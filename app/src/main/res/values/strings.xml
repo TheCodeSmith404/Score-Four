@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Score 4</string>
+    <string name="app_name">Score Four</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -10,4 +10,15 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <string name="login_anonymously">Login anonymously</string>
+    <string name="login_using_google">Login using Google</string>
+    <string name="create_a_game">Create a game</string>
+    <string name="join_a_game">Join a game</string>
+    <string name="enter_room_id">Room Id</string>
+    <string name="room_id_hint">xxxxxxxx</string>
+    <string name="enter_password">Password</string>
+    <string name="password_hint">********</string>
+    <string name="join_room">Join</string>
+    <string name="dialog_enter_id_pass_title">Verify Credentials</string>
+    <string name="fragment_waiting_room_title">Waiting Room</string>
 </resources>

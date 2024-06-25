@@ -4,46 +4,47 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.HomeFragment">
+    tools:context=".ui.login.LoginFragment">
+
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/home_create_game"
+        android:id="@+id/login_google"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawableEnd="@drawable/ic_menu_camera"
-        android:text="@string/create_a_game"
+        android:text="@string/login_using_google"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider4" />
+        app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/home_join_game"
+        android:id="@+id/login_anonymous"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:drawableEnd="@drawable/ic_menu_camera"
-        android:text="@string/join_a_game"
+        android:text="@string/login_anonymously"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/home_create_game" />
-
+        app:layout_constraintTop_toBottomOf="@+id/login_google" />
 
     <View
-        android:id="@+id/divider3"
-        android:layout_width="409dp"
+        android:id="@+id/divider"
+        android:layout_width="0dp"
         android:layout_height="1dp"
         android:background="?android:attr/listDivider"
-        app:layout_constraintBottom_toTopOf="@+id/divider4"
+        app:layout_constraintBottom_toTopOf="@+id/divider2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
-        android:id="@+id/divider4"
-        android:layout_width="409dp"
+        android:id="@+id/divider2"
+        android:layout_width="0dp"
         android:layout_height="1dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider3" />
+        app:layout_constraintTop_toBottomOf="@+id/divider" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

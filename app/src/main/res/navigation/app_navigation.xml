@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/app_navigation"
+    app:startDestination="@layout/fragment_login">
+    <fragment
+        android:id="@+id/fragment_login"
+        tools:layout="@layout/fragment_login"
+        android:label="Login">
+        <action
+            android:id="@+id/action_fragment_login_to_fragment_home"
+            app:destination="@id/fragment_home" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_home"
+        tools:layout="@layout/fragment_home"
+        android:label="Home">
+        <action
+            android:id="@+id/action_fragment_home_to_dialog_enter_credentials"
+            app:destination="@id/dialog_enter_credentials" />
+        <action
+            android:id="@+id/action_fragment_home_to_game_settings"
+            app:destination="@id/game_settings" />
+    </fragment>
+    <dialog
+        android:id="@+id/dialog_enter_credentials"
+        tools:layout="@layout/dialog_enter_id_pass"
+        android:label="Enter Credentials">
+        <action
+            android:id="@+id/action_dialog_enter_credentials_to_waiting_room"
+            app:destination="@id/waiting_room" />
+    </dialog>
+    <fragment
+        android:id="@+id/game_settings"
+        android:label="Create a game"
+        tools:layout="@layout/fragment_game_settings">
+        <action
+            android:id="@+id/action_game_settings_to_waiting_room"
+            app:destination="@id/waiting_room" />
+    </fragment>
+    <fragment
+        android:id="@+id/waiting_room"
+        tools:layout="@layout/fragment_waiting_room"
+        android:label="Waiting Room">
+        <action
+            android:id="@+id/action_waiting_room_to_game_details"
+            app:destination="@id/game_details" />
+    </fragment>
+    <dialog
+        android:id="@+id/game_details"
+        android:label="Game Details"
+        tools:layout="@layout/dialog_view_game_details"/>
+
+</navigation>

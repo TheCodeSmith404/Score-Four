@@ -1,4 +1,6 @@
 package com.tcs.games.scorefour.ui.home
 
-class EnterIdPassDialog {
+import androidx.fragment.app.DialogFragment
+
+class EnterIdPassDialog:DialogFragment() {
 }
