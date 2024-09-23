@@ -1,4 +1,6 @@
 package com.tcs.games.scorefour.ui.gameroom
 
-class GameRoomFragment {
+import androidx.fragment.app.Fragment
+
+class GameRoomFragment:Fragment() {
 }

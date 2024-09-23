@@ -42,6 +42,9 @@
         <action
             android:id="@+id/action_game_settings_to_waiting_room"
             app:destination="@id/waiting_room" />
+        <action
+            android:id="@+id/action_game_settings_to_select_image"
+            app:destination="@id/select_image" />
     </fragment>
     <fragment
         android:id="@+id/waiting_room"
@@ -51,6 +54,9 @@
         <action
             android:id="@+id/action_waiting_room_to_game_details"
             app:destination="@id/game_details" />
+        <action
+            android:id="@+id/action_waiting_room_to_game_room"
+            app:destination="@id/game_room" />
     </fragment>
     <dialog
         android:id="@+id/game_details"
@@ -62,5 +68,26 @@
         android:name="com.tcs.games.scorefour.ui.GameSettingFragment.SelectImageFragment"
         android:label="Select Image"
         tools:layout="@layout/fragment_select_image"/>
+    <fragment
+        android:id="@+id/game_room"
+        android:name="com.tcs.games.scorefour.ui.gameroom.GameRoomFragment"
+        android:label="Game Room"
+        tools:layout="@layout/fragment_game_room">
+        <action
+            android:id="@+id/action_game_room_to_game_finished"
+            app:destination="@id/game_finished"/>
+    </fragment>
+    <dialog
+        android:id="@+id/game_finished"
+        android:name="com.tcs.games.scorefour.ui.gameroom.GameFinishedDialog"
+        android:label="Game Finished"
+        tools:layout="@layout/dialog_game_finished">
+        <action
+            android:id="@+id/action_game_finished_to_fragment_home"
+            app:destination="@id/fragment_home"/>
+        <action
+            android:id="@+id/action_game_finished_to_waiting_room"
+            app:destination="@id/waiting_room"/>
+    </dialog>
 
 </navigation>

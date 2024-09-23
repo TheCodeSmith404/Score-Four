@@ -10,8 +10,10 @@
         android:id="@+id/login_google"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawableEnd="@drawable/ic_menu_camera"
+        android:padding="16dp"
+        android:drawableEnd="@drawable/google"
         android:text="@string/login_using_google"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider2" />
@@ -21,8 +23,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:drawableEnd="@drawable/ic_menu_camera"
+        android:padding="16dp"
+        android:drawableEnd="@drawable/incognito"
         android:text="@string/login_anonymously"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_google" />
