@@ -1,4 +1,4 @@
-package com.tcs.games.scorefour.ui.gameroom
+package com.tcs.games.score4.ui.gameroom
 
 import androidx.fragment.app.DialogFragment
 

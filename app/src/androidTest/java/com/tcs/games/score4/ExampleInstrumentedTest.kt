@@ -1,4 +1,4 @@
-package com.tcs.games.scorefour
+package com.tcs.games.score4
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

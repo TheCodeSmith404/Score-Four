@@ -1,4 +1,4 @@
-package com.tcs.games.scorefour
+package com.tcs.games.score4
 
 import org.junit.Test
 

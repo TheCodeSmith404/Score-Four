@@ -1,17 +1,16 @@
-package com.tcs.games.scorefour.ui.login
+package com.tcs.games.score4.ui.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.tcs.games.scorefour.databinding.FragmentLoginBinding
+import com.tcs.games.score4.databinding.FragmentHomeBinding
 
-class LoginFragment : Fragment() {
+class HomeFragment : Fragment() {
 
-    private var _binding: FragmentLoginBinding ?= null
+    private var _binding: FragmentHomeBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -22,11 +21,16 @@ class LoginFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val loginViewModel =
-            ViewModelProvider(this).get(LoginViewModel::class.java)
+        val homeViewModel =
+            ViewModelProvider(this).get(HomeViewModel::class.java)
 
-        _binding = FragmentLoginBinding.inflate(inflater, container, false)
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
+
+        homeViewModel.text.observe(viewLifecycleOwner) {
+
+        }
         return root
     }
 

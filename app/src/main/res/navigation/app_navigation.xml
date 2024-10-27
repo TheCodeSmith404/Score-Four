@@ -6,7 +6,7 @@
     app:startDestination="@id/fragment_login">
     <fragment
         android:id="@+id/fragment_login"
-        android:name="com.tcs.games.scorefour.ui.login.LoginFragment"
+        android:name="com.tcs.games.score4.ui.login.LoginFragment"
         tools:layout="@layout/fragment_login"
         android:label="Login">
         <action
@@ -15,7 +15,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragment_home"
-        android:name="com.tcs.games.scorefour.ui.home.HomeFragment"
+        android:name="com.tcs.games.score4.ui.home.HomeFragment"
         tools:layout="@layout/fragment_home"
         android:label="Home">
         <action
@@ -27,7 +27,7 @@
     </fragment>
     <dialog
         android:id="@+id/dialog_enter_credentials"
-        android:name="com.tcs.games.scorefour.ui.home.EnterIdPassDialog"
+        android:name="com.tcs.games.score4.ui.home.EnterIdPassDialog"
         tools:layout="@layout/dialog_enter_id_pass"
         android:label="Enter Credentials">
         <action
@@ -36,7 +36,7 @@
     </dialog>
     <fragment
         android:id="@+id/game_settings"
-        android:name="com.tcs.games.scorefour.ui.GameSettingFragment.GameSettingFragment"
+        android:name="com.tcs.games.score4.ui.GameSettingFragment.GameSettingFragment"
         android:label="Create a game"
         tools:layout="@layout/fragment_game_settings">
         <action
@@ -48,7 +48,7 @@
     </fragment>
     <fragment
         android:id="@+id/waiting_room"
-        android:name="com.tcs.games.scorefour.ui.waitingroom.WaitingRoomFragment"
+        android:name="com.tcs.games.score4.ui.waitingroom.WaitingRoomFragment"
         tools:layout="@layout/fragment_waiting_room"
         android:label="Waiting Room">
         <action
@@ -60,17 +60,17 @@
     </fragment>
     <dialog
         android:id="@+id/game_details"
-        android:name="com.tcs.games.scorefour.ui.waitingroom.DialogViewGameDetails"
+        android:name="com.tcs.games.score4.ui.waitingroom.DialogViewGameDetails"
         android:label="Game Details"
         tools:layout="@layout/dialog_view_game_details"/>
     <fragment
         android:id="@+id/select_image"
-        android:name="com.tcs.games.scorefour.ui.GameSettingFragment.SelectImageFragment"
+        android:name="com.tcs.games.score4.ui.GameSettingFragment.SelectImageFragment"
         android:label="Select Image"
         tools:layout="@layout/fragment_select_image"/>
     <fragment
         android:id="@+id/game_room"
-        android:name="com.tcs.games.scorefour.ui.gameroom.GameRoomFragment"
+        android:name="com.tcs.games.score4.ui.gameroom.GameRoomFragment"
         android:label="Game Room"
         tools:layout="@layout/fragment_game_room">
         <action
@@ -79,7 +79,7 @@
     </fragment>
     <dialog
         android:id="@+id/game_finished"
-        android:name="com.tcs.games.scorefour.ui.gameroom.GameFinishedDialog"
+        android:name="com.tcs.games.score4.ui.gameroom.GameFinishedDialog"
         android:label="Game Finished"
         tools:layout="@layout/dialog_game_finished">
         <action
