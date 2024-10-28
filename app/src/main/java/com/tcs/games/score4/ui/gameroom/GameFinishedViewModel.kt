@@ -1,4 +1,4 @@
 package com.tcs.games.score4.ui.gameroom
 
-class GameRestartViewModel {
+class GameFinishedViewModel {
 }

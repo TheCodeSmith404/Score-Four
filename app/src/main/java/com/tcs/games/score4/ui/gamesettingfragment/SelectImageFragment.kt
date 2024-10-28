@@ -1,4 +1,4 @@
-package com.tcs.games.score4.ui.GameSettingFragment
+package com.tcs.games.score4.ui.gamesettingfragment
 
 import androidx.fragment.app.Fragment
 

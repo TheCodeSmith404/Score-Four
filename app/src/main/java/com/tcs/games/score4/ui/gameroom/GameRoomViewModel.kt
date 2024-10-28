@@ -1,4 +1,6 @@
 package com.tcs.games.score4.ui.gameroom
 
-class GameRoomViewModel {
+import androidx.lifecycle.ViewModel
+
+class GameRoomViewModel: ViewModel() {
 }

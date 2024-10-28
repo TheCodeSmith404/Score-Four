@@ -4,25 +4,108 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.gameroom.GameRoomFragment">
+    tools:context=".ui.gameroom.GameRoomFragment"
+    android:padding="16dp">
 
     <ImageButton
+        android:id="@+id/imageButton2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@android:color/transparent"
         android:contentDescription="TODO"
         android:padding="12dp"
+        android:scaleY="1.5"
+        android:scaleX="1.5"
         android:src="@drawable/baseline_arrow_back_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textView8"
+    <ImageButton
+        android:id="@+id/imageButton3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Game Room"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:backgroundTint="@android:color/transparent"
+        android:contentDescription="TODO"
+        android:padding="12dp"
+        android:src="@drawable/baseline_settings_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/player_icon_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:padding="4dp"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/imageButton2">
+        <utils.views.PlayerIcon
+            android:id="@+id/player_a"
+            app:playerText="A"
+            android:layout_margin="2dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <utils.views.PlayerIcon
+            android:id="@+id/player_b"
+            app:playerText="B"
+            android:layout_margin="2dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <utils.views.PlayerIcon
+            android:id="@+id/player_c"
+            app:playerText="C"
+            android:layout_margin="2dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <utils.views.PlayerIcon
+            android:id="@+id/player_d"
+            app:playerText="D"
+            android:layout_margin="2dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/cards"
+        android:layout_width="270dp"
+        android:layout_height="360dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:orientation="horizontal"
+        android:padding="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/cardsContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/player_icon_container"
+        app:layout_constraintVertical_bias="0.60" />
+
+
+    <LinearLayout
+        android:id="@+id/cardsContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" >
+        <utils.views.CustomCard
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+        <utils.views.CustomCard
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+        <utils.views.CustomCard
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+        <utils.views.CustomCard
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+        <utils.views.CustomCard
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+    </LinearLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
