@@ -11,7 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.tcs.games.score4.R
 import com.tcs.games.score4.databinding.FragmentGameSettingsBinding
 import com.tcs.games.score4.ui.gamesettingfragment.GameSettingViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class GameSettingFragment:Fragment() {
     private var _binding: FragmentGameSettingsBinding?= null
     private val binding get() = _binding!!

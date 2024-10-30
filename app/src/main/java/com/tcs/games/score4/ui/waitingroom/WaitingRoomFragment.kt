@@ -10,7 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.tcs.games.score4.R
 import com.tcs.games.score4.databinding.FragmentWaitingRoomBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class WaitingRoomFragment:Fragment() {
     private var _binding:FragmentWaitingRoomBinding?=null
     private val binding get()=_binding!!

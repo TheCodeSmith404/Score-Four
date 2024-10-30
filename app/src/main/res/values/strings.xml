@@ -22,4 +22,5 @@
     <string name="join_room">Join</string>
     <string name="dialog_enter_id_pass_title">Verify Credentials</string>
     <string name="fragment_waiting_room_title">Waiting Room</string>
+    <string name="web_client_id">810341928649-ie77n6pa9js5rjn3hle71os2rmes9udp.apps.googleusercontent.com</string>
 </resources>

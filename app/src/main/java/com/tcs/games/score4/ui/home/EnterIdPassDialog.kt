@@ -8,7 +8,9 @@ import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
 import com.tcs.games.score4.R
 import com.tcs.games.score4.databinding.DialogEnterIdPassBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class EnterIdPassDialog:DialogFragment() {
     private var _binding: DialogEnterIdPassBinding? = null
     private val binding get() = _binding!!

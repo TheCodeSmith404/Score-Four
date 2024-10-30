@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.tcs.games.score4.databinding.DialogViewGameDetailsBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DialogViewGameDetails:DialogFragment() {
     private var _binding:DialogViewGameDetailsBinding?= null
     private val binding get()=_binding!!

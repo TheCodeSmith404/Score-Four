@@ -1,6 +1,9 @@
 package com.tcs.games.score4.ui.gameroom
 
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class GameRoomViewModel: ViewModel() {
+@HiltViewModel
+class GameRoomViewModel @Inject constructor(): ViewModel() {
 }

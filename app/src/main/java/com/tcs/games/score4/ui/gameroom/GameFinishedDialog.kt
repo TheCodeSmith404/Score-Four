@@ -10,7 +10,9 @@ import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
 import com.tcs.games.score4.R
 import com.tcs.games.score4.databinding.DialogGameFinishedBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class GameFinishedDialog: DialogFragment() {
     private var _binding:DialogGameFinishedBinding?=null
     private val binding get()=_binding!!

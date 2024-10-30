@@ -104,7 +104,7 @@
                         <ImageView
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            android:elevation="1dp"
+                            android:elevation="10dp"
                             android:foregroundGravity="center"
                             android:src="@drawable/baseline_preview_24"
                             app:layout_constraintStart_toStartOf="parent"

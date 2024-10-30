@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.google.services)
     alias(libs.plugins.firebase.perf)
     alias(libs.plugins.firebase.crashlytics)
+    alias(libs.plugins.devtools.ksp)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -30,14 +32,17 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_20
+        targetCompatibility = JavaVersion.VERSION_20
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "20"
     }
     buildFeatures {
         viewBinding = true
+    }
+    hilt {
+        enableAggregatingTask = false
     }
 }
 
@@ -58,6 +63,12 @@ dependencies {
     implementation(libs.firebase.authentication)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.play.services.auth)
+    implementation(libs.hilt.android)
+    implementation(libs.googleid)
+    implementation(libs.play.services.auth)
+    ksp(libs.hilt.compiler)
+    implementation(libs.androidx.credentials)
+    implementation(libs.firebase.firestore)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

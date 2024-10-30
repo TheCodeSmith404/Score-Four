@@ -18,8 +18,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.tcs.games.score4.R
 import com.tcs.games.score4.databinding.FragmentGameRoomBinding
 import com.tcs.games.score4.ui.gameroom.adapter.LargeCardAdapter
-import javax.net.ssl.HandshakeCompletedListener
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class GameRoomFragment:Fragment() {
     private var _binding:FragmentGameRoomBinding?=null
     private val binding get()=_binding!!
