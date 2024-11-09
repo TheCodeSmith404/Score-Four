@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/textViewType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <GridLayout
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:rowCount="4"
+        android:columnCount="4"
+        android:padding="8dp">
+        <ImageButton
+            android:padding="16dp"
+            android:layout_margin="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/choose_icon_background_selector"
+            android:src="@drawable/star" />
+        <ImageButton
+            android:padding="16dp"
+            android:layout_margin="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/choose_icon_background_selector"
+            android:src="@drawable/star" />
+        <ImageButton
+            android:padding="16dp"
+            android:layout_margin="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/choose_icon_background_selector"
+            android:src="@drawable/star" />
+        <ImageButton
+            android:padding="16dp"
+            android:layout_margin="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/choose_icon_background_selector"
+            android:src="@drawable/star" />
+        <ImageButton
+            android:padding="16dp"
+            android:layout_margin="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/choose_icon_background_selector"
+            android:src="@drawable/star" />
+        <ImageButton
+            android:padding="16dp"
+            android:layout_margin="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/choose_icon_background_selector"
+            android:src="@drawable/star" />
+        <ImageButton
+            android:padding="16dp"
+            android:layout_margin="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/choose_icon_background_selector"
+            android:src="@drawable/star" />
+        <ImageButton
+            android:padding="16dp"
+            android:layout_margin="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/choose_icon_background_selector"
+            android:src="@drawable/star" />
+        <ImageButton
+            android:padding="16dp"
+            android:layout_margin="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/choose_icon_background_selector"
+            android:src="@drawable/star" />
+        <ImageButton
+            android:padding="16dp"
+            android:layout_margin="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/choose_icon_background_selector"
+            android:src="@drawable/star" />
+        <ImageButton
+            android:padding="16dp"
+            android:layout_margin="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/choose_icon_background_selector"
+            android:src="@drawable/star" />
+        <ImageButton
+            android:padding="16dp"
+            android:layout_margin="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/choose_icon_background_selector"
+            android:src="@drawable/star" />
+        <ImageButton
+            android:padding="16dp"
+            android:layout_margin="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/choose_icon_background_selector"
+            android:src="@drawable/star" />
+        <ImageButton
+            android:padding="16dp"
+            android:layout_margin="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/choose_icon_background_selector"
+            android:src="@drawable/star" />
+        <ImageButton
+            android:padding="16dp"
+            android:layout_margin="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/choose_icon_background_selector"
+            android:src="@drawable/star" />
+        <ImageButton
+            android:padding="16dp"
+            android:layout_margin="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/choose_icon_background_selector"
+            android:src="@drawable/star" />
+    </GridLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="360dp">
+
+        <RadioGroup
+            android:id="@+id/colors_radio_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="4dp">
+
+            <RadioButton
+                android:id="@+id/card_color_option_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Red"
+                android:textColor="@color/cardColorOption1" />
+
+            <RadioButton
+                android:id="@+id/card_color_option_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Yellow"
+                android:textColor="@color/cardColorOption2" />
+
+            <RadioButton
+                android:id="@+id/card_color_option_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Green"
+                android:textColor="@color/cardColorOption3" />
+
+            <RadioButton
+                android:id="@+id/card_color_option_4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Blue"
+                android:textColor="@color/cardColorOption4" />
+
+            <RadioButton
+                android:id="@+id/card_color_option_5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Pink"
+                android:textColor="@color/cardColorOption5" />
+
+            <RadioButton
+                android:id="@+id/card_color_option_6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Purple"
+                android:textColor="@color/cardColorOption6" />
+
+            <RadioButton
+                android:id="@+id/card_color_option_7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Teal"
+                android:textColor="@color/cardColorOption7" />
+
+            <RadioButton
+                android:id="@+id/card_color_option_8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Orange"
+                android:textColor="@color/cardColorOption8" />
+        </RadioGroup>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:enabled="true"
+        android:text="Cancel"
+        android:backgroundTint="#999999"
+        android:textColor="@color/black"/>
+
+</LinearLayout>

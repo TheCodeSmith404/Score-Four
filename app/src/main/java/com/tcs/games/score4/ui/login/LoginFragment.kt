@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -17,6 +18,7 @@ import com.google.android.gms.common.api.ApiException
 import com.tcs.games.score4.R
 import com.tcs.games.score4.databinding.FragmentLoginBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
@@ -33,7 +35,9 @@ class LoginFragment : Fragment() {
                 val account = task.getResult(ApiException::class.java)
                 val idToken = account?.idToken
                 if (idToken != null) {
-                    viewModel.signInWithGoogle(idToken)
+                    lifecycleScope.launch {
+                        viewModel.signInWithGoogle(idToken)
+                    }
                 }
             } catch (e: ApiException) {
                 Log.e("SignIn", "Google sign-in failed with code: ${e.statusCode}", e)

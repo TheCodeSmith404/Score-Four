@@ -7,4 +7,12 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="cardColorOption1">#FFFF6B6B</color> <!-- Soft Red -->
+    <color name="cardColorOption2">#FFFFD93D</color> <!-- Warm Yellow -->
+    <color name="cardColorOption3">#FF6BCB77</color> <!-- Fresh Green -->
+    <color name="cardColorOption4">#FF4D96FF</color> <!-- Sky Blue -->
+    <color name="cardColorOption5">#FFFF6F91</color> <!-- Coral Pink -->
+    <color name="cardColorOption6">#FF845EC2</color> <!-- Purple Haze -->
+    <color name="cardColorOption7">#FF00796B</color> <!-- medium-dark Teal -->
+    <color name="cardColorOption8">#FFFFC75F</color> <!-- Sunset Orange -->
 </resources>

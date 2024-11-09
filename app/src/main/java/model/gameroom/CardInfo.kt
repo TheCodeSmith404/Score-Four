@@ -1,9 +1,9 @@
 package model.gameroom
 
 data class CardInfo(
-    val id:Int,
+    val id:String,
     val name:String,
-    val color:String,
+    val color:Int,
     val imageRes:String,
     val icon:Int,
 )

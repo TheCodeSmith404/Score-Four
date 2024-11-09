@@ -26,7 +26,19 @@
         <action
             android:id="@+id/action_fragment_home_to_game_settings"
             app:destination="@id/game_settings" />
+        <action
+            android:id="@+id/action_fragment_home_to_dialog_user_info"
+            app:destination="@id/dialog_user_info"/>
     </fragment>
+    <dialog
+        android:id="@+id/dialog_user_info"
+        android:name="com.tcs.games.score4.ui.home.UserInfoDialog"
+        tools:layout="@layout/dialog_user_info"
+        android:label="User_Info">
+        <action
+            android:id="@+id/action_dialog_user_info_to_select_image"
+            app:destination="@id/select_image"/>
+    </dialog>
     <dialog
         android:id="@+id/dialog_enter_credentials"
         android:name="com.tcs.games.score4.ui.home.EnterIdPassDialog"

@@ -11,6 +11,9 @@ import androidx.navigation.fragment.findNavController
 import com.tcs.games.score4.R
 import com.tcs.games.score4.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
+import data.PreferenceManager
+import data.repository.UserRepository
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -18,6 +21,10 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val homeViewModel:HomeViewModel by viewModels()
+    @Inject
+    lateinit var preferenceManager: PreferenceManager
+    @Inject
+    lateinit var userRepository: UserRepository
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,16 +39,42 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setUpViews()
+        setOnClickListeners()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun setUpViews(){
+        binding.showUserName.text=preferenceManager.userName
+        if(preferenceManager.isSignedIn){
+            loadImage()
+        }else{
+            setImageResource()
+        }
+    }
+    private fun loadImage(){
+
+    }
+    private fun setImageResource(){
+
+    }
+
+    private fun setOnClickListeners(){
         binding.homeCreateGame.setOnClickListener{
             findNavController().navigate(R.id.action_fragment_home_to_game_settings)
         }
         binding.homeJoinGame.setOnClickListener{
             findNavController().navigate(R.id.action_fragment_home_to_dialog_enter_credentials)
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+        binding.cardView.setOnClickListener{
+            findNavController().navigate(R.id.action_fragment_home_to_dialog_user_info)
+        }
+        binding.showUserName.setOnClickListener{
+            findNavController().navigate(R.id.action_fragment_home_to_dialog_user_info)
+        }
     }
 }
