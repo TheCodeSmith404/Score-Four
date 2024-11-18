@@ -61,7 +61,7 @@ class LoginViewModel @Inject constructor(private val userRepository: UserReposit
                     val data=UserData(id,generateShownId(id,currentTime),user.displayName.toString(),user.email.toString(),currentTime,currentTime,currentTime,pair.first,pair.second,false,0,0,0,0,0,0,0,0,0,true)
                     val uploadData=userRepository.addUser(data)
                     preferenceManager.isSignedIn=true
-                    preferenceManager.profileUrl=""
+                    preferenceManager.profileUrl=null
                     preferenceManager.userName=user.displayName.toString()
                     // Use await() to block further execution until user is added
                     uploadData.await()
@@ -91,7 +91,7 @@ class LoginViewModel @Inject constructor(private val userRepository: UserReposit
                     val data=UserData(id,"User Not Registered","User_${pair.first}","Please Sign Up",currentTime,currentTime,currentTime,pair.first,pair.second,false,0,0,0,0,0,0,0,0,0,false)
                     val uploadData=userRepository.addUser(data)
                     preferenceManager.isSignedIn=false
-                    preferenceManager.profileUrl=""
+                    preferenceManager.profileUrl=null
                     preferenceManager.userName=data.playerName
                     uploadData.await()
                     _user.value=auth.currentUser

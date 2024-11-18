@@ -66,9 +66,11 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.googleid)
     implementation(libs.play.services.auth)
+    implementation(libs.firebase.storage.ktx)
     ksp(libs.hilt.compiler)
     implementation(libs.androidx.credentials)
     implementation(libs.firebase.firestore)
+    implementation(libs.github.glide)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

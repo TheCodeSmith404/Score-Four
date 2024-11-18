@@ -44,7 +44,7 @@ class UserRepository @Inject constructor(
             val document = usersCollection.document(authId).get().await()
             user=document.toObject(UserData::class.java)
             preferenceManager.isSignedIn=true
-            preferenceManager.profileUrl=""
+            preferenceManager.profileUrl=null
             preferenceManager.userName=user?.playerName.toString()
             Log.d("UserRepository", "Data Received")
             Tasks.forResult(user)

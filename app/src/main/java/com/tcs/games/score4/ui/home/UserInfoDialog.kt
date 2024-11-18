@@ -64,7 +64,7 @@ class UserInfoDialog:DialogFragment() {
             Toast.makeText(requireContext(),"Edit name",Toast.LENGTH_SHORT).show()
         }
         binding.imageButtonEditProfile.setOnClickListener{
-            Toast.makeText(requireContext(),"Edit Profile",Toast.LENGTH_SHORT).show()
+            findNavController().navigate(R.id.action_dialog_user_info_to_select_image)
         }
     }
     override fun onStart() {

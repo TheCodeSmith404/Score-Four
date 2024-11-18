@@ -2,6 +2,8 @@ package data
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.net.Uri
+import androidx.core.net.toUri
 
 class PreferenceManager(context: Context) {
     private val sharedPreferences: SharedPreferences =
@@ -19,10 +21,10 @@ class PreferenceManager(context: Context) {
             sharedPreferences.edit().putString("user_name", value).apply() // Apply changes here
         }
 
-    var profileUrl: String
-        get() = sharedPreferences.getString("image_url", "no image found") ?:"no image found"// Default to null if not set
+    var profileUrl: Uri?
+        get() = sharedPreferences.getString("image_url", "no image found")?.toUri()
         set(value) {
-            sharedPreferences.edit().putString("image_url", value).apply()
+            sharedPreferences.edit().putString("image_url", value.toString()).apply()
         }
     var currentGameId:String
         get()=sharedPreferences.getString("current_game_id","404")?:"404"
