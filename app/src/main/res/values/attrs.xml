@@ -3,4 +3,7 @@
     <declare-styleable name="PlayerIcon">
         <attr name="playerText" format="string" />
     </declare-styleable>
+    <declare-styleable name="WaitingRoomItem">
+        <attr name="playerName" format="string"/>
+    </declare-styleable>
 </resources>

@@ -19,9 +19,14 @@ class PreferenceManager(context: Context) {
             sharedPreferences.edit().putString("user_name", value).apply() // Apply changes here
         }
 
-    var imageUrl: String?
-        get() = sharedPreferences.getString("image_url", null) // Default to null if not set
+    var profileUrl: String
+        get() = sharedPreferences.getString("image_url", "no image found") ?:"no image found"// Default to null if not set
         set(value) {
             sharedPreferences.edit().putString("image_url", value).apply()
+        }
+    var currentGameId:String
+        get()=sharedPreferences.getString("current_game_id","404")?:"404"
+        set(value){
+            sharedPreferences.edit().putString("current_game_id",value).apply()
         }
 }

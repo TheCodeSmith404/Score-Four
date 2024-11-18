@@ -40,13 +40,14 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+        app:layout_constraintBottom_toTopOf="@+id/setTurnsTime"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
+
+        android:id="@+id/setTurnsTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -76,11 +77,14 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
 
-        <NumberPicker
+        <TextView
             android:id="@+id/numberPicker"
             android:layout_width="wrap_content"
+            android:padding="4dp"
             android:layout_height="48dp"
-            android:orientation="vertical"
+            android:text="10"
+            android:textStyle="bold"
+            android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/textView7"
             app:layout_constraintTop_toTopOf="parent" />

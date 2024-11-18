@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -13,139 +14,179 @@
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="24sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp"/>
 
     <GridLayout
+        android:id="@+id/options_sheet_select_icons"
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:rowCount="4"
         android:columnCount="4"
-        android:padding="8dp">
+        android:padding="16dp"
+        android:visibility="gone">
+
         <ImageButton
+            android:id="@+id/icon_1"
+            android:padding="16dp"
+            android:layout_margin="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/choose_icon_background_selector"
+            android:src="@drawable/cards_club" />
+
+        <ImageButton
+            android:id="@+id/icon_2"
+            android:padding="16dp"
+            android:layout_margin="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/choose_icon_background_selector"
+            android:src="@drawable/cards_heart" />
+
+        <ImageButton
+            android:id="@+id/icon_3"
+            android:padding="16dp"
+            android:layout_margin="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/choose_icon_background_selector"
+            android:src="@drawable/cards_diamond" />
+
+        <ImageButton
+            android:id="@+id/icon_4"
+            android:padding="16dp"
+            android:layout_margin="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/choose_icon_background_selector"
+            android:src="@drawable/cards_spade" />
+
+        <ImageButton
+            android:id="@+id/icon_5"
+            android:padding="16dp"
+            android:layout_margin="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/choose_icon_background_selector"
+            android:src="@drawable/star_three_points" />
+
+        <ImageButton
+            android:id="@+id/icon_6"
+            android:padding="16dp"
+            android:layout_margin="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/choose_icon_background_selector"
+            android:src="@drawable/star_four_points" />
+
+        <ImageButton
+            android:id="@+id/icon_7"
             android:padding="16dp"
             android:layout_margin="4dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/choose_icon_background_selector"
             android:src="@drawable/star" />
+
         <ImageButton
+            android:id="@+id/icon_8"
             android:padding="16dp"
             android:layout_margin="4dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/choose_icon_background_selector"
-            android:src="@drawable/star" />
+            android:src="@drawable/hexagram" />
+
         <ImageButton
+            android:id="@+id/icon_9"
             android:padding="16dp"
             android:layout_margin="4dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/choose_icon_background_selector"
-            android:src="@drawable/star" />
+            android:src="@drawable/chess_pawn" />
+
         <ImageButton
+            android:id="@+id/icon_10"
             android:padding="16dp"
             android:layout_margin="4dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/choose_icon_background_selector"
-            android:src="@drawable/star" />
+            android:src="@drawable/chess_knight" />
+
         <ImageButton
+            android:id="@+id/icon_11"
             android:padding="16dp"
             android:layout_margin="4dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/choose_icon_background_selector"
-            android:src="@drawable/star" />
+            android:src="@drawable/chess_bishop" />
+
         <ImageButton
+            android:id="@+id/icon_12"
             android:padding="16dp"
             android:layout_margin="4dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/choose_icon_background_selector"
-            android:src="@drawable/star" />
+            android:src="@drawable/chess_rook" />
+
         <ImageButton
+            android:id="@+id/icon_13"
             android:padding="16dp"
             android:layout_margin="4dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/choose_icon_background_selector"
-            android:src="@drawable/star" />
+            android:src="@drawable/chess_queen" />
+
         <ImageButton
+            android:id="@+id/icon_14"
             android:padding="16dp"
             android:layout_margin="4dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/choose_icon_background_selector"
-            android:src="@drawable/star" />
+            android:src="@drawable/chess_king" />
+
         <ImageButton
+            android:id="@+id/icon_15"
             android:padding="16dp"
             android:layout_margin="4dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/choose_icon_background_selector"
-            android:src="@drawable/star" />
+            android:src="@drawable/car" />
+
         <ImageButton
+            android:id="@+id/icon_16"
             android:padding="16dp"
             android:layout_margin="4dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/choose_icon_background_selector"
-            android:src="@drawable/star" />
-        <ImageButton
-            android:padding="16dp"
-            android:layout_margin="4dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/choose_icon_background_selector"
-            android:src="@drawable/star" />
-        <ImageButton
-            android:padding="16dp"
-            android:layout_margin="4dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/choose_icon_background_selector"
-            android:src="@drawable/star" />
-        <ImageButton
-            android:padding="16dp"
-            android:layout_margin="4dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/choose_icon_background_selector"
-            android:src="@drawable/star" />
-        <ImageButton
-            android:padding="16dp"
-            android:layout_margin="4dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/choose_icon_background_selector"
-            android:src="@drawable/star" />
-        <ImageButton
-            android:padding="16dp"
-            android:layout_margin="4dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/choose_icon_background_selector"
-            android:src="@drawable/star" />
-        <ImageButton
-            android:padding="16dp"
-            android:layout_margin="4dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/choose_icon_background_selector"
-            android:src="@drawable/star" />
+            android:src="@drawable/ferry" />
     </GridLayout>
 
-    <ScrollView
+
+    <LinearLayout
+        android:id="@+id/options_sheet_select_colors"
         android:layout_width="match_parent"
-        android:layout_height="360dp">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:visibility="visible">
 
         <RadioGroup
             android:id="@+id/colors_radio_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="4dp">
+            android:padding="4dp"
+            tools:ignore="UselessParent">
 
             <RadioButton
                 android:id="@+id/card_color_option_1"
@@ -203,10 +244,44 @@
                 android:text="Orange"
                 android:textColor="@color/cardColorOption8" />
         </RadioGroup>
-    </ScrollView>
+    </LinearLayout>
+
+    <RadioGroup
+        android:id="@+id/selectTurnsTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:padding="4dp"
+        android:visibility="gone">
+
+        <RadioButton
+            android:id="@+id/seconds_10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="10 seconds" />
+
+        <RadioButton
+            android:id="@+id/seconds_20"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="20 seconds" />
+
+        <RadioButton
+            android:id="@+id/seconds_30"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="30 seconds" />
+
+        <RadioButton
+            android:id="@+id/seconds_40"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="40 seconds" />
+
+    </RadioGroup>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/options_sheet_cancel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:enabled="true"

@@ -48,9 +48,12 @@
             app:hintEnabled="false">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/verify_creds_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/room_id_hint" />
+                android:hint="@string/room_id_hint"
+                android:inputType="textCapSentences"
+                android:maxLength="6" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
@@ -68,9 +71,12 @@
             app:hintEnabled="false">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/verify_creds_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/password_hint" />
+                android:hint="@string/password_hint"
+                android:inputType="number"
+                android:maxLength="4" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton

@@ -4,16 +4,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.tcs.games.score4.R
 import com.tcs.games.score4.databinding.DialogEnterIdPassBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class EnterIdPassDialog:DialogFragment() {
     private var _binding: DialogEnterIdPassBinding? = null
     private val binding get() = _binding!!
+    private val viewModel: EnterIdPassViewModel by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -29,8 +36,8 @@ class EnterIdPassDialog:DialogFragment() {
     }
     private fun setOnClickListeners(){
         binding.dialogIdPassJoin.setOnClickListener{
-            dismiss()
-            findNavController().navigate(R.id.action_dialog_enter_credentials_to_waiting_room)
+            verifyCredentials()
+
         }
         binding.dialogIdPassCancel.setOnClickListener{
             dismiss()
@@ -45,5 +52,39 @@ class EnterIdPassDialog:DialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null // Avoid memory leaks
+    }
+    private fun verifyCredentials(){
+        val id=binding.verifyCredsId.text.toString()
+        val pass=binding.verifyCredsPassword.text.toString()
+        if(id.isNotEmpty()&&pass.isNotEmpty()){
+           if(viewModel.verifyLocally(id,pass)){
+               //TODO show a loading bar
+               isInputAllowed(false)
+               lifecycleScope.launch {
+                   val result=viewModel.verifyGlobally(id,pass)
+                   if(result!=null){
+                       val userAdded=viewModel.joinGameRoom(result)
+                       if(userAdded.result){
+                           dismiss()
+                           findNavController().navigate(R.id.action_dialog_enter_credentials_to_waiting_room)
+                       }else{
+                           isInputAllowed(true)
+                           Toast.makeText(requireContext(),"Server Error try again later",Toast.LENGTH_LONG).show()
+                       }
+                   }else{
+                       Toast.makeText(requireContext(),"Unable to find game room",Toast.LENGTH_SHORT).show()
+                       isInputAllowed(true)
+                   }
+               }
+           }else{
+               isInputAllowed(true)
+               Toast.makeText(requireContext(),"Invalid Entries",Toast.LENGTH_SHORT).show()
+           }
+        }
+    }
+    private fun isInputAllowed(isAllowed:Boolean){
+        binding.dialogIdPassCancel.isEnabled=isAllowed
+        binding.verifyCredsId.isEnabled=isAllowed
+        binding.verifyCredsPassword.isEnabled=isAllowed
     }
 }

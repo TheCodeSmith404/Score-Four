@@ -16,13 +16,17 @@
     <string name="create_a_game">Create a game</string>
     <string name="join_a_game">Join a game</string>
     <string name="enter_room_id">Room Id</string>
-    <string name="room_id_hint">xxxxxxxx</string>
+    <string name="room_id_hint">A2CDGS</string>
     <string name="enter_password">Password</string>
-    <string name="password_hint">********</string>
+    <string name="password_hint">1245</string>
     <string name="join_room">Join</string>
     <string name="dialog_enter_id_pass_title">Verify Credentials</string>
     <string name="fragment_waiting_room_title">Waiting Room</string>
+    <string name="fragment_waiting_room_waiting_for_players">Waiting for Players to Join</string>
+    <string name="fragment_waiting_room_waiting_for_players_to_be_ready">Waiting for Players to be Ready</string>
+
     <string name="web_client_id">810341928649-ie77n6pa9js5rjn3hle71os2rmes9udp.apps.googleusercontent.com</string>
+
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>
@@ -37,4 +41,6 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

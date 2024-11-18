@@ -6,6 +6,7 @@ import com.google.android.gms.tasks.Tasks
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import data.PreferenceManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -16,7 +17,8 @@ import kotlinx.coroutines.async
 
 @Singleton
 class UserRepository @Inject constructor(
-    private val firestore: FirebaseFirestore
+    private val firestore: FirebaseFirestore,
+    private val preferenceManager: PreferenceManager,
 ) {
 
     private val usersCollection = firestore.collection("accounts")
@@ -41,6 +43,9 @@ class UserRepository @Inject constructor(
         try {
             val document = usersCollection.document(authId).get().await()
             user=document.toObject(UserData::class.java)
+            preferenceManager.isSignedIn=true
+            preferenceManager.profileUrl=""
+            preferenceManager.userName=user?.playerName.toString()
             Log.d("UserRepository", "Data Received")
             Tasks.forResult(user)
         } catch (e: Exception) {

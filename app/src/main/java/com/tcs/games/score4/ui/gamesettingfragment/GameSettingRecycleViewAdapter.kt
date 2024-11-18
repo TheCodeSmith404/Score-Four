@@ -18,6 +18,7 @@ import data.defaults.DefaultCardOptions
 import model.gamesettings.CardInfoAdapter
 
 class GameSettingRecycleViewAdapter(
+    private val context:Context,
     private val cards:List<CardInfoAdapter>,
     private val onEditClick:(Int)->Unit,
     private val onPreViewClick:(Int)->Unit,
@@ -28,6 +29,7 @@ class GameSettingRecycleViewAdapter(
     RecyclerView.Adapter<GameSettingRecycleViewAdapter.ViewHolder>() {
     inner class ViewHolder(binding:FragmentGameSettingsItemBinding):RecyclerView.ViewHolder(binding.root){
         val cardId=binding.textViewCardName
+        val root=binding.root
         val edit=binding.imageButtonEdit
         val preview=binding.imageButtonPreview
         val previewCardContainer=binding.cardContainerConstraint
@@ -82,7 +84,7 @@ class GameSettingRecycleViewAdapter(
             }
         }
         fun setCardTint(color:Int){
-            setCardTint(previewCardCard,previewCardIcon,previewCardTextView,editCardColor,editCardIcon,color)
+            setCardTint(root,previewCardCard,previewCardIcon,previewCardTextView,editCardColor,editCardIcon,color)
         }
         fun setCardName(name:String){
             setCardName(previewCardTextView,editCardName,name)
@@ -93,9 +95,9 @@ class GameSettingRecycleViewAdapter(
                     // Hide the keyboard
                     val imm = editCardName.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.hideSoftInputFromWindow(editCardName.windowToken, 0)
-
                     // Update the name (your logic for updating the name goes here)
                     val newName = editCardName.text.toString()
+
                     updateName(newName,position)  // Call your update function with the new name
 
                     true  // Return true to indicate the action was handled
@@ -107,6 +109,10 @@ class GameSettingRecycleViewAdapter(
         private fun updateName(name:String,position: Int){
             previewCardTextView.text=name
             onNameChange(position,name)
+        }
+        fun setIcon(id:Int){
+            editCardIcon.setImageDrawable(DefaultCardOptions.getDrawable(context,id))
+            previewCardIcon.setImageDrawable(DefaultCardOptions.getDrawable(context,id))
         }
 
     }
@@ -127,6 +133,7 @@ class GameSettingRecycleViewAdapter(
         holder.setCardTint(card.color)
         holder.setCardName(card.name)
         holder.setUpKeyListener(position)
+        holder.setIcon(card.icon)
         holder.setUpIconPicker(position,card.icon)
         holder.setUpColorPicker(position,card.color)
         holder.setUpImageSelector(position, card.imageRes)
@@ -139,16 +146,22 @@ class GameSettingRecycleViewAdapter(
             else->"Card D"
         }
     }
-    private fun setCardTint(card:MaterialCardView,icon:ImageView,text:TextView,editColor:ImageView,editIconColor:ImageView,colorId:Int){
+    private fun setCardTint(cardParent:MaterialCardView,cardPreview:MaterialCardView,icon:ImageView,text:TextView,editColor:ImageView,editIconColor:ImageView,colorId:Int){
         val selectedColor=DefaultCardOptions.getColor(colorId,false)
-        card.strokeColor=selectedColor
+        cardParent.strokeColor=selectedColor
+        cardPreview.strokeColor=selectedColor
         text.setBackgroundColor(DefaultCardOptions.getColor(colorId,true))
         icon.setColorFilter(selectedColor, android.graphics.PorterDuff.Mode.SRC_IN)
         editColor.setColorFilter(selectedColor,android.graphics.PorterDuff.Mode.SRC_IN)
         editIconColor.setColorFilter(selectedColor,android.graphics.PorterDuff.Mode.SRC_IN)
     }
-    private fun setCardIcon(icon:ImageView,iconId:Int){
-
+    fun updateCardIcon(position:Int,iconId:Int){
+        cards[position].icon=iconId
+        notifyItemChanged(position)
+    }
+    fun changeCardColor(position:Int,colorId:Int){
+        cards[position].color=colorId
+        notifyItemChanged(position)
     }
     private fun setCardName(view:TextView,editText:EditText,text:String){
         view.text=text

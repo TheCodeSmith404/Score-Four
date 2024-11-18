@@ -17,7 +17,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import model.UserData
 import utils.convertors.TimeUtils
-import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -62,7 +61,7 @@ class LoginViewModel @Inject constructor(private val userRepository: UserReposit
                     val data=UserData(id,generateShownId(id,currentTime),user.displayName.toString(),user.email.toString(),currentTime,currentTime,currentTime,pair.first,pair.second,false,0,0,0,0,0,0,0,0,0,true)
                     val uploadData=userRepository.addUser(data)
                     preferenceManager.isSignedIn=true
-                    preferenceManager.imageUrl=""
+                    preferenceManager.profileUrl=""
                     preferenceManager.userName=user.displayName.toString()
                     // Use await() to block further execution until user is added
                     uploadData.await()
@@ -92,7 +91,7 @@ class LoginViewModel @Inject constructor(private val userRepository: UserReposit
                     val data=UserData(id,"User Not Registered","User_${pair.first}","Please Sign Up",currentTime,currentTime,currentTime,pair.first,pair.second,false,0,0,0,0,0,0,0,0,0,false)
                     val uploadData=userRepository.addUser(data)
                     preferenceManager.isSignedIn=false
-                    preferenceManager.imageUrl=""
+                    preferenceManager.profileUrl=""
                     preferenceManager.userName=data.playerName
                     uploadData.await()
                     _user.value=auth.currentUser

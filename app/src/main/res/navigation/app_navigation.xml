@@ -59,8 +59,17 @@
             app:popUpToInclusive="true"
             app:destination="@id/waiting_room" />
         <action
-            android:id="@+id/action_game_settings_to_select_image"
-            app:destination="@id/select_image" />
+            android:id="@+id/action_game_settings_to_images_uploaded"
+            app:destination="@id/images_uploaded" />
+    </fragment>
+    <fragment
+        android:id="@+id/images_uploaded"
+        android:name="com.tcs.games.score4.ui.uploadimages.UploadImage"
+        tools:layout="@layout/fragment_upload_image"
+        android:label="Images Uploaded">
+        <action
+            android:id="@+id/action_images_uploaded_to_select_image"
+            app:destination="@id/select_image"/>
     </fragment>
     <fragment
         android:id="@+id/waiting_room"
@@ -84,7 +93,7 @@
         tools:layout="@layout/dialog_view_game_details"/>
     <fragment
         android:id="@+id/select_image"
-        android:name="com.tcs.games.score4.ui.gamesettingfragment.SelectImageFragment"
+        android:name="com.tcs.games.score4.ui.uploadimages.SelectImageFragment"
         android:label="Select Image"
         tools:layout="@layout/fragment_select_image"/>
     <fragment

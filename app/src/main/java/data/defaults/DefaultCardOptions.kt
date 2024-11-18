@@ -67,9 +67,41 @@ object DefaultCardOptions {
             5 to ContextCompat.getDrawable(context, R.drawable.star_three_points), // v5 drawable
             6 to ContextCompat.getDrawable(context, R.drawable.star_four_points), // v6 drawable
             7 to ContextCompat.getDrawable(context, R.drawable.star), // v7 drawable
-            8 to ContextCompat.getDrawable(context, R.drawable.hexagram)  // v8 drawable
+            8 to ContextCompat.getDrawable(context, R.drawable.hexagram), // v8 drawable
+            9 to ContextCompat.getDrawable(context, R.drawable.chess_pawn),
+            10 to ContextCompat.getDrawable(context, R.drawable.chess_knight),
+            11 to ContextCompat.getDrawable(context, R.drawable.chess_bishop),
+            12 to ContextCompat.getDrawable(context, R.drawable.chess_rook),
+            13 to ContextCompat.getDrawable(context, R.drawable.chess_queen),
+            14 to ContextCompat.getDrawable(context, R.drawable.chess_king),
+            15 to ContextCompat.getDrawable(context, R.drawable.car),
+            16 to ContextCompat.getDrawable(context, R.drawable.ferry),
         )
         return map[key]?:ContextCompat.getDrawable(context,R.drawable.star)!!
+    }
+
+    fun getColoursRadioButtonId(id:Int):Int{
+        val radioButtonMap = mapOf(
+            1 to R.id.card_color_option_1,
+            2 to R.id.card_color_option_2,
+            3 to R.id.card_color_option_3,
+            4 to R.id.card_color_option_4,
+            5 to R.id.card_color_option_5,
+            6 to R.id.card_color_option_6,
+            7 to R.id.card_color_option_7,
+            8 to R.id.card_color_option_8
+        )
+        return radioButtonMap[id]?:R.id.card_color_option_1
+    }
+
+    fun getTurnsRadioButtonId(id:Int):Int{
+        val radioGroupMap= mapOf(
+            1 to R.id.seconds_10,
+            2 to R.id.seconds_20,
+            3 to R.id.seconds_30,
+            4 to R.id.seconds_40,
+        )
+        return radioGroupMap[id]?:R.id.seconds_10
     }
 
 }

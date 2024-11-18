@@ -9,7 +9,11 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import data.PreferenceManager
+import data.defaults.DefaultCardOptions
+import data.repository.CreateGameRepository
+import data.repository.GameDetailsRepository
 import data.repository.UserRepository
+import data.repository.WaitingRoomRepository
 import javax.inject.Singleton
 
 @Module
@@ -22,12 +26,33 @@ object AppModule {
     }
     @Provides
     @Singleton
-    fun providesUserRepository(firestore: FirebaseFirestore):UserRepository{
-        return UserRepository(firestore)
+    fun providesUserRepository(firestore: FirebaseFirestore,preferenceManager: PreferenceManager):UserRepository{
+        return UserRepository(firestore,preferenceManager)
+    }
+    @Provides
+    @Singleton
+    fun providesGameSettingsRepository(firestore: FirebaseFirestore):CreateGameRepository{
+        return CreateGameRepository(firestore)
     }
     @Provides
     @Singleton
     fun providePreferenceManager(@ApplicationContext context:Context): PreferenceManager {
         return PreferenceManager(context)
+    }
+    @Provides
+    @Singleton
+    fun providesDefaultCardOptions():DefaultCardOptions{
+        return DefaultCardOptions
+    }
+    @Provides
+    @Singleton
+    fun providesGameDetailsRepository(firestore: FirebaseFirestore,preferenceManager: PreferenceManager):GameDetailsRepository{
+        return GameDetailsRepository(firestore,preferenceManager)
+    }
+
+    @Provides
+    @Singleton
+    fun providesWaitingRoomRepository(firestore: FirebaseFirestore):WaitingRoomRepository{
+        return WaitingRoomRepository(firestore)
     }
 }

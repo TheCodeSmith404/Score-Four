@@ -3,21 +3,33 @@ package com.tcs.games.score4.ui.waitingroom
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.navigateUp
 import com.tcs.games.score4.R
 import com.tcs.games.score4.databinding.FragmentWaitingRoomBinding
 import dagger.hilt.android.AndroidEntryPoint
+import data.repository.GameDetailsRepository
+import data.repository.WaitingRoomRepository
+import kotlinx.coroutines.launch
+import model.gameroom.GameRoom
+import model.gameroom.PlayersStatus
+import utils.views.WaitingRoomItem
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class WaitingRoomFragment:Fragment() {
     private var _binding:FragmentWaitingRoomBinding?=null
     private val binding get()=_binding!!
-    private lateinit var handler: Handler
-    private lateinit var navigateRunnable: Runnable
+    private val viewModel:WaitingRoomViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -31,30 +43,85 @@ class WaitingRoomFragment:Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setOnClickListeners()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        handler = Handler(Looper.getMainLooper())
-
-        // Define the Runnable
-        navigateRunnable = Runnable {
-            findNavController().navigate(R.id.action_waiting_room_to_game_room)
+        lifecycleScope.launch {
+            fetchGameRoom().observe(viewLifecycleOwner,{gameRoom->
+                if(gameRoom!=null) {
+                    if (viewModel.allPlayersReady(gameRoom.players)) {
+                        navigate()
+                    } else {
+                        setUpWaitingRoom(gameRoom)
+                    }
+                    if(gameRoom.numberOfPlayers+gameRoom.numberOfBots==4)
+                        binding.waitingRoomTvStatus.text=getString(R.string.fragment_waiting_room_waiting_for_players_to_be_ready)
+                    else
+                        binding.waitingRoomTvStatus.text=getString(R.string.fragment_waiting_room_waiting_for_players)
+                }
+                else
+                    dataFetchError()
+            })
         }
 
-        // Post the Runnable with a delay
-        handler.postDelayed(navigateRunnable, 4000)
     }
+    override fun onStart() {
+        super.onStart()
 
+    }
     override fun onStop() {
         super.onStop()
-        handler.removeCallbacks(navigateRunnable)
     }
     private fun setOnClickListeners(){
         binding.fragmentWaitingRoomTvGameDetails.setOnClickListener{
-            handler.removeCallbacks(navigateRunnable)
             findNavController().navigate(R.id.action_waiting_room_to_game_details)
         }
+        binding.checkBox.setOnCheckedChangeListener{ view,checked->
+            if(checked) {
+                view.isEnabled = false
+                updateUserStatus()
+            }
+        }
+    }
+    private fun fetchGameRoom(): LiveData<GameRoom?> {
+        return viewModel.fetchGameRoom()
+    }
+    private fun setUpWaitingRoom(data:GameRoom){
+        binding.host.setText(data.players[0].playerName)
+
+        if(data.players[0].isReady){
+            binding.host.setState(WaitingRoomItem.PlayerState.IS_READY)
+        }else{
+            binding.host.setState(WaitingRoomItem.PlayerState.PLAYER_JOINED)
+        }
+        for(i in 1..<data.numberOfPlayers){
+            addPlayer(i,data.players[i])
+        }
+        Log.d("Waiting Room",data.toString())
+
+    }
+    private fun addPlayer(index:Int,data:PlayersStatus){
+        val view=getPlayerItem(index)
+        view.setText(data.playerName)
+        if(data.isReady){
+            view.setState(WaitingRoomItem.PlayerState.IS_READY)
+        }else {
+            view.setState(WaitingRoomItem.PlayerState.PLAYER_JOINED)
+        }
+    }
+    private fun getPlayerItem(index:Int):WaitingRoomItem{
+        val map=mapOf(
+            1 to binding.player1,
+            2 to binding.player2,
+            3 to binding.player3,
+        )
+        return map[index]?:binding.player3
+    }
+    private fun dataFetchError(){
+        Toast.makeText(requireContext(),"Unable to fetch data retry",Toast.LENGTH_SHORT).show()
+    }
+    private fun updateUserStatus(){
+        viewModel.updatePlayerStatus()
+    }
+    private fun navigate(){
+        findNavController().navigate(R.id.action_waiting_room_to_game_room)
     }
 
 }
