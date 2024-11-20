@@ -1,60 +1,67 @@
 package com.tcs.games.score4.ui.uploadimages
 
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import com.tcs.games.score4.R
+import com.tcs.games.score4.databinding.FragmentUploadImageBinding
+import dagger.hilt.android.AndroidEntryPoint
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [UploadImage.newInstance] factory method to
- * create an instance of this fragment.
- */
-class UploadImage : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+@AndroidEntryPoint
+class UploadImage : Fragment(),OnUploadImageAdapterClickListener {
+    private var _binding:FragmentUploadImageBinding?=null
+    private val binding get()=_binding!!
+    private val sharedViewModel:SharedImageViewModel by activityViewModels()
+    private val viewModel:UploadImageViewModel by viewModels()
+    private val selectImageSharedViewModel:SelectImageSharedViewModel by activityViewModels()
+    private val selectImageLauncher =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            uri?.let { // Load image into ImageView
+                selectImageSharedViewModel.imageUri.value=it // Store URI in ViewModel
+                navigate()
+            }
         }
-    }
+    private lateinit var adapter:UploadImageAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View{
+        _binding=FragmentUploadImageBinding.inflate(layoutInflater,container,false)
+        val root=binding.root
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_upload_image, container, false)
+        return root
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setUpRecyclerView()
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment UploadImage.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            UploadImage().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onDeleteClick(position: Int, imageId: Int) {
+        TODO("Not yet implemented")
     }
+
+    override fun onFooterClick() {
+        selectImageLauncher.launch("image/*")
+    }
+    private fun navigate(){
+        val bundle = Bundle().apply {
+            putInt("sourceId", R.id.images_uploaded) // Pass the ID of the calling fragment
+        }
+        findNavController().navigate(R.id.action_images_upload_to_select_image,bundle)
+    }
+    private fun setUpRecyclerView(){
+        adapter=UploadImageAdapter(requireContext(), mutableListOf("a","b","c","d",),6,this)
+        binding.imagesRecycleView.layoutManager=GridLayoutManager(requireContext(),2)
+        binding.imagesRecycleView.adapter=adapter
+    }
+
 }

@@ -42,7 +42,7 @@ object DefaultCardOptions {
             1 to "Hammer",
             2 to "Queen",
             3 to "Rich",
-            4 to "Dirt",
+            4 to "Coins",
             5 to "Snow",
             6 to "Big Snow",
             7 to "You",
@@ -52,10 +52,10 @@ object DefaultCardOptions {
     }
 
     val defaultCards: MutableList<CardInfoAdapter> = mutableListOf(
-        CardInfoAdapter("00", getDefaultNames(1), 1, "", 1,false),
-        CardInfoAdapter("01", getDefaultNames(2), 2, "", 2,false),
-        CardInfoAdapter("10", getDefaultNames(3), 3, "", 3,false),
-        CardInfoAdapter("11", getDefaultNames(4), 4, "", 4,false)
+        CardInfoAdapter("00", getDefaultNames(1), 1, 0, 1,false),
+        CardInfoAdapter("01", getDefaultNames(2), 2, -1, 2,false),
+        CardInfoAdapter("10", getDefaultNames(3), 3, -2, 3,false),
+        CardInfoAdapter("11", getDefaultNames(4), 4, -3, 4,false)
     )
 
     fun getDrawable(context: Context,key:Int): Drawable {

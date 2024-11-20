@@ -9,6 +9,7 @@ import android.net.Uri
 import android.transition.Transition
 import android.util.Log
 import android.widget.ImageView
+import androidx.core.net.toUri
 import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.internal.Contexts.getApplication
@@ -40,6 +41,11 @@ object ImageUtils {
     fun loadBitmapIntoImageView(context: Context, bitmap: Bitmap, imageView: ImageView) {
         Glide.with(context)
             .load(bitmap) // Load the Bitmap
+            .into(imageView) // Set it into the ImageView
+    }
+    fun loadImageUriIntoImageView(context: Context, uri:Uri, imageView: ImageView) {
+        Glide.with(context)
+            .load(uri) // Load the Bitmap
             .into(imageView) // Set it into the ImageView
     }
     suspend fun compressBitmap(bitmap: Bitmap): Bitmap {
@@ -124,8 +130,9 @@ object ImageUtils {
         directoryName: String,
         imageId: String,
         context: Context,
+        nameToSave:String,
         saveToPrivateFiles: Boolean
-    ): File? {
+    ): Uri? {
         return withContext(Dispatchers.IO) {
             try {
                 // Create a reference to the Firebase Storage location
@@ -143,13 +150,14 @@ object ImageUtils {
                 }
 
                 // Create the target file
-                val file = File(targetDir, "$imageId.jpg")
+                val file = File(targetDir, "$nameToSave.jpg")
 
                 // Write the image data to the file
                 file.outputStream().use { it.write(imageData) }
+                Log.d("Download","Image downloaded at:${file.toUri()}")
 
                 Log.d("FirebaseDownload", "Image saved to: ${file.absolutePath}")
-                file
+                file.toUri()
             } catch (e: Exception) {
                 Log.e("FirebaseDownload", "Failed to download image: ${e.message}")
                 null

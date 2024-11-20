@@ -1,8 +1,10 @@
 package dependency
 
+import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,8 +28,8 @@ object AppModule {
     }
     @Provides
     @Singleton
-    fun providesUserRepository(firestore: FirebaseFirestore,preferenceManager: PreferenceManager):UserRepository{
-        return UserRepository(firestore,preferenceManager)
+    fun providesUserRepository(firestore: FirebaseFirestore,preferenceManager: PreferenceManager,firebaseStorage: FirebaseStorage):UserRepository{
+        return UserRepository(firestore,preferenceManager,firebaseStorage)
     }
     @Provides
     @Singleton
@@ -54,5 +56,10 @@ object AppModule {
     @Singleton
     fun providesWaitingRoomRepository(firestore: FirebaseFirestore):WaitingRoomRepository{
         return WaitingRoomRepository(firestore)
+    }
+    @Provides
+    @Singleton
+    fun providesFirebaseStorageInstance():FirebaseStorage{
+        return FirebaseStorage.getInstance()
     }
 }

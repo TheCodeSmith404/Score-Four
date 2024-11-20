@@ -22,7 +22,7 @@ class PreferenceManager(context: Context) {
         }
 
     var profileUrl: Uri?
-        get() = sharedPreferences.getString("image_url", "no image found")?.toUri()
+        get() = sharedPreferences.getString("image_url", null)?.toUri()
         set(value) {
             sharedPreferences.edit().putString("image_url", value.toString()).apply()
         }
@@ -30,5 +30,10 @@ class PreferenceManager(context: Context) {
         get()=sharedPreferences.getString("current_game_id","404")?:"404"
         set(value){
             sharedPreferences.edit().putString("current_game_id",value).apply()
+        }
+    var profileImageChanged:Boolean
+        get()=sharedPreferences.getBoolean("profile_image_changed",false)
+        set(value){
+            sharedPreferences.edit().putBoolean("profile_image_changed",false).apply()
         }
 }

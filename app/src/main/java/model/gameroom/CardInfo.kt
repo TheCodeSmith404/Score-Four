@@ -4,6 +4,6 @@ data class CardInfo(
     val id:String="",
     val name:String="",
     val color:Int=0,
-    val imageRes:String="",
+    val imageRes:Int=-1,
     val icon:Int=0,
 )

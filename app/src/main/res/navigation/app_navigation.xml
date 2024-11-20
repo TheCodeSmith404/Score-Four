@@ -37,7 +37,11 @@
         android:label="User_Info">
         <action
             android:id="@+id/action_dialog_user_info_to_select_image"
-            app:destination="@id/select_image"/>
+            app:destination="@id/select_image">
+            <argument
+                android:name="sourceId"
+                app:argType="integer" />
+        </action>
     </dialog>
     <dialog
         android:id="@+id/dialog_enter_credentials"
@@ -68,8 +72,12 @@
         tools:layout="@layout/fragment_upload_image"
         android:label="Images Uploaded">
         <action
-            android:id="@+id/action_images_uploaded_to_select_image"
-            app:destination="@id/select_image"/>
+            android:id="@+id/action_images_upload_to_select_image"
+            app:destination="@id/select_image">
+            <argument
+                android:name="sourceId"
+                app:argType="integer" />
+        </action>
     </fragment>
     <fragment
         android:id="@+id/waiting_room"

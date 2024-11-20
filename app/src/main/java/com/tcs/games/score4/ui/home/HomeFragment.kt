@@ -13,6 +13,7 @@ import com.tcs.games.score4.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 import data.PreferenceManager
 import data.repository.UserRepository
+import utils.ImageUtils
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -57,7 +58,9 @@ class HomeFragment : Fragment() {
         }
     }
     private fun loadImage(){
-
+        if(preferenceManager.profileUrl!=null)
+            ImageUtils.loadImageUriIntoImageView(requireContext(),
+                preferenceManager.profileUrl!!,binding.imageView3)
     }
     private fun setImageResource(){
 

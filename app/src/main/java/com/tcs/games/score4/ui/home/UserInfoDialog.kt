@@ -1,19 +1,25 @@
 package com.tcs.games.score4.ui.home
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.tcs.games.score4.R
 import com.tcs.games.score4.databinding.DialogUserInfoBinding
+import com.tcs.games.score4.ui.uploadimages.SelectImageSharedViewModel
+import com.tcs.games.score4.ui.uploadimages.SelectImageViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import data.PreferenceManager
 import data.repository.UserRepository
 import model.UserData
+import utils.ImageUtils
 import utils.convertors.TimeUtils
 import javax.inject.Inject
 
@@ -25,6 +31,17 @@ class UserInfoDialog:DialogFragment() {
     lateinit var userRepository:UserRepository
     @Inject
     lateinit var preferenceManager: PreferenceManager
+    private val selectImageViewModel:SelectImageSharedViewModel by activityViewModels()
+    private val selectImageLauncher =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            uri?.let { // Load image into ImageView
+                selectImageViewModel.imageUri.value=it // Store URI in ViewModel
+                val bundle = Bundle().apply {
+                    putInt("sourceId", R.id.dialog_user_info) // Pass the ID of the calling fragment
+                }
+                findNavController().navigate(R.id.action_dialog_user_info_to_select_image,bundle)
+            }
+        }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -55,6 +72,12 @@ class UserInfoDialog:DialogFragment() {
         binding.gamesPlayed.text=data.numberGamesPlayed.toString()
         binding.gamesWon.text=data.numberGamesWon.toString()
         binding.imagesUploaded.text="${data.numberImagesUploaded}/5"
+        loadImage()
+    }
+    private fun loadImage(){
+        if(preferenceManager.profileUrl!=null)
+            ImageUtils.loadImageUriIntoImageView(requireContext(),
+                preferenceManager.profileUrl!!,binding.imageView4)
     }
     private fun setOnClickListeners(){
         binding.imageButtonClose.setOnClickListener{
@@ -64,7 +87,7 @@ class UserInfoDialog:DialogFragment() {
             Toast.makeText(requireContext(),"Edit name",Toast.LENGTH_SHORT).show()
         }
         binding.imageButtonEditProfile.setOnClickListener{
-            findNavController().navigate(R.id.action_dialog_user_info_to_select_image)
+            selectImageLauncher.launch("image/*")
         }
     }
     override fun onStart() {

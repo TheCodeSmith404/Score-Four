@@ -81,6 +81,7 @@ class CropOverlayView @JvmOverloads constructor(
         bitmap.recycle() // Clean up the bitmap to avoid memory leaks
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {

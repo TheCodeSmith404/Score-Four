@@ -11,8 +11,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textfield.TextInputEditText
+import com.tcs.games.score4.R
 import com.tcs.games.score4.databinding.FragmentGameSettingsItemBinding
 import data.defaults.DefaultCardOptions
 import model.gamesettings.CardInfoAdapter
@@ -25,6 +28,7 @@ class GameSettingRecycleViewAdapter(
     private val onNameChange:(Int,String)->Unit,
     private val pickColor:(Int,Int)->Unit,
     private val pickIcon:(Int,Int)->Unit,
+    private val pickImage:(Int,Int)->Unit,
 ):
     RecyclerView.Adapter<GameSettingRecycleViewAdapter.ViewHolder>() {
     inner class ViewHolder(binding:FragmentGameSettingsItemBinding):RecyclerView.ViewHolder(binding.root){
@@ -43,6 +47,7 @@ class GameSettingRecycleViewAdapter(
         val colorPicker=binding.editColorPicker
         val iconPicker=binding.editIconPicker
         val selectImage=binding.uploadImageButton
+        val imageView=binding.cardPreviewImage
         fun setOnClickListeners(position: Int){
             edit.setOnClickListener{
                 setMode(true)
@@ -65,9 +70,9 @@ class GameSettingRecycleViewAdapter(
                 pickIcon(position,iconId)
             }
         }
-        fun setUpImageSelector(position: Int,currentImg:String){
+        fun setUpImageSelector(position: Int,currentImg:Int){
             selectImage.setOnClickListener{
-                Toast.makeText(selectImage.context,"Implementation Pending",Toast.LENGTH_SHORT).show()
+                pickImage(position,currentImg)
             }
         }
         fun setMode(isEdit:Boolean){
@@ -88,6 +93,14 @@ class GameSettingRecycleViewAdapter(
         }
         fun setCardName(name:String){
             setCardName(previewCardTextView,editCardName,name)
+        }
+        fun loadDefaultImage(id:Int){
+            Glide.with(context)
+                .load(id)  // Resource ID for WebP image
+                .diskCacheStrategy(DiskCacheStrategy.ALL) // Cache on disk for future use
+                .skipMemoryCache(false)  // Allow Glide to use memory cache for faster loading
+                .centerCrop()
+                .into(imageView)
         }
         fun setUpKeyListener(position: Int){
             editCardName.setOnEditorActionListener { _, actionId, _ ->
@@ -137,6 +150,8 @@ class GameSettingRecycleViewAdapter(
         holder.setUpIconPicker(position,card.icon)
         holder.setUpColorPicker(position,card.color)
         holder.setUpImageSelector(position, card.imageRes)
+        if(card.imageRes<=0)
+            holder.loadDefaultImage(getDefaultImageId(card.imageRes))
     }
     private fun getCardName(index:Int):String{
         return when(index){
@@ -144,6 +159,14 @@ class GameSettingRecycleViewAdapter(
             1->"Card B"
             2->"Card C"
             else->"Card D"
+        }
+    }
+    private fun getDefaultImageId(index:Int):Int{
+        return when(index){
+            0-> R.drawable.i0
+            -1->R.drawable.i1
+            -2->R.drawable.i2
+            else->R.drawable.i3
         }
     }
     private fun setCardTint(cardParent:MaterialCardView,cardPreview:MaterialCardView,icon:ImageView,text:TextView,editColor:ImageView,editIconColor:ImageView,colorId:Int){

@@ -7,8 +7,6 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.PointF
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffXfermode
 import android.graphics.Rect
 import android.graphics.RectF
 import android.net.Uri
@@ -16,27 +14,24 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import application.Application
-import dagger.hilt.android.internal.Contexts.getApplication
+import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import data.PreferenceManager
+import data.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import utils.ImageUtils
 import utils.views.CropOverlayView
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.OutputStream
 import javax.inject.Inject
 
 @HiltViewModel
 class SelectImageViewModel @Inject constructor(
-    val preferenceManager: PreferenceManager
+    val preferenceManager: PreferenceManager,
+    private val firebaseStorage: FirebaseStorage,
+    private val userRepository: UserRepository,
 ):ViewModel() {
-    val imageUri: MutableLiveData<Uri?> = MutableLiveData(null)
+
     val savedImageUri: MutableLiveData<Uri?> = MutableLiveData()
 
     // Function to handle cropping, compression, and saving image
@@ -157,7 +152,6 @@ class SelectImageViewModel @Inject constructor(
         return output
     }
 
-
     suspend fun getBitmapFromUri(uri: Uri, context: Context): Bitmap? {
         // Use withContext to switch to background thread (IO)
         Log.d("Crop","Getting bitmap from uri")
@@ -177,5 +171,21 @@ class SelectImageViewModel @Inject constructor(
     private fun saveUriToSharedPreferences(uri: Uri) {
         Log.d("Crop","Saving URI")
         preferenceManager.profileUrl=uri
+    }
+    suspend fun uploadToFirebase(context: Context,done:(Boolean,String)->Unit){
+       val url=ImageUtils.uploadImageToFirebase(firebaseStorage,"profile_images",userRepository.user!!.authId,getBitmapFromUri(savedImageUri.value!!,context)!!)
+        if(url!=null){
+            done(true,url)
+        }else
+            done(false,"failure")
+        Log.d("Upload profile",url.toString())
+    }
+    suspend fun updateProfileUrl(url:String):Boolean{
+        val done=userRepository.updateProfileImage(userRepository.user!!.authId,url)
+        if(done){
+            return true
+        }else{
+            return false
+        }
     }
 }

@@ -1,11 +1,13 @@
 package data.repository
 
+import android.content.Context
 import android.util.Log
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import data.PreferenceManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
@@ -14,11 +16,13 @@ import model.UserData
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.async
+import utils.ImageUtils
 
 @Singleton
 class UserRepository @Inject constructor(
     private val firestore: FirebaseFirestore,
     private val preferenceManager: PreferenceManager,
+    private val firebaseStorage: FirebaseStorage,
 ) {
 
     private val usersCollection = firestore.collection("accounts")
@@ -39,13 +43,22 @@ class UserRepository @Inject constructor(
         }
     }
     // Suspend function to get user data
-    suspend fun getUser(authId: String): Task<UserData?> = withContext(Dispatchers.IO) {
+    suspend fun getUser(authId: String,context: Context): Task<UserData?> = withContext(Dispatchers.IO) {
         try {
             val document = usersCollection.document(authId).get().await()
             user=document.toObject(UserData::class.java)
+            Log.d("Download","user Data: ${user.toString()}")
             preferenceManager.isSignedIn=true
-            preferenceManager.profileUrl=null
             preferenceManager.userName=user?.playerName.toString()
+            if(user!!.profileUrl!="none"&&preferenceManager.profileUrl==null||preferenceManager.profileImageChanged){
+                Log.d("Download","Starting Download")
+                preferenceManager.profileImageChanged=false
+                val uri=ImageUtils.downloadImageFromFirebase(firebaseStorage,"profile_images",user!!.authId, context,"profile_profile",true)
+                if(uri!=null){
+                    preferenceManager.profileUrl=uri
+                }
+            }
+            // TODO downloadImage from firebase if available
             Log.d("UserRepository", "Data Received")
             Tasks.forResult(user)
         } catch (e: Exception) {
@@ -53,6 +66,21 @@ class UserRepository @Inject constructor(
             Tasks.forResult(null)
         }
     }
+
+    suspend fun updateProfileImage(authId: String, profile: String): Boolean = withContext(Dispatchers.IO) {
+        try {
+            // Update the profile URL in the FireStore document
+            usersCollection.document(authId)
+                .update("profileUrl", profile)
+                .await()
+            user?.profileUrl=profile
+            // Wait for the operation to complete
+            true // Return true if the update succeeds
+        } catch (e: Exception) {
+            false // Return false if the update fails
+        }
+    }
+
 
     // Suspend function to check if user exists
     suspend fun checkUserExists(authId: String): Boolean = withContext(Dispatchers.IO) {

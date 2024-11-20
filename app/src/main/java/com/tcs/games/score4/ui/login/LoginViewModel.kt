@@ -1,10 +1,15 @@
 package com.tcs.games.score4.ui.login
 
+import android.annotation.SuppressLint
+import android.app.Application
+import android.content.Context
 import android.util.Log
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -20,7 +25,7 @@ import utils.convertors.TimeUtils
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val userRepository: UserRepository,private val preferenceManager: PreferenceManager) : ViewModel() {
+class LoginViewModel @Inject constructor(private val userRepository: UserRepository, private val preferenceManager: PreferenceManager,private val application: Application) : ViewModel() {
     private val auth= FirebaseAuth.getInstance()
     private val _user = MutableLiveData<FirebaseUser?>()
     val user: LiveData<FirebaseUser?> = _user
@@ -30,7 +35,7 @@ class LoginViewModel @Inject constructor(private val userRepository: UserReposit
         if(auth.currentUser!=null) {
             @Suppress("OPT_IN_USAGE")
             GlobalScope.launch {
-                isReady = userRepository.getUser(auth.currentUser!!.uid)
+                isReady = userRepository.getUser(auth.currentUser!!.uid,application.applicationContext)
                 isReady.await()
             }
         }
@@ -50,7 +55,7 @@ class LoginViewModel @Inject constructor(private val userRepository: UserReposit
                 val exists = userRepository.checkUserExists(id)
                 if (exists) {
                     Log.d("LoginViewModel", "User Exists")
-                    userRepository.getUser(id)
+                    userRepository.getUser(id,application.applicationContext)
                 } else {
                     Log.d("LoginViewModel", "User Does Not Exist")
 
@@ -58,7 +63,7 @@ class LoginViewModel @Inject constructor(private val userRepository: UserReposit
                     val pair = userRepository.getStats().await()
 
                     // Create UserData object with details
-                    val data=UserData(id,generateShownId(id,currentTime),user.displayName.toString(),user.email.toString(),currentTime,currentTime,currentTime,pair.first,pair.second,false,0,0,0,0,0,0,0,0,0,true)
+                    val data=UserData(id,generateShownId(id,currentTime),user.displayName.toString(),user.email.toString(),"none",currentTime,currentTime,currentTime,pair.first,pair.second,false,0,0,0,0,0,0,0,0,0,true)
                     val uploadData=userRepository.addUser(data)
                     preferenceManager.isSignedIn=true
                     preferenceManager.profileUrl=null
@@ -88,7 +93,7 @@ class LoginViewModel @Inject constructor(private val userRepository: UserReposit
                 viewModelScope.launch {
                     val currentTime = TimeUtils.getCurrentTimeInMillis()
                     val pair = userRepository.getStats().await()
-                    val data=UserData(id,"User Not Registered","User_${pair.first}","Please Sign Up",currentTime,currentTime,currentTime,pair.first,pair.second,false,0,0,0,0,0,0,0,0,0,false)
+                    val data=UserData(id,"User Not Registered","User_${pair.first}","Please Sign Up","none",currentTime,currentTime,currentTime,pair.first,pair.second,false,0,0,0,0,0,0,0,0,0,false)
                     val uploadData=userRepository.addUser(data)
                     preferenceManager.isSignedIn=false
                     preferenceManager.profileUrl=null

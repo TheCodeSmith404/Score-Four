@@ -97,6 +97,9 @@ class GameSettingFragment:Fragment(),OptionsBottomSheet.OptionsBottomSheetListen
                 optionSheetViewModel.updateState(false,position,iconId)
                 showOptionsBottomSheet()
             },
+            pickImage = {position,imageId->
+                findNavController().navigate(R.id.action_game_settings_to_images_uploaded)
+            }
         )
     }
     private fun setUpRecycleView(){
