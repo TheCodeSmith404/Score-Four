@@ -34,6 +34,11 @@ class PreferenceManager(context: Context) {
     var profileImageChanged:Boolean
         get()=sharedPreferences.getBoolean("profile_image_changed",false)
         set(value){
-            sharedPreferences.edit().putBoolean("profile_image_changed",false).apply()
+            sharedPreferences.edit().putBoolean("profile_image_changed",value).apply()
+        }
+    var imagesDownloaded:Boolean
+        get()=sharedPreferences.getBoolean("images_uploaded",false)
+        set(value){
+            sharedPreferences.edit().putBoolean("images_uploaded",value).apply()
         }
 }

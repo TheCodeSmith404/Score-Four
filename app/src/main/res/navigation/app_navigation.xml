@@ -41,6 +41,9 @@
             <argument
                 android:name="sourceId"
                 app:argType="integer" />
+            <argument
+                android:name="imageName"
+                app:argType="string"/>
         </action>
     </dialog>
     <dialog
@@ -68,7 +71,7 @@
     </fragment>
     <fragment
         android:id="@+id/images_uploaded"
-        android:name="com.tcs.games.score4.ui.uploadimages.UploadImage"
+        android:name="com.tcs.games.score4.ui.uploadedimages.UploadedImages"
         tools:layout="@layout/fragment_upload_image"
         android:label="Images Uploaded">
         <action
@@ -77,6 +80,9 @@
             <argument
                 android:name="sourceId"
                 app:argType="integer" />
+            <argument
+                android:name="imageName"
+                app:argType="string"/>
         </action>
     </fragment>
     <fragment
@@ -101,7 +107,7 @@
         tools:layout="@layout/dialog_view_game_details"/>
     <fragment
         android:id="@+id/select_image"
-        android:name="com.tcs.games.score4.ui.uploadimages.SelectImageFragment"
+        android:name="com.tcs.games.score4.ui.selectimage.SelectImageFragment"
         android:label="Select Image"
         tools:layout="@layout/fragment_select_image"/>
     <fragment

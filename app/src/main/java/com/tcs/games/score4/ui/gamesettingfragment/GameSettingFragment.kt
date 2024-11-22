@@ -9,14 +9,22 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tcs.games.score4.R
 import com.tcs.games.score4.databinding.FragmentGameSettingsBinding
 import com.tcs.games.score4.ui.gamesettingfragment.GameSettingViewModel
+import com.tcs.games.score4.ui.uploadedimages.UploadedImagesSharedViewModel
+import com.tcs.games.score4.ui.uploadedimages.UploadedImagesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import data.repository.UserRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import model.gameroom.GameRoom
 import model.gameroom.PlayersStatus
@@ -34,7 +42,9 @@ class GameSettingFragment:Fragment(),OptionsBottomSheet.OptionsBottomSheetListen
     private lateinit var optionsBottomSheet: OptionsBottomSheet
     @Inject
     lateinit var userRepository: UserRepository
-
+    private val uploadedImagesSharedViewModel:UploadedImagesSharedViewModel by activityViewModels()
+    private val job: Job by lazy{ Job() }
+    private val imageLoadingScope: CoroutineScope by lazy { CoroutineScope(Dispatchers.IO + job) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,6 +63,34 @@ class GameSettingFragment:Fragment(),OptionsBottomSheet.OptionsBottomSheetListen
         setOnClickListeners()
         setUpRecycleView()
         setUpNumberPicker()
+        setUpImageChangeListner()
+    }
+    private fun setUpImageChangeListner(){
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                uploadedImagesSharedViewModel.imagesChanged.collect{changed->
+                    when(changed){
+                        true->{
+                            uploadedImagesSharedViewModel.imagesChanged.value=false
+                            val data=uploadedImagesSharedViewModel.cardId.value
+                            updateRvAdapter(data)
+                        }
+                        false->{
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+    private fun updateRvAdapter(data:MutableMap<Int,Pair<Int,Int>>){
+        viewModel.cards.forEachIndexed { index, cardInfoAdapter ->
+            val info=data[index]!!
+            if(cardInfoAdapter.imageRes!=info.first){
+                adapter.updateCardImage(index,info.first)
+            }
+        }
+
     }
     private fun setOnClickListeners(){
         binding.fragmentGameSettingsCreate.setOnClickListener{
@@ -62,8 +100,10 @@ class GameSettingFragment:Fragment(),OptionsBottomSheet.OptionsBottomSheetListen
     }
     private fun setUpAdapter(){
         adapter= GameSettingRecycleViewAdapter(
+            application = requireActivity().application,
             context=requireContext(),
             cards = viewModel.cards,
+            coroutineScope = imageLoadingScope,
             onEditClick = { position ->
                 viewModel.cards[position].isEdit=true
             },
@@ -98,6 +138,7 @@ class GameSettingFragment:Fragment(),OptionsBottomSheet.OptionsBottomSheetListen
                 showOptionsBottomSheet()
             },
             pickImage = {position,imageId->
+                uploadedImagesSharedViewModel.updateCurrentCardId(position)
                 findNavController().navigate(R.id.action_game_settings_to_images_uploaded)
             }
         )
@@ -125,6 +166,11 @@ class GameSettingFragment:Fragment(),OptionsBottomSheet.OptionsBottomSheetListen
     }
     override fun onCardsOptionSelected(isColor: Boolean, position:Int, id: Int) {
         if(isColor){
+            val card=uploadedImagesSharedViewModel.cardId.value
+            var cardPair=card[position]!!
+            cardPair=Pair(cardPair.first,id)
+            card[position]=cardPair
+            uploadedImagesSharedViewModel.updateImageData(card)
             optionSheetViewModel.setColors.remove(viewModel.cards[position].color)
             optionSheetViewModel.setColors.add(id)
             viewModel.cards[position].color = id
@@ -155,5 +201,10 @@ class GameSettingFragment:Fragment(),OptionsBottomSheet.OptionsBottomSheetListen
                 Log.d("GameSettings","Error Creating game room")
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        job.cancel()
     }
 }

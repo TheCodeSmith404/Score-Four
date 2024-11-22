@@ -80,6 +80,20 @@ class UserRepository @Inject constructor(
             false // Return false if the update fails
         }
     }
+    suspend fun updateImageList(list:MutableList<Int>):Boolean = withContext(Dispatchers.IO){
+        try{
+            usersCollection.document(user!!.authId)
+                .update(
+                    "imageData",list,
+                    "numberImagesUploaded",user!!.numberImagesUploaded+1)
+                .await()
+            user!!.numberImagesUploaded++
+            user?.imageData=list
+            true
+        }catch (e:Exception){
+            false
+        }
+    }
 
 
     // Suspend function to check if user exists

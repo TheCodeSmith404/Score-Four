@@ -10,15 +10,17 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.tcs.games.score4.R
 import com.tcs.games.score4.databinding.DialogUserInfoBinding
-import com.tcs.games.score4.ui.uploadimages.SelectImageSharedViewModel
-import com.tcs.games.score4.ui.uploadimages.SelectImageViewModel
+import com.tcs.games.score4.ui.selectimage.SelectImageSharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import data.PreferenceManager
 import data.repository.UserRepository
-import model.UserData
+import kotlinx.coroutines.launch
 import utils.ImageUtils
 import utils.convertors.TimeUtils
 import javax.inject.Inject
@@ -31,12 +33,13 @@ class UserInfoDialog:DialogFragment() {
     lateinit var userRepository:UserRepository
     @Inject
     lateinit var preferenceManager: PreferenceManager
-    private val selectImageViewModel:SelectImageSharedViewModel by activityViewModels()
+    private val selectImageViewModel: SelectImageSharedViewModel by activityViewModels()
     private val selectImageLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             uri?.let { // Load image into ImageView
                 selectImageViewModel.imageUri.value=it // Store URI in ViewModel
                 val bundle = Bundle().apply {
+                    putString("imageName","profile_image")
                     putInt("sourceId", R.id.dialog_user_info) // Pass the ID of the calling fragment
                 }
                 findNavController().navigate(R.id.action_dialog_user_info_to_select_image,bundle)
@@ -55,6 +58,7 @@ class UserInfoDialog:DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpViews()
         setOnClickListeners()
+        observeImageChanges()
     }
     @SuppressLint("SetTextI18n")
     private fun setUpViews(){
@@ -88,6 +92,23 @@ class UserInfoDialog:DialogFragment() {
         }
         binding.imageButtonEditProfile.setOnClickListener{
             selectImageLauncher.launch("image/*")
+        }
+    }
+    private fun observeImageChanges(){
+        lifecycleScope.launch{
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                selectImageViewModel.isImageUploaded.collect{value->
+                    when(value){
+                        true->{
+                            selectImageViewModel.updateImageUploaded(false)
+                        }
+                        false->{
+                            // Do nothing
+                        }
+                    }
+                }
+
+            }
         }
     }
     override fun onStart() {

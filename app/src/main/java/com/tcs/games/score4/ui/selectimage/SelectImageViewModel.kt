@@ -1,4 +1,4 @@
-package com.tcs.games.score4.ui.uploadimages
+package com.tcs.games.score4.ui.selectimage
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -33,9 +33,14 @@ class SelectImageViewModel @Inject constructor(
 ):ViewModel() {
 
     val savedImageUri: MutableLiveData<Uri?> = MutableLiveData()
+    var imageName:String="profile_image"
+    var sourceId:Int=0
+    fun getUserId():String{
+        return userRepository.user!!.authId
+    }
 
     // Function to handle cropping, compression, and saving image
-    fun cropCompressAndSaveImage(originalBitmap: Bitmap, cropOverlay: CropOverlayView,context:Context,onComplete: (Boolean) -> Unit) {
+    fun cropCompressAndSaveImage(imageName:String,originalBitmap: Bitmap, cropOverlay: CropOverlayView,context:Context,onComplete: (Boolean) -> Unit) {
         viewModelScope.launch {
             try {
                 Log.d("Crop","Starting to crop")
@@ -46,11 +51,10 @@ class SelectImageViewModel @Inject constructor(
                 val compressedBitmap = ImageUtils.compressBitmap(croppedBitmap)
                 // Save the image to storage
                 val savedUri = ImageUtils.
-                saveImageToInternalStorage(compressedBitmap,context,"profile_picture.jpg")
+                saveImageToInternalStorage(compressedBitmap,context,"$imageName.jpg")
                 Log.d("Crop","saved Uri: ${savedUri.toString()}")
                 if (savedUri != null) {
                     // Save URI in SharedPreferences
-                    saveUriToSharedPreferences(savedUri)
                     savedImageUri.value=savedUri
                     Log.d("Crop","All Done")
                     onComplete(true)
@@ -152,7 +156,7 @@ class SelectImageViewModel @Inject constructor(
         return output
     }
 
-    suspend fun getBitmapFromUri(uri: Uri, context: Context): Bitmap? {
+    private suspend fun getBitmapFromUri(uri: Uri, context: Context): Bitmap? {
         // Use withContext to switch to background thread (IO)
         Log.d("Crop","Getting bitmap from uri")
         return withContext(Dispatchers.IO) {
@@ -172,8 +176,8 @@ class SelectImageViewModel @Inject constructor(
         Log.d("Crop","Saving URI")
         preferenceManager.profileUrl=uri
     }
-    suspend fun uploadToFirebase(context: Context,done:(Boolean,String)->Unit){
-       val url=ImageUtils.uploadImageToFirebase(firebaseStorage,"profile_images",userRepository.user!!.authId,getBitmapFromUri(savedImageUri.value!!,context)!!)
+    suspend fun uploadToFirebase(context: Context,directory:String,imageName:String,done:(Boolean,String)->Unit){
+       val url=ImageUtils.uploadImageToFirebase(firebaseStorage,directory,imageName,getBitmapFromUri(savedImageUri.value!!,context)!!)
         if(url!=null){
             done(true,url)
         }else

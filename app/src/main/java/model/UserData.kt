@@ -22,5 +22,5 @@ data class UserData(
     var lastGameAbandonedTimeAsHost:Long=0,
     var status:Int=0,
     var isSignedIn:Boolean=false,
-    val imageData:MutableList<Int> = mutableListOf()
+    var imageData:MutableList<Int> = mutableListOf()
     )

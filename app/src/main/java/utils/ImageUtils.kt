@@ -11,10 +11,13 @@ import android.util.Log
 import android.widget.ImageView
 import androidx.core.net.toUri
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.internal.Contexts.getApplication
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
@@ -90,7 +93,21 @@ object ImageUtils {
             }
         }
     }
-    suspend fun loadImageFromInternalStorage(context:Context,name:String):Bitmap?{
+    suspend fun loadCardImageFromInternalStorage(context: Context,name:String,imageView:ImageView){
+        val file=File(getApplication(context).filesDir,"$name.jpg")
+        return withContext(Dispatchers.Main){
+            if(file.exists()){
+                Glide.with(context)
+                    .load(file)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL) // Cache on disk
+                    .skipMemoryCache(false)
+                    .into(imageView)
+            }else{
+                Log.d("cardImage","404 file not found $name")
+            }
+        }
+    }
+    suspend fun loadImageBitmapFromInternalStorage(context:Context,name:String):Bitmap?{
         val file=File(getApplication(context).filesDir,name)
         return withContext(Dispatchers.IO) {
             if (file.exists()) {
@@ -124,13 +141,68 @@ object ImageUtils {
             }
         }
     }
+    suspend fun downloadMultipleImagesFromFirebase(
+        firebaseStorage: FirebaseStorage,
+        directoryName: String,
+        imageList: List<Int>,
+        context: Context,
+        saveToPrivateFiles: Boolean,
+        progressListener: (Int) -> Unit,
+        doneListener: (Boolean) -> Unit,
+    ) {
+        var downloaded = 0
+        withContext(Dispatchers.IO) {
+            try {
+                val storageRef = firebaseStorage.reference
+
+                imageList.map { image ->
+                    async {
+                        try {
+                            val imageRef = storageRef.child("$directoryName/card_image_$image.jpg")
+
+                            // Avoid loading data into memory, use getFile()
+                            val targetDir = if (saveToPrivateFiles) {
+                                context.filesDir
+                            } else {
+                                context.cacheDir
+                            }
+                            val file = File(targetDir, "card_image_$image.jpg")
+
+                            // Download directly to the file
+                            imageRef.getFile(file).await()
+
+                            synchronized(this@withContext) { downloaded++ }
+                            withContext(Dispatchers.Main) {
+                                progressListener(downloaded)
+                            }
+
+                            Log.d("Download", "Image downloaded at: ${file.toUri()}")
+                            Log.d("FirebaseDownload", "Image saved to: ${file.absolutePath}")
+                        } catch (e: Exception) {
+                            Log.e("FirebaseDownload", "Failed to download $image: ${e.message}")
+                            throw e // Propagate exception to stop further downloads
+                        }
+                    }
+                }.awaitAll() // Wait for all downloads to complete
+                withContext(Dispatchers.Main) {
+                    doneListener(true)
+                }
+            } catch (exception: Exception) {
+                Log.e("FirebaseDownload", "Failed during image downloads: ${exception.message}")
+                withContext(Dispatchers.Main) {
+                    doneListener(false)
+                }
+            }
+        }
+    }
+
 
     suspend fun downloadImageFromFirebase(
         firebaseStorage: FirebaseStorage,
         directoryName: String,
         imageId: String,
         context: Context,
-        nameToSave:String,
+        nameToSave: String,
         saveToPrivateFiles: Boolean
     ): Uri? {
         return withContext(Dispatchers.IO) {
@@ -138,9 +210,6 @@ object ImageUtils {
                 // Create a reference to the Firebase Storage location
                 val storageRef = firebaseStorage.reference
                 val imageRef = storageRef.child("$directoryName/$imageId.jpg")
-
-                // Download the image as a ByteArray
-                val imageData = imageRef.getBytes(Long.MAX_VALUE).await()
 
                 // Determine the directory to save the image
                 val targetDir = if (saveToPrivateFiles) {
@@ -152,10 +221,10 @@ object ImageUtils {
                 // Create the target file
                 val file = File(targetDir, "$nameToSave.jpg")
 
-                // Write the image data to the file
-                file.outputStream().use { it.write(imageData) }
-                Log.d("Download","Image downloaded at:${file.toUri()}")
+                // Download the image directly to the file
+                imageRef.getFile(file).await()
 
+                Log.d("Download", "Image downloaded at: ${file.toUri()}")
                 Log.d("FirebaseDownload", "Image saved to: ${file.absolutePath}")
                 file.toUri()
             } catch (e: Exception) {
@@ -165,5 +234,21 @@ object ImageUtils {
         }
     }
 
+
+    fun getCardImageIdToUpload(images:MutableList<Int>,numOfImagesUploaded:Int):Pair<Int,List<Int>>{
+        if(images.size==numOfImagesUploaded){
+            images.add(numOfImagesUploaded+1)
+            return Pair(numOfImagesUploaded+1,images)
+        }else{
+            for(i in 1..<numOfImagesUploaded){
+                if(!images.contains(i)) {
+                    images.add(i)
+                    return Pair(i,images)
+                }
+            }
+        }
+        images.add(numOfImagesUploaded+1)
+        return Pair(numOfImagesUploaded+1,images)
+    }
 
 }

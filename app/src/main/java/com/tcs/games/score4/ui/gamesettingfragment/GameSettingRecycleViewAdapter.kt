@@ -1,5 +1,6 @@
 package com.tcs.games.score4.ui.gamesettingfragment
 
+import android.app.Application
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -18,11 +19,16 @@ import com.google.android.material.textfield.TextInputEditText
 import com.tcs.games.score4.R
 import com.tcs.games.score4.databinding.FragmentGameSettingsItemBinding
 import data.defaults.DefaultCardOptions
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import model.gamesettings.CardInfoAdapter
+import utils.ImageUtils
 
 class GameSettingRecycleViewAdapter(
+    private val application:Application,
     private val context:Context,
     private val cards:List<CardInfoAdapter>,
+    private val coroutineScope: CoroutineScope,
     private val onEditClick:(Int)->Unit,
     private val onPreViewClick:(Int)->Unit,
     private val onNameChange:(Int,String)->Unit,
@@ -102,6 +108,15 @@ class GameSettingRecycleViewAdapter(
                 .centerCrop()
                 .into(imageView)
         }
+        fun loadUploadedImage(id:Int){
+            coroutineScope.launch {
+                ImageUtils.loadCardImageFromInternalStorage(
+                    application,
+                    "card_image_$id",
+                    imageView
+                )
+            }
+        }
         fun setUpKeyListener(position: Int){
             editCardName.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -152,6 +167,8 @@ class GameSettingRecycleViewAdapter(
         holder.setUpImageSelector(position, card.imageRes)
         if(card.imageRes<=0)
             holder.loadDefaultImage(getDefaultImageId(card.imageRes))
+        else
+            holder.loadUploadedImage(card.imageRes)
     }
     private fun getCardName(index:Int):String{
         return when(index){
@@ -189,5 +206,9 @@ class GameSettingRecycleViewAdapter(
     private fun setCardName(view:TextView,editText:EditText,text:String){
         view.text=text
         editText.setText(text)
+    }
+    fun updateCardImage(position: Int,imageId:Int){
+        cards[position].imageRes=imageId
+        notifyItemChanged(position)
     }
 }
