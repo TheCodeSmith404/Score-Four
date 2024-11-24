@@ -22,6 +22,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import utils.ImageUtils
+import utils.constants.ImageNames
 import utils.views.CropOverlayView
 import javax.inject.Inject
 
@@ -33,7 +34,7 @@ class SelectImageViewModel @Inject constructor(
 ):ViewModel() {
 
     val savedImageUri: MutableLiveData<Uri?> = MutableLiveData()
-    var imageName:String="profile_image"
+    var imageName:String=ImageNames.PROFILE.txt
     var sourceId:Int=0
     fun getUserId():String{
         return userRepository.user!!.authId

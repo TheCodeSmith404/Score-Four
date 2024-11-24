@@ -30,6 +30,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import utils.ImageUtils
+import utils.constants.ImageNames
 
 @AndroidEntryPoint
 class UploadedImages : Fragment(),OnUploadImageAdapterClickListener {
@@ -89,8 +90,7 @@ class UploadedImages : Fragment(),OnUploadImageAdapterClickListener {
     }
 
     override fun onFooterClick() {
-        val pair=ImageUtils.getCardImageIdToUpload(viewModel.getImageList(),6)
-        viewModel.currentImageId=pair.first
+        viewModel.currentImageId=viewModel.getImageIdToUpload()
         selectImageLauncher.launch("image/*")
     }
 
@@ -137,7 +137,7 @@ class UploadedImages : Fragment(),OnUploadImageAdapterClickListener {
     }
     private fun navigate(imageId:Int){
         val bundle = Bundle().apply {
-            putString("imageName","card_image_$imageId")
+            putString("imageName","${ImageNames.CARD.txt}$imageId")
             putInt("sourceId", R.id.images_uploaded) // Pass the ID of the calling fragment
         }
         findNavController().navigate(R.id.action_images_upload_to_select_image,bundle)
@@ -146,7 +146,7 @@ class UploadedImages : Fragment(),OnUploadImageAdapterClickListener {
         setFragmentResultListener("selectImage") { requestKey, bundle ->
             val done = bundle.getBoolean("done", false)
             if (done) {
-                viewModel.updateImagesList()
+                viewModel.updateImagesList(viewModel.currentImageId)
                 // Handle successful result
                 Toast.makeText(requireContext(), "Image selection completed!", Toast.LENGTH_SHORT).show()
             } else {
@@ -161,7 +161,7 @@ class UploadedImages : Fragment(),OnUploadImageAdapterClickListener {
     }
     private fun setUpRecyclerView(){
         adapter=UploadedImagesAdapter(requireActivity().application,requireContext(), viewModel.getImageList(),
-            mutableMapOf(),6,customImageScope,this)
+            mutableMapOf(),viewModel.getMaxAllowedImages(),customImageScope,this)
         binding.imagesRecycleView.layoutManager=GridLayoutManager(requireContext(),2)
         binding.imagesRecycleView.adapter=adapter
     }
@@ -173,9 +173,12 @@ class UploadedImages : Fragment(),OnUploadImageAdapterClickListener {
                 },
                 {done->
                     viewModel.imageUploaded()
-                    adapter.updateImageData(viewModel.getImageList())
+                    Log.d("Null pointer","Updating adapter")
+                    adapter.updateImageData(viewModel.getImageList(),viewModel.currentImageId)
                     Log.d("downloadingImages",done.toString())
                 })
+        }else{
+            viewModel.imageUploaded()
         }
     }
     private fun observeImageChanges(){
@@ -184,7 +187,7 @@ class UploadedImages : Fragment(),OnUploadImageAdapterClickListener {
                selectImageSharedViewModel.isImageUploaded.collect{value->
                    when(value){
                        true->{
-                           viewModel.updateImagesList()
+                           viewModel.updateImagesList(viewModel.currentImageId)
                            selectImageSharedViewModel.updateImageUploaded(false)
                        }
                        false->{

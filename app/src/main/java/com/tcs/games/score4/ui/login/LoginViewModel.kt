@@ -63,7 +63,7 @@ class LoginViewModel @Inject constructor(private val userRepository: UserReposit
                     val pair = userRepository.getStats().await()
 
                     // Create UserData object with details
-                    val data=UserData(id,generateShownId(id,currentTime),user.displayName.toString(),user.email.toString(),"none",currentTime,currentTime,currentTime,pair.first,pair.second,false,0,0,0,0,0,0,0,0,0,true)
+                    val data=UserData(id,generateShownId(id,currentTime),user.displayName.toString(),user.email.toString(),"",currentTime,currentTime,currentTime,pair.first,pair.second,false,0,6,0,0,0,0,0,0,0,0,true)
                     val uploadData=userRepository.addUser(data)
                     preferenceManager.isSignedIn=true
                     preferenceManager.profileUrl=null
@@ -93,7 +93,7 @@ class LoginViewModel @Inject constructor(private val userRepository: UserReposit
                 viewModelScope.launch {
                     val currentTime = TimeUtils.getCurrentTimeInMillis()
                     val pair = userRepository.getStats().await()
-                    val data=UserData(id,"User Not Registered","User_${pair.first}","Please Sign Up","none",currentTime,currentTime,currentTime,pair.first,pair.second,false,0,0,0,0,0,0,0,0,0,false)
+                    val data=UserData(id,generateShownId(id,currentTime),"User_${pair.first}","Please Sign Up","",currentTime,currentTime,currentTime,pair.first,pair.second,false,0,6,0,0,0,0,0,0,0,0,false)
                     val uploadData=userRepository.addUser(data)
                     preferenceManager.isSignedIn=false
                     preferenceManager.profileUrl=null

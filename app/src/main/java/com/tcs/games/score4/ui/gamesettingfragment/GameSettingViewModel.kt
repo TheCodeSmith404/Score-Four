@@ -43,7 +43,7 @@ class GameSettingViewModel @Inject constructor(
     }
     suspend fun createGameRoom(hostData: UserData,time:Int):Boolean {
         return withContext(Dispatchers.IO) {
-            val userStatus=PlayersStatus(false,hostData.authId,hostData.generatedId,hostData.playerName,hostData.isOG,hostData.numberGamesPlayed,hostData.numberGamesWon,hostData.timeCreated,false,true)
+            val userStatus=PlayersStatus(false,hostData.authId,hostData.generatedId,hostData.playerName,hostData.profileUrl,hostData.isOG,hostData.numberGamesPlayed,hostData.numberGamesWon,hostData.timeCreated,false,true)
             val deck= DeckCreator.createDeck()
             val roomId = "${userStatus.playerId}${userStatus.numberOfGamesPlayed}" // Generate roomId
             val idPass = GenerateGameIdPass.getIdPass()

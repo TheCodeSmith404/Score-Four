@@ -1,5 +1,7 @@
 package com.tcs.games.score4.ui.waitingroom
 
+import android.content.Context
+import android.widget.ImageView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
@@ -13,6 +15,7 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import model.gameroom.GameRoom
 import model.gameroom.PlayersStatus
+import utils.ImageUtils
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,6 +33,9 @@ class WaitingRoomViewModel @Inject constructor(
     }
     private fun getUserAuthid():String{
         return userRepository.user!!.authId
+    }
+    fun setImageToPlayerIcon(context: Context, url:String, imageView: ImageView){
+        ImageUtils.downloadImageFromUrlToImageView(context,url,imageView)
     }
     fun updatePlayerStatus(){
         val userId=getUserAuthid()

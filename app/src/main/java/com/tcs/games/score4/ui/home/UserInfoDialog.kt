@@ -3,6 +3,7 @@ package com.tcs.games.score4.ui.home
 import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +23,7 @@ import data.PreferenceManager
 import data.repository.UserRepository
 import kotlinx.coroutines.launch
 import utils.ImageUtils
+import utils.constants.ImageNames
 import utils.convertors.TimeUtils
 import javax.inject.Inject
 
@@ -38,8 +40,9 @@ class UserInfoDialog:DialogFragment() {
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             uri?.let { // Load image into ImageView
                 selectImageViewModel.imageUri.value=it // Store URI in ViewModel
+                Log.d("Testing","Image name: ${ImageNames.PROFILE.txt}")
                 val bundle = Bundle().apply {
-                    putString("imageName","profile_image")
+                    putString("imageName", ImageNames.PROFILE.txt)
                     putInt("sourceId", R.id.dialog_user_info) // Pass the ID of the calling fragment
                 }
                 findNavController().navigate(R.id.action_dialog_user_info_to_select_image,bundle)
@@ -97,6 +100,7 @@ class UserInfoDialog:DialogFragment() {
     private fun observeImageChanges(){
         lifecycleScope.launch{
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                Log.d("Testing","Triggered ? ")
                 selectImageViewModel.isImageUploaded.collect{value->
                     when(value){
                         true->{

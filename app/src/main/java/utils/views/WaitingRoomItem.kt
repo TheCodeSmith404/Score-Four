@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import com.tcs.games.score4.R
@@ -72,8 +73,8 @@ class WaitingRoomItem @JvmOverloads constructor(
     fun setText(text:String){
         binding.playerName.text=text
     }
-    fun setProfilePicture(url:String){
-        // TODO implement image loading and cache it
+    fun getImageView():ImageView{
+        return binding.waitingRoomPlayerProfile
     }
 
 

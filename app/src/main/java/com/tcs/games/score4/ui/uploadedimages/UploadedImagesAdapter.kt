@@ -16,6 +16,7 @@ import data.defaults.DefaultCardOptions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import utils.ImageUtils
+import utils.constants.ImageNames
 
 class UploadedImagesAdapter(
     private val applicationContext:Application,
@@ -69,8 +70,10 @@ class UploadedImagesAdapter(
 
     override fun getItemViewType(position: Int): Int {
         return if(hasAddImageFunctionality&&imageData.size==position){
+            Log.d("Adapter Null Pointer","$position Footer Item")
             FOOTER
         }else{
+            Log.d("Adapter Null Pointer","$position Item")
             ITEM
         }
     }
@@ -94,15 +97,21 @@ class UploadedImagesAdapter(
             }
             is ItemViewHolder->{
                 val id=imageData[position]
+            Log.d("Null pointer",id.toString())
+                Log.d("Null pointer",cardsData[id].toString())
+                Log.d("Null pointer",cardsData.entries.toString())
                 coroutineScope.launch {
                     ImageUtils.loadCardImageFromInternalStorage(
                         applicationContext,
-                        "card_image_$id",
+                        "${ImageNames.CARD.txt}$id",
                         holder.cardImage
                     )
                 }
-                if(cardsData[id]!!.first!=""){
-                    holder.cardName.text="Card ${cardsData[id]!!.first}"
+                if(cardsData[id]==null){
+                    cardsData[id]=Pair("",0)
+                }
+                if(cardsData[id]?.first!=""){
+                    holder.cardName.text="Card ${cardsData[id]?.first}"
                     holder.cardName.visibility=View.VISIBLE
                     holder.backGround.setBackgroundColor(DefaultCardOptions.getColor(cardsData[id]!!.second,false))
                 }else{
@@ -134,9 +143,14 @@ class UploadedImagesAdapter(
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateImageData(images:MutableList<Int>){
+    fun updateImageData(images:MutableList<Int>,newId:Int){
+        Log.d("Null pointer","ImageData has been changed dudes")
+        Log.d("Null pointer",images.toString())
         imageData=images
-        notifyDataSetChanged()
+        Log.d("Null pointer",cardsData.entries.toString())
+        cardsData[newId]=Pair("",0)
+        Log.d("Null pointer",cardsData.entries.toString())
+        notifyItemInserted(images.size)
     }
     fun updateImageItemRemoved(position: Int){
         imageData.remove(position)

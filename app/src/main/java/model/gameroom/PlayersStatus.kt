@@ -5,6 +5,7 @@ data class PlayersStatus(
     val firebaseId:String="",
     val playerId:String="",
     val playerName:String="",
+    val playerProfile:String="",
     val isOG:Boolean=false,
     val numberOfGamesPlayed:Int=0,
     val numberOfGamesWon:Int=0,

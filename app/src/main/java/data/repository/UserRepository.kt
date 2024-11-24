@@ -17,6 +17,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.async
 import utils.ImageUtils
+import utils.constants.ImageNames
 
 @Singleton
 class UserRepository @Inject constructor(
@@ -53,7 +54,7 @@ class UserRepository @Inject constructor(
             if(user!!.profileUrl!="none"&&preferenceManager.profileUrl==null||preferenceManager.profileImageChanged){
                 Log.d("Download","Starting Download")
                 preferenceManager.profileImageChanged=false
-                val uri=ImageUtils.downloadImageFromFirebase(firebaseStorage,"profile_images",user!!.authId, context,"profile_profile",true)
+                val uri=ImageUtils.downloadImageFromFirebase(firebaseStorage,"profile_images",user!!.authId, context,ImageNames.PROFILE.txt,true)
                 if(uri!=null){
                     preferenceManager.profileUrl=uri
                 }

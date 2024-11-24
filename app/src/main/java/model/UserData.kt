@@ -13,6 +13,7 @@ data class UserData(
     val isOG:Boolean=false,
     var isImageUploaded:Boolean=false,
     var numberImagesUploaded:Int=0,
+    val numberImagesAllowed:Int=6,
     var numberGamesPlayed:Int=0,
     var numberGamesWon:Int=0,
     var numberGamesLost:Int=0,

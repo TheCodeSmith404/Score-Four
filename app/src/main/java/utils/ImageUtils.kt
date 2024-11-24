@@ -13,6 +13,7 @@ import androidx.core.net.toUri
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.firebase.storage.FirebaseStorage
+import com.tcs.games.score4.R
 import dagger.hilt.android.internal.Contexts.getApplication
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +21,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import utils.constants.ImageNames
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -93,19 +95,44 @@ object ImageUtils {
             }
         }
     }
-    suspend fun loadCardImageFromInternalStorage(context: Context,name:String,imageView:ImageView){
+    suspend fun loadCardImageFromInternalStorage(context: Context,name:String,imageView:ImageView,keepPlaceHolders:Boolean=false){
         val file=File(getApplication(context).filesDir,"$name.jpg")
         return withContext(Dispatchers.Main){
             if(file.exists()){
-                Glide.with(context)
-                    .load(file)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL) // Cache on disk
-                    .skipMemoryCache(false)
-                    .into(imageView)
+                if(keepPlaceHolders) {
+                    Glide.with(context)
+                        .load(file)
+                        .placeholder(R.drawable.baseline_person_24)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL) // Cache on disk
+                        .error(R.drawable.baseline_person_24)
+                        .skipMemoryCache(false)
+                        .into(imageView)
+                }else{
+                    loadImageFromFile(context,file,imageView)
+                }
             }else{
                 Log.d("cardImage","404 file not found $name")
             }
         }
+    }
+    fun downloadImageFromUrlToImageView(context: Context,url:String,imageView: ImageView){
+        if(url!="") {
+            Glide.with(context)
+                .load(url)
+                .diskCacheStrategy(DiskCacheStrategy.ALL) // Cache on disk
+                .skipMemoryCache(false)
+                .placeholder(R.drawable.baseline_person_24)
+                .error(R.drawable.baseline_person_24)
+                .into(imageView)
+        }
+    }
+
+    private fun loadImageFromFile(context:Context,file:File,imageView: ImageView){
+        Glide.with(context)
+            .load(file)
+            .diskCacheStrategy(DiskCacheStrategy.ALL) // Cache on disk
+            .skipMemoryCache(false)
+            .into(imageView)
     }
     suspend fun loadImageBitmapFromInternalStorage(context:Context,name:String):Bitmap?{
         val file=File(getApplication(context).filesDir,name)
@@ -158,7 +185,7 @@ object ImageUtils {
                 imageList.map { image ->
                     async {
                         try {
-                            val imageRef = storageRef.child("$directoryName/card_image_$image.jpg")
+                            val imageRef = storageRef.child("$directoryName/${ImageNames.CARD.txt}$image.jpg")
 
                             // Avoid loading data into memory, use getFile()
                             val targetDir = if (saveToPrivateFiles) {
@@ -166,7 +193,7 @@ object ImageUtils {
                             } else {
                                 context.cacheDir
                             }
-                            val file = File(targetDir, "card_image_$image.jpg")
+                            val file = File(targetDir, "${ImageNames.CARD.txt}$image.jpg")
 
                             // Download directly to the file
                             imageRef.getFile(file).await()
@@ -192,6 +219,38 @@ object ImageUtils {
                 withContext(Dispatchers.Main) {
                     doneListener(false)
                 }
+            }
+        }
+    }
+
+    suspend fun downloadAndSetImageFromFirebaseOrInternalStorage(
+        firebaseStorage: FirebaseStorage,
+        directoryName: String,
+        imageId: String,
+        context: Context,
+        nameToSave: String,
+        directoryToSave:String,
+        fromPrivateFiles: Boolean,
+        imageView: ImageView
+    ){
+        withContext(Dispatchers.IO){
+            try{
+                val targetDir=if(fromPrivateFiles){
+                    getApplication(context).filesDir
+                }else{
+                    getApplication(context).cacheDir
+                }
+                val file = File(targetDir, "$directoryToSave/$nameToSave.jpg")
+                if(file.exists()){
+                    loadImageFromFile(context,file,imageView)
+                }else{
+                    val storageRef = firebaseStorage.reference
+                    val imageRef = storageRef.child("$directoryName/$imageId.jpg")
+                    imageRef.getFile(file).await()
+                    loadImageFromFile(context,file,imageView)
+                }
+            }catch (e:Exception){
+                Log.e("Download Image","unable to download: ${e.message}",e)
             }
         }
     }
@@ -234,21 +293,5 @@ object ImageUtils {
         }
     }
 
-
-    fun getCardImageIdToUpload(images:MutableList<Int>,numOfImagesUploaded:Int):Pair<Int,List<Int>>{
-        if(images.size==numOfImagesUploaded){
-            images.add(numOfImagesUploaded+1)
-            return Pair(numOfImagesUploaded+1,images)
-        }else{
-            for(i in 1..<numOfImagesUploaded){
-                if(!images.contains(i)) {
-                    images.add(i)
-                    return Pair(i,images)
-                }
-            }
-        }
-        images.add(numOfImagesUploaded+1)
-        return Pair(numOfImagesUploaded+1,images)
-    }
 
 }

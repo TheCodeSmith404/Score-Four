@@ -27,11 +27,15 @@ class UploadedImagesViewModel @Inject constructor(
     fun getCardInitialFromId(id:Int):Char{
         return ('A' +id)
     }
+    fun getMaxAllowedImages():Int{
+        return userRepository.user?.numberImagesAllowed?:6
+    }
     fun getImageList():MutableList<Int> {
         return userRepository.user!!.imageData
     }
-    fun updateImagesList(){
+    fun updateImagesList(id:Int){
         val list=userRepository.user!!.imageData
+        list.add(id)
         Log.d("list",list.toString())
         viewModelScope.launch {
             val done=userRepository.updateImageList(list)
@@ -39,6 +43,9 @@ class UploadedImagesViewModel @Inject constructor(
         }
     }
     var currentImageId=1
+    fun getImageIdToUpload():Int{
+        return userRepository.user!!.numberImagesUploaded+1
+    }
 
     fun isImagesUploaded():Boolean{
         return preferenceManager.imagesDownloaded

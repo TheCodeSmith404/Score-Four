@@ -61,6 +61,7 @@ class EnterIdPassViewModel @Inject constructor(
                 currentUser.authId,
                 currentUser.generatedId,
                 currentUser.playerName,
+                currentUser.profileUrl,
                 currentUser.isOG,
                 currentUser.numberGamesPlayed,
                 currentUser.numberGamesWon,

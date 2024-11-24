@@ -8,7 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
@@ -22,6 +24,8 @@ import data.repository.WaitingRoomRepository
 import kotlinx.coroutines.launch
 import model.gameroom.GameRoom
 import model.gameroom.PlayersStatus
+import utils.ImageUtils
+import utils.constants.ImageNames
 import utils.views.WaitingRoomItem
 import javax.inject.Inject
 
@@ -30,6 +34,7 @@ class WaitingRoomFragment:Fragment() {
     private var _binding:FragmentWaitingRoomBinding?=null
     private val binding get()=_binding!!
     private val viewModel:WaitingRoomViewModel by viewModels()
+    private val waitingRoomGameDetailsViewModel:WaitingRoomSharedViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -91,6 +96,20 @@ class WaitingRoomFragment:Fragment() {
         }else{
             binding.host.setState(WaitingRoomItem.PlayerState.PLAYER_JOINED)
         }
+        if(data.players[0].playerProfile!=null){
+            if(viewModel.isUserHost()){
+                lifecycleScope.launch {
+                    ImageUtils.loadCardImageFromInternalStorage(
+                        requireActivity().applicationContext,
+                        ImageNames.PROFILE.txt,
+                        binding.host.getImageView(),
+                        true
+                    )
+                }
+            }else{
+                viewModel.setImageToPlayerIcon(requireContext(),data.players[0].playerProfile,binding.host.getImageView())
+            }
+        }
         for(i in 1..<data.numberOfPlayers){
             addPlayer(i,data.players[i])
         }
@@ -105,6 +124,7 @@ class WaitingRoomFragment:Fragment() {
         }else {
             view.setState(WaitingRoomItem.PlayerState.PLAYER_JOINED)
         }
+        viewModel.setImageToPlayerIcon(requireContext(),data.playerProfile,view.getImageView())
     }
     private fun getPlayerItem(index:Int):WaitingRoomItem{
         val map=mapOf(
@@ -121,7 +141,16 @@ class WaitingRoomFragment:Fragment() {
         viewModel.updatePlayerStatus()
     }
     private fun navigate(){
-        findNavController().navigate(R.id.action_waiting_room_to_game_room)
+        downloadAssets()
+        try {
+            findNavController().navigate(R.id.action_waiting_room_to_game_room)
+        }catch (e:IllegalStateException){
+            findNavController().navigateUp()
+            findNavController().navigate(R.id.action_waiting_room_to_game_room)
+        }
+    }
+    private fun downloadAssets(){
+
     }
 
 }

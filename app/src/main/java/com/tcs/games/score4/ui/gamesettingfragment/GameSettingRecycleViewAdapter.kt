@@ -23,6 +23,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import model.gamesettings.CardInfoAdapter
 import utils.ImageUtils
+import utils.constants.ImageNames
 
 class GameSettingRecycleViewAdapter(
     private val application:Application,
@@ -108,11 +109,14 @@ class GameSettingRecycleViewAdapter(
                 .centerCrop()
                 .into(imageView)
         }
+        fun setImageSelectorText(txt:String){
+            selectImage.text=txt
+        }
         fun loadUploadedImage(id:Int){
             coroutineScope.launch {
                 ImageUtils.loadCardImageFromInternalStorage(
                     application,
-                    "card_image_$id",
+                    "${ImageNames.CARD.txt}$id",
                     imageView
                 )
             }
@@ -165,10 +169,13 @@ class GameSettingRecycleViewAdapter(
         holder.setUpIconPicker(position,card.icon)
         holder.setUpColorPicker(position,card.color)
         holder.setUpImageSelector(position, card.imageRes)
-        if(card.imageRes<=0)
+        if(card.imageRes<=0) {
+            holder.setImageSelectorText("UPLOAD IMAGE")
             holder.loadDefaultImage(getDefaultImageId(card.imageRes))
-        else
+        } else {
+            holder.setImageSelectorText("Image: ${card.imageRes}")
             holder.loadUploadedImage(card.imageRes)
+        }
     }
     private fun getCardName(index:Int):String{
         return when(index){
