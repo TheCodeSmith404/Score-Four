@@ -54,7 +54,7 @@ class GameSettingRecycleViewAdapter(
         val colorPicker=binding.editColorPicker
         val iconPicker=binding.editIconPicker
         val selectImage=binding.uploadImageButton
-        val imageView=binding.cardPreviewImage
+        val imageView=binding.cardImage
         fun setOnClickListeners(position: Int){
             edit.setOnClickListener{
                 setMode(true)

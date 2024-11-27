@@ -1,6 +1,7 @@
 package model.gameroom
 
 data class GameRoom(
+    val roomId:String="",
     val gameId:String="",
     val gamePassword:String="",
     var hostId:String="",

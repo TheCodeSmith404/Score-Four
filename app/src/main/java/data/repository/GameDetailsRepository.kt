@@ -10,6 +10,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import model.gameroom.CardInfo
 import model.gameroom.GameRoom
 import model.gameroom.PlayersStatus
 import utils.views.WaitingRoomItem
@@ -19,7 +20,7 @@ import javax.inject.Singleton
 @Singleton
 class GameDetailsRepository @Inject constructor(
     private val firebaseFireStore: FirebaseFirestore,
-    private val preferenceManager: PreferenceManager,
+    preferenceManager: PreferenceManager,
 ) {
     private val _gameDetails = MutableLiveData<GameRoom?>()
     val gameRoom: LiveData<GameRoom?> get() = _gameDetails
@@ -56,6 +57,16 @@ class GameDetailsRepository @Inject constructor(
             .addOnFailureListener{
                 Log.d("GameDetailsRepository","failure")
             }
+    }
+    fun getGameInformation():Triple<List<CardInfo>,String,String>{
+        val game=gameRoom.value!!
+        return Triple(game.cards.toList(),game.roomId,game.timePerTurns.toString())
+    }
+    fun getCardsDetails():List<CardInfo>{
+        return gameRoom.value!!.cards.toList()
+    }
+    fun getTpt():String{
+        return gameRoom.value!!.timePerTurns.toString()
     }
 
 }

@@ -1,8 +1,9 @@
 package model.gameroom
 
 data class Deck(
-    var playerA:MutableList<String>,
-    var playerB:MutableList<String>,
-    var playerC:MutableList<String>,
-    var playerD:MutableList<String>,
+    var currentlyPlaying:Int=0,
+    var playerA:MutableList<String> = mutableListOf(),
+    var playerB:MutableList<String> = mutableListOf(),
+    var playerC:MutableList<String> = mutableListOf(),
+    var playerD:MutableList<String> = mutableListOf(),
 )

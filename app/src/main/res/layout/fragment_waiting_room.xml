@@ -36,71 +36,89 @@
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
         app:cardCornerRadius="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/textView9"
         app:layout_constraintTop_toBottomOf="@+id/textView9">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             android:padding="16dp">
 
-            <TextView
-                android:id="@+id/tv_waiting_room_host"
+            <ScrollView
+                android:id="@+id/scrollView2"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Host" />
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_editor_absoluteX="16dp">
 
-            <utils.views.WaitingRoomItem
-                android:id="@+id/host"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:playerName="Waiting for Player"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Player 1" />
+                    <TextView
+                        android:id="@+id/tv_waiting_room_host"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Host" />
 
-            <utils.views.WaitingRoomItem
-                android:id="@+id/player1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:playerName="Waiting for Player"/>
+                    <utils.views.WaitingRoomItem
+                        android:id="@+id/host"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:playerName="Waiting for Player" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Player 2" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Player 1" />
 
-            <utils.views.WaitingRoomItem
-                android:id="@+id/player2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:playerName="Waiting for Player"/>
+                    <utils.views.WaitingRoomItem
+                        android:id="@+id/player1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:playerName="Waiting for Player" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Player 3" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Player 2" />
 
-            <utils.views.WaitingRoomItem
-                android:id="@+id/player3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:playerName="Waiting for Player"/>
+                    <utils.views.WaitingRoomItem
+                        android:id="@+id/player2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:playerName="Waiting for Player" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Player 3" />
+
+                    <utils.views.WaitingRoomItem
+                        android:id="@+id/player3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:playerName="Waiting for Player" />
+                </LinearLayout>
+            </ScrollView>
 
             <LinearLayout
+                android:id="@+id/linearLayout3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
                 android:clickable="true"
                 android:orientation="horizontal"
-                android:padding="8dp">
+                android:padding="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/fragment_waiting_room_tv_game_details"
+                tools:layout_editor_absoluteX="16dp">
 
                 <TextView
                     android:id="@+id/fragment_waiting_room_tv_id_pass"
@@ -136,12 +154,17 @@
                 android:text="View game Details"
                 android:textAlignment="center"
                 android:textSize="16sp"
-                android:textStyle="italic|bold" />
+                android:textStyle="italic|bold"
+                app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+                tools:layout_editor_absoluteX="16dp" />
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/frameLayout2"
+                tools:layout_editor_absoluteX="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -166,8 +189,11 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <FrameLayout
+                android:id="@+id/frameLayout2"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/waiting_room_tv_status"
+                tools:layout_editor_absoluteX="16dp">
 
                 <ProgressBar
                     android:layout_width="wrap_content"
@@ -195,10 +221,12 @@
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:layout_editor_absoluteX="16dp" />
 
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

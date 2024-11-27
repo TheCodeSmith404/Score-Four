@@ -4,9 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.net.Uri
-import android.transition.Transition
 import android.util.Log
 import android.widget.ImageView
 import androidx.core.net.toUri
@@ -15,7 +13,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.firebase.storage.FirebaseStorage
 import com.tcs.games.score4.R
 import dagger.hilt.android.internal.Contexts.getApplication
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -29,12 +26,14 @@ import java.io.IOException
 import java.io.OutputStream
 
 object ImageUtils {
+
     fun loadImageAsBitmapIntoImageView(context: Context, imageView: ImageView, imageUri: Uri) {
         Glide.with(context)
             .asBitmap() // Load image as Bitmap
             .load(imageUri) // URI, URL, or File path
             .into(imageView)
     }
+
     fun getBitmapFromImageView(imageView: ImageView): Bitmap? {
         val drawable = imageView.drawable
         return if (drawable is BitmapDrawable) {
@@ -43,16 +42,19 @@ object ImageUtils {
             null
         }
     }
+
     fun loadBitmapIntoImageView(context: Context, bitmap: Bitmap, imageView: ImageView) {
         Glide.with(context)
             .load(bitmap) // Load the Bitmap
             .into(imageView) // Set it into the ImageView
     }
+
     fun loadImageUriIntoImageView(context: Context, uri:Uri, imageView: ImageView) {
         Glide.with(context)
             .load(uri) // Load the Bitmap
             .into(imageView) // Set it into the ImageView
     }
+
     suspend fun compressBitmap(bitmap: Bitmap): Bitmap {
         return withContext(Dispatchers.Default) {
             Log.d("Crop", "Compressing bitmap")
@@ -74,6 +76,7 @@ object ImageUtils {
             compressedBitmap
         }
     }
+
     suspend fun saveImageToInternalStorage(bitmap: Bitmap, context: Context, name: String): Uri? {
         return withContext(Dispatchers.IO) {
             Log.d("Crop", "Saving Image")
@@ -95,6 +98,7 @@ object ImageUtils {
             }
         }
     }
+
     suspend fun loadCardImageFromInternalStorage(context: Context,name:String,imageView:ImageView,keepPlaceHolders:Boolean=false){
         val file=File(getApplication(context).filesDir,"$name.jpg")
         return withContext(Dispatchers.Main){
@@ -115,6 +119,13 @@ object ImageUtils {
             }
         }
     }
+    suspend fun loadCardImageFromCacheDir(context: Context,name:String,gameId:String,imageView:ImageView){
+        val file=File(getApplication(context).cacheDir,"$gameId/$name.jpg")
+        return withContext(Dispatchers.Main){
+            loadImageFromFile(context,file,imageView)
+        }
+    }
+
     fun downloadImageFromUrlToImageView(context: Context,url:String,imageView: ImageView){
         if(url!="") {
             Glide.with(context)
@@ -134,6 +145,7 @@ object ImageUtils {
             .skipMemoryCache(false)
             .into(imageView)
     }
+
     suspend fun loadImageBitmapFromInternalStorage(context:Context,name:String):Bitmap?{
         val file=File(getApplication(context).filesDir,name)
         return withContext(Dispatchers.IO) {
@@ -144,12 +156,8 @@ object ImageUtils {
             }
         }
     }
-    suspend fun uploadImageToFirebase(
-        firebaseStorage: FirebaseStorage,
-        directoryName: String,
-        imageId: String,
-        image:Bitmap,
-    ): String? {
+
+    suspend fun uploadImageToFirebase(firebaseStorage: FirebaseStorage, directoryName: String, imageId: String, image:Bitmap, ): String? {
         return withContext(Dispatchers.IO) {
             try {
                 // Create a reference to the Firebase Storage location
@@ -168,15 +176,8 @@ object ImageUtils {
             }
         }
     }
-    suspend fun downloadMultipleImagesFromFirebase(
-        firebaseStorage: FirebaseStorage,
-        directoryName: String,
-        imageList: List<Int>,
-        context: Context,
-        saveToPrivateFiles: Boolean,
-        progressListener: (Int) -> Unit,
-        doneListener: (Boolean) -> Unit,
-    ) {
+
+    suspend fun downloadMultipleCardImagesFromFirebase(firebaseStorage: FirebaseStorage, directoryName: String, imageList: List<Int>, context: Context, saveToPrivateFiles: Boolean, progressListener: (Int) -> Unit, doneListener: (Boolean) -> Unit, ) {
         var downloaded = 0
         withContext(Dispatchers.IO) {
             try {
@@ -223,16 +224,7 @@ object ImageUtils {
         }
     }
 
-    suspend fun downloadAndSetImageFromFirebaseOrInternalStorage(
-        firebaseStorage: FirebaseStorage,
-        directoryName: String,
-        imageId: String,
-        context: Context,
-        nameToSave: String,
-        directoryToSave:String,
-        fromPrivateFiles: Boolean,
-        imageView: ImageView
-    ){
+    suspend fun downloadAndSetImageFromFirebaseOrInternalStorage(firebaseStorage: FirebaseStorage, directoryName: String, imageId: String, context: Context, nameToSave: String, directoryToSave:String, fromPrivateFiles: Boolean, imageView: ImageView){
         withContext(Dispatchers.IO){
             try{
                 val targetDir=if(fromPrivateFiles){
@@ -255,15 +247,7 @@ object ImageUtils {
         }
     }
 
-
-    suspend fun downloadImageFromFirebase(
-        firebaseStorage: FirebaseStorage,
-        directoryName: String,
-        imageId: String,
-        context: Context,
-        nameToSave: String,
-        saveToPrivateFiles: Boolean
-    ): Uri? {
+    suspend fun downloadImageFromFirebase(firebaseStorage: FirebaseStorage, directoryName: String, imageId: String, context: Context, nameToSave: String, saveToPrivateFiles: Boolean): Uri? {
         return withContext(Dispatchers.IO) {
             try {
                 // Create a reference to the Firebase Storage location

@@ -48,6 +48,7 @@ class GameSettingViewModel @Inject constructor(
             val roomId = "${userStatus.playerId}${userStatus.numberOfGamesPlayed}" // Generate roomId
             val idPass = GenerateGameIdPass.getIdPass()
             val gameRoom = GameRoom(
+                roomId,
                 idPass.first,
                 idPass.second,
                 userStatus.firebaseId,

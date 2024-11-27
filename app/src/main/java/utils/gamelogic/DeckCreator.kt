@@ -9,6 +9,7 @@ object DeckCreator {
         "c1","c2","c3","c4",
         "d1","d2","d3","d4")
     fun createDeck():Deck{
+        val randomPlayer=(0..3).random()
         cardsId.shuffle()
         val deck= mutableListOf(
             cardsId.subList(0,4),
@@ -17,6 +18,7 @@ object DeckCreator {
             cardsId.subList(12,16))
         deck.shuffle()
         val data=Deck(
+            randomPlayer,
             deck[0],
             deck[1],
             deck[2],

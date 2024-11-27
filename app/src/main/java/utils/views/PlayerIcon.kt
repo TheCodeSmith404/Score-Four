@@ -4,6 +4,8 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import androidx.core.content.ContextCompat
+import com.bumptech.glide.Glide
 import com.tcs.games.score4.R
 import com.tcs.games.score4.databinding.GameRoomPlayerIconItemBinding
 
@@ -30,6 +32,19 @@ class PlayerIcon @JvmOverloads constructor(
             } finally {
                 recycle()
             }
+        }
+    }
+
+    fun setIcon(url:String){
+        val drawable=ContextCompat.getDrawable(context,R.drawable.baseline_person_24)
+        if(url=="") {
+            binding.imageView4.setImageDrawable(drawable)
+        }else{
+            Glide.with(context)
+                .load(url)
+                .placeholder(drawable)
+                .error(drawable)
+                .into(binding.imageView4)
         }
     }
 }

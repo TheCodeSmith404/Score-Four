@@ -25,6 +25,7 @@ class WaitingRoomViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val gameDetailsRepository: GameDetailsRepository,
 ):ViewModel() {
+    var gameRoom:GameRoom=GameRoom()
     fun isUserHost():Boolean{
          return userRepository.user!!.authId==gameDetailsRepository.gameRoom.value!!.hostId
     }

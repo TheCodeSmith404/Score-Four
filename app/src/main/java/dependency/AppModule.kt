@@ -13,6 +13,7 @@ import dagger.hilt.components.SingletonComponent
 import data.PreferenceManager
 import data.defaults.DefaultCardOptions
 import data.repository.CreateGameRepository
+import data.repository.DownloadGameResourcesRepository
 import data.repository.GameDetailsRepository
 import data.repository.UserRepository
 import data.repository.WaitingRoomRepository
@@ -61,5 +62,11 @@ object AppModule {
     @Singleton
     fun providesFirebaseStorageInstance():FirebaseStorage{
         return FirebaseStorage.getInstance()
+    }
+
+    @Provides
+    @Singleton
+    fun providesDownloadResourcesRepository(firebaseStorage: FirebaseStorage):DownloadGameResourcesRepository{
+        return DownloadGameResourcesRepository(firebaseStorage)
     }
 }

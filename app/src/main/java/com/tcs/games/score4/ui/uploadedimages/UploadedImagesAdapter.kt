@@ -30,7 +30,8 @@ class UploadedImagesAdapter(
 
     init {
         imageData.forEach{data->
-            cardsData[data]=Pair("",0)
+            if(cardsData[data]==null)
+                cardsData[data]=Pair("",0)
         }
     }
 

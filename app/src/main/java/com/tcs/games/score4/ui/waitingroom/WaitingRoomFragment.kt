@@ -21,7 +21,9 @@ import com.tcs.games.score4.databinding.FragmentWaitingRoomBinding
 import dagger.hilt.android.AndroidEntryPoint
 import data.repository.GameDetailsRepository
 import data.repository.WaitingRoomRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import model.gameroom.GameRoom
 import model.gameroom.PlayersStatus
 import utils.ImageUtils
@@ -34,7 +36,8 @@ class WaitingRoomFragment:Fragment() {
     private var _binding:FragmentWaitingRoomBinding?=null
     private val binding get()=_binding!!
     private val viewModel:WaitingRoomViewModel by viewModels()
-    private val waitingRoomGameDetailsViewModel:WaitingRoomSharedViewModel by activityViewModels()
+    private val downloadResourcesSharedViewModel:DownloadResourcesSharedViewModel by activityViewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -51,6 +54,7 @@ class WaitingRoomFragment:Fragment() {
         lifecycleScope.launch {
             fetchGameRoom().observe(viewLifecycleOwner,{gameRoom->
                 if(gameRoom!=null) {
+                    viewModel.gameRoom=gameRoom
                     if (viewModel.allPlayersReady(gameRoom.players)) {
                         navigate()
                     } else {
@@ -76,13 +80,53 @@ class WaitingRoomFragment:Fragment() {
     }
     private fun setOnClickListeners(){
         binding.fragmentWaitingRoomTvGameDetails.setOnClickListener{
-            findNavController().navigate(R.id.action_waiting_room_to_game_details)
+            if(downloadResourcesSharedViewModel.isDownloaded.value==true){
+                findNavController().navigate(R.id.action_waiting_room_to_game_details)
+            }else{
+                lifecycleScope.launch {
+                    val result=downloadResourcesToCacheDir()
+                    if(result){
+                        //TODO show and hide progressbar
+                        downloadResourcesSharedViewModel.setResourcesDownloaded()
+                        findNavController().navigate(R.id.action_waiting_room_to_game_details)
+                    }else{
+                        Toast.makeText(requireContext(),"Unable to download resources",Toast.LENGTH_LONG).show()
+                        //retry or show relevant error
+                    }
+                }
+            }
         }
         binding.checkBox.setOnCheckedChangeListener{ view,checked->
             if(checked) {
-                view.isEnabled = false
-                updateUserStatus()
+                if(downloadResourcesSharedViewModel.isDownloaded.value == true){
+                    updateUserStatus()
+                    view.isEnabled=false
+                }else{
+                    lifecycleScope.launch {
+                        val result=downloadResourcesToCacheDir()
+                        if(result){
+                            view.isEnabled=false
+                            binding.checkBox.setOnCheckedChangeListener(null)
+                            downloadResourcesSharedViewModel.setResourcesDownloaded()
+                            updateUserStatus()
+                        }else{
+                            view.isEnabled=true
+                            view.isChecked=false
+                            Toast.makeText(requireContext(),"Unable to download resources",Toast.LENGTH_LONG).show()
+                        }
+                    }
+                }
             }
+        }
+    }
+    private suspend fun downloadResourcesToCacheDir():Boolean{
+        return withContext(Dispatchers.IO){
+            downloadResourcesSharedViewModel.downloadCardResources(
+                requireContext(),
+                viewModel.gameRoom.hostId,
+                viewModel.gameRoom.roomId,
+                viewModel.gameRoom.cards
+            )
         }
     }
     private fun fetchGameRoom(): LiveData<GameRoom?> {

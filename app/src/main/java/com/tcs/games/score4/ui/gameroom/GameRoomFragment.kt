@@ -4,6 +4,7 @@ import android.graphics.Canvas
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +20,8 @@ import com.tcs.games.score4.R
 import com.tcs.games.score4.databinding.FragmentGameRoomBinding
 import com.tcs.games.score4.ui.gameroom.adapter.LargeCardAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import utils.views.CustomCard
+import utils.views.PlayerIcon
 
 @AndroidEntryPoint
 class GameRoomFragment:Fragment() {
@@ -38,8 +41,10 @@ class GameRoomFragment:Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setUpPlayerIcons()
         setUpLargeCards()
         setUpOnClickListeners()
+        setUpMiniCardsObserver()
     }
 
     override fun onStart() {
@@ -59,6 +64,48 @@ class GameRoomFragment:Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding=null
+    }
+    private fun setUpPlayerIcons(){
+        val gameRoom=viewModel.getGameRoom().value
+        if(gameRoom!=null){
+            val players=gameRoom.players
+            players.forEachIndexed { index, player ->
+                val view= viewModel.getPlayerIcon(index,binding)
+                view.setIcon(player.playerProfile)
+            }
+        }
+    }
+
+    private fun setUpMiniCardsObserver(){
+        viewModel.getDeck().observe(viewLifecycleOwner){deck->
+            if(deck!=null){
+                Log.d("Deck","${viewModel.userIndex}")
+                val myDeck=when(viewModel.userIndex){
+                    0->deck.playerA
+                    1->deck.playerB
+                    2->deck.playerC
+                    else->deck.playerD
+                }
+                binding.cardsContainer.removeAllViews()
+                myDeck.forEach{id->
+                    val card=prepareCardFromId(id)
+                    binding.cardsContainer.addView(card)
+                }
+            }
+        }
+    }
+    private fun prepareCardFromId(id:String):CustomCard{
+        val customCard=CustomCard(requireContext())
+        val details=viewModel.getCardDetailsFromId(id)
+        val params = ViewGroup.MarginLayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        val marginInPx = resources.getDimensionPixelSize(R.dimen.margin_4dp)
+        params.setMargins(marginInPx, marginInPx, marginInPx, marginInPx)
+
+        customCard.setUpView(details)
+        return customCard
     }
     private fun setUpOnClickListeners(){
 

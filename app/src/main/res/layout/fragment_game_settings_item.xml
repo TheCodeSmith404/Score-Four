@@ -102,9 +102,9 @@
                             android:gravity="center"
                             android:text="card name"
                             android:textColor="@color/black"
-                            app:layout_constraintBottom_toBottomOf="@+id/card_preview_image"
-                            app:layout_constraintEnd_toEndOf="@+id/card_preview_image"
-                            app:layout_constraintStart_toStartOf="@+id/card_preview_image" />
+                            app:layout_constraintBottom_toBottomOf="@+id/card_image"
+                            app:layout_constraintEnd_toEndOf="@+id/card_image"
+                            app:layout_constraintStart_toStartOf="@+id/card_image" />
 
                         <ImageView
                             android:id="@+id/card_preview_Icon"
@@ -114,10 +114,10 @@
                             android:foregroundGravity="center"
                             android:src="@drawable/baseline_preview_24"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/card_preview_image" />
+                            app:layout_constraintTop_toTopOf="@+id/card_image" />
 
                         <ImageView
-                            android:id="@+id/card_preview_image"
+                            android:id="@+id/card_image"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:src="@color/white"

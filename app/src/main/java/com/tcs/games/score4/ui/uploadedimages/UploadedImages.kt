@@ -86,7 +86,7 @@ class UploadedImages : Fragment(),OnUploadImageAdapterClickListener {
     }
 
     override fun onDeleteClick(position: Int, imageId: Int) {
-        TODO("Not yet implemented")
+
     }
 
     override fun onFooterClick() {
@@ -161,9 +161,24 @@ class UploadedImages : Fragment(),OnUploadImageAdapterClickListener {
     }
     private fun setUpRecyclerView(){
         adapter=UploadedImagesAdapter(requireActivity().application,requireContext(), viewModel.getImageList(),
-            mutableMapOf(),viewModel.getMaxAllowedImages(),customImageScope,this)
+            transformMap(),viewModel.getMaxAllowedImages(),customImageScope,this)
         binding.imagesRecycleView.layoutManager=GridLayoutManager(requireContext(),2)
         binding.imagesRecycleView.adapter=adapter
+    }
+    private fun transformMap(): MutableMap<Int, Pair<String, Int>> {
+        // Assuming cardId.value is a map of type Map<Int, Pair<Int, Int>>
+        val cardMap = uploadedImagesSharedViewModel.cardId.value ?: emptyMap()
+
+        // Transform the map using getCardInitialFromId for the first Pair value
+        return cardMap
+            .filter { (_, value) -> value.first > 0 } // Filter entries where `first` > 0
+            .map { (key, value) ->
+                val (first, second) = value
+                val transformedFirst = viewModel.getCardInitialFromId(key).toString()
+                first to (transformedFirst to second) // Transform the value
+            }
+            .toMap()
+            .toMutableMap()
     }
     private fun downloadImages(){
         if(!viewModel.isImagesUploaded()&&viewModel.getImageList().size!=0){
