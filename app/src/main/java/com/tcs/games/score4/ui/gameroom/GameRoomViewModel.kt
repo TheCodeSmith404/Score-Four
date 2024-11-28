@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.tcs.games.score4.databinding.FragmentGameRoomBinding
 import dagger.hilt.android.lifecycle.HiltViewModel
+import data.PreferenceManager
 import data.repository.GameDeckRepository
 import data.repository.GameDetailsRepository
 import data.repository.UserRepository
@@ -19,8 +20,10 @@ class GameRoomViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val gameDetailsRepository: GameDetailsRepository,
     private val gameDeckRepository: GameDeckRepository,
+    private val preferenceManager: PreferenceManager,
 ): ViewModel() {
     private var _userIndex: Int? = null
+    var previousDeck= mutableListOf<String>()
     val userIndex: Int
         get() {
             if (_userIndex==null) {
@@ -32,6 +35,9 @@ class GameRoomViewModel @Inject constructor(
             }
             return _userIndex!!
         }
+    fun getRoomId():String{
+        return preferenceManager.currentGameId
+    }
     fun getDeck():LiveData<Deck?>{
         return gameDeckRepository.gameDeck
     }
@@ -55,5 +61,20 @@ class GameRoomViewModel @Inject constructor(
             'c'->cards[2]
             else->cards[3]
         }
+    }
+    fun getCardsDetailsFromIds(ids:MutableList<String>):MutableList<CardInfo>{
+        val list= mutableListOf<CardInfo>()
+        val cards=gameDetailsRepository.gameRoom.value!!.cards
+        ids.forEach{id->
+            val char=id[0]
+            val temp=when(char){
+                'a'->cards[0]
+                'b'->cards[1]
+                'c'->cards[2]
+                else->cards[3]
+            }
+            list.add(temp)
+        }
+        return list
     }
 }

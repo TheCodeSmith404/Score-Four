@@ -83,7 +83,7 @@ class GameDetailsAdapter(
     }
 
     override fun getItemCount(): Int {
-        return 4;
+        return 4
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

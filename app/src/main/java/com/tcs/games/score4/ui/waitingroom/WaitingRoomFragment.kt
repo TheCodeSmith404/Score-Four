@@ -30,6 +30,7 @@ import utils.ImageUtils
 import utils.constants.ImageNames
 import utils.views.WaitingRoomItem
 import javax.inject.Inject
+import kotlin.math.min
 
 @AndroidEntryPoint
 class WaitingRoomFragment:Fragment() {
@@ -154,8 +155,8 @@ class WaitingRoomFragment:Fragment() {
                 viewModel.setImageToPlayerIcon(requireContext(),data.players[0].playerProfile,binding.host.getImageView())
             }
         }
-        for(i in 1..<data.numberOfPlayers){
-            addPlayer(i,data.players[i])
+        for(i in 1..min(data.numberOfPlayers,4)){
+            addPlayer(i,data.players[i-1])
         }
         Log.d("Waiting Room",data.toString())
 

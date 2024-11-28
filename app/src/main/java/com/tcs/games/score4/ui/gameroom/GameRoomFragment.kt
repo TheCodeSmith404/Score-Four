@@ -16,10 +16,15 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.tcs.games.score4.R
 import com.tcs.games.score4.databinding.FragmentGameRoomBinding
 import com.tcs.games.score4.ui.gameroom.adapter.LargeCardAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import model.gameroom.CardInfo
 import utils.views.CustomCard
 import utils.views.PlayerIcon
 
@@ -28,8 +33,11 @@ class GameRoomFragment:Fragment() {
     private var _binding:FragmentGameRoomBinding?=null
     private val binding get()=_binding!!
     private val viewModel:GameRoomViewModel by viewModels()
+    private lateinit var adapter: LargeCardAdapter
     private lateinit var handler:Handler
     private lateinit var runnable: Runnable
+    private val job:Job by lazy { Job() }
+    private val coroutineScope by lazy { CoroutineScope(Dispatchers.IO + job) }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -42,7 +50,6 @@ class GameRoomFragment:Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpPlayerIcons()
-        setUpLargeCards()
         setUpOnClickListeners()
         setUpMiniCardsObserver()
     }
@@ -63,6 +70,7 @@ class GameRoomFragment:Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
+        job.cancel()
         _binding=null
     }
     private fun setUpPlayerIcons(){
@@ -70,8 +78,10 @@ class GameRoomFragment:Fragment() {
         if(gameRoom!=null){
             val players=gameRoom.players
             players.forEachIndexed { index, player ->
-                val view= viewModel.getPlayerIcon(index,binding)
-                view.setIcon(player.playerProfile)
+                if(index<4) {
+                    val view = viewModel.getPlayerIcon(index, binding)
+                    view.setIcon(player.playerProfile)
+                }
             }
         }
     }
@@ -87,35 +97,46 @@ class GameRoomFragment:Fragment() {
                     else->deck.playerD
                 }
                 binding.cardsContainer.removeAllViews()
-                myDeck.forEach{id->
-                    val card=prepareCardFromId(id)
-                    binding.cardsContainer.addView(card)
+                if(viewModel.previousDeck!=myDeck){
+                    viewModel.previousDeck=myDeck
+                    val temp=prepareCardsFromIds(myDeck)
+                    if(true){
+                        setUpLargeCards(temp)
+                    }else{
+                        //TODO update
+                    }
+                    temp.forEach{id->
+                        val card=prepareCardFromId(id)
+                        binding.cardsContainer.addView(card)
+                    }
                 }
             }
         }
     }
-    private fun prepareCardFromId(id:String):CustomCard{
+    private fun prepareCardsFromIds(ids:MutableList<String>):MutableList<CardInfo>{
+        return viewModel.getCardsDetailsFromIds(ids)
+    }
+    private fun prepareCardFromId(details:CardInfo):CustomCard{
         val customCard=CustomCard(requireContext())
-        val details=viewModel.getCardDetailsFromId(id)
         val params = ViewGroup.MarginLayoutParams(
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
         val marginInPx = resources.getDimensionPixelSize(R.dimen.margin_4dp)
         params.setMargins(marginInPx, marginInPx, marginInPx, marginInPx)
-
         customCard.setUpView(details)
         return customCard
     }
     private fun setUpOnClickListeners(){
 
     }
-    private fun setUpLargeCards(){
-        binding.cards.adapter=LargeCardAdapter()
+    private fun setUpLargeCards(cards:MutableList<CardInfo>){
+        adapter=LargeCardAdapter(cards,requireContext(),viewModel.getRoomId(),requireActivity().application, coroutineScope)
+        binding.cards.adapter=adapter
         val recyclerView = binding.cards.getChildAt(0) as RecyclerView
-
         //Clipping Children can be disabled
         (binding.cards.parent as ViewGroup).clipChildren = false
+
 
         val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.Callback() {
 
@@ -139,10 +160,10 @@ class GameRoomFragment:Fragment() {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                // Handle the upward swipe (removal or modification)
-                val position = viewHolder.adapterPosition
+                // Handle the upward swipe (removal)
                 if (direction == ItemTouchHelper.UP) {
-                    Toast.makeText(requireContext(),"Moved UP",Toast.LENGTH_SHORT).show()  // Action for upward swipe
+                    val position = viewHolder.adapterPosition
+                    fadeOutAndRemove(viewHolder, position)
                 }
             }
 
@@ -155,34 +176,57 @@ class GameRoomFragment:Fragment() {
                 actionState: Int,
                 isCurrentlyActive: Boolean
             ) {
-                // Detect swipe start and stop
-                if (isCurrentlyActive && !isSwiping) {
-                    isSwiping = true
-                    onSwipeStarted(viewHolder)
-                }
-
-                if (!isCurrentlyActive && isSwiping) {
-                    isSwiping = false
-                    onSwipeStopped(viewHolder)
-                }
+                // Apply fade effect while swiping upward
+                val alpha = 1.0f - (Math.abs(dY) / viewHolder.itemView.height)
+                viewHolder.itemView.alpha = alpha
+                viewHolder.itemView.translationY = dY
 
                 super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
             }
 
-            private fun onSwipeStarted(viewHolder: RecyclerView.ViewHolder) {
-                // Handle swipe start (custom logic)
-                println("Swipe started on position: ${viewHolder.adapterPosition}")
+            override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
+                super.clearView(recyclerView, viewHolder)
+                // Reset alpha and translation if swipe is canceled
+                viewHolder.itemView.alpha = 1.0f
+                viewHolder.itemView.translationY = 0.0f
             }
 
-            private fun onSwipeStopped(viewHolder: RecyclerView.ViewHolder) {
-                // Handle swipe stop without completion (custom logic)
-                println("Swipe stopped on position: ${viewHolder.adapterPosition}")
+            private fun fadeOutAndRemove(viewHolder: RecyclerView.ViewHolder, position: Int) {
+                val itemView = viewHolder.itemView
+                itemView.animate()
+                    .alpha(0.0f)
+                    .setDuration(300) // Duration of fade-out animation
+                    .withEndAction {
+                        // Remove the item from the adapter after the animation
+                        (recyclerView.adapter as? LargeCardAdapter)?.apply {
+                            removeItem(position)
+                        }
+                        //Trigger item removal from small cards container
+                        //Update firebase and disable item touch listener
+                    }.start()
             }
         })
 
-
-
+// Attach the ItemTouchHelper to the RecyclerView
         itemTouchHelper.attachToRecyclerView(recyclerView)
+        binding.cards.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                Log.d("Adapter","current position: $position item count: ${adapter.itemCount}")
+                when (position) {
+                    0 -> { // If the user reaches the first phantom item
+                        Log.d("Adapter","switching to ${adapter.itemCount-2}")
+                        binding.cards.setCurrentItem(adapter.itemCount-2, false) // Jump to the last real item
+                    }
+                    adapter.itemCount-1 -> { // If the user reaches the last phantom item
+                        Log.d("Adapter","switching to 1")
+                        binding.cards.setCurrentItem(1, false) // Jump to the first real item
+                    }
+                }
+            }
+        })
     }
+
+
 
 }

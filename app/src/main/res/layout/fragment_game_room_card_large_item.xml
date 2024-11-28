@@ -1,40 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     app:cardCornerRadius="16dp"
-    android:layout_margin="4dp"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:strokeColor="@color/purple_700"
-    app:strokeWidth="8dp">
+    android:layout_margin="4dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="5dp">
+        app:cardCornerRadius="16dp"
+        app:strokeColor="@color/purple_700"
+        app:strokeWidth="8dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="5dp">
 
             <TextView
+                android:id="@+id/card_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="48dp"
                 android:alpha="1"
                 android:background="#663700B3"
                 android:elevation="1dp"
-                android:textSize="28sp"
                 android:ellipsize="marquee"
                 android:gravity="center"
                 android:text="card name"
                 android:textColor="@color/black"
+                android:textSize="28sp"
                 app:layout_constraintBottom_toBottomOf="@+id/dialog_view_card_image"
                 app:layout_constraintEnd_toEndOf="@+id/dialog_view_card_image"
                 app:layout_constraintStart_toStartOf="@+id/dialog_view_card_image" />
 
             <ImageView
+                android:id="@+id/card_icon"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:elevation="1dp"
@@ -49,5 +54,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@color/white" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</com.google.android.material.card.MaterialCardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</FrameLayout>
