@@ -2,6 +2,7 @@ package com.tcs.games.score4.ui.gameroom
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.tcs.games.score4.databinding.FragmentGameRoomBinding
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,7 +24,10 @@ class GameRoomViewModel @Inject constructor(
     private val preferenceManager: PreferenceManager,
 ): ViewModel() {
     private var _userIndex: Int? = null
-    var previousDeck= mutableListOf<String>()
+    private val gameRoomData:MutableLiveData<GameRoom> = MutableLiveData()
+    val previousDeck= mutableListOf<String>()
+    var currentlySelectedItem:MutableLiveData<Int> =MutableLiveData(0)
+    var previouslySelectedItem=-1
     val userIndex: Int
         get() {
             if (_userIndex==null) {
@@ -41,8 +45,14 @@ class GameRoomViewModel @Inject constructor(
     fun getDeck():LiveData<Deck?>{
         return gameDeckRepository.gameDeck
     }
+    fun isUserCurrentlyPlaying():Boolean{
+        val currentlyPlaying=gameDeckRepository.gameDeck.value?.currentlyPlaying?:0
+        return userIndex==currentlyPlaying
+    }
     fun getGameRoom(): LiveData<GameRoom?> {
-        return gameDetailsRepository.gameRoom
+        val temp=gameDetailsRepository.gameRoom
+        gameRoomData.value=temp.value
+        return temp
     }
     fun getPlayerIcon(index:Int,binding:FragmentGameRoomBinding): PlayerIcon {
         return when(index){
@@ -51,6 +61,21 @@ class GameRoomViewModel @Inject constructor(
             2->binding.playerC
             else->binding.playerD
         }
+    }
+    fun modifyDeckForPlayer(card:Int):Deck{
+        val all=gameDeckRepository.gameDeck.value!!
+        val decks=when(userIndex){
+            0-> Pair(all.playerA,all.playerB)
+            1-> Pair(all.playerB,all.playerC)
+            2-> Pair(all.playerC,all.playerD)
+            else -> Pair(all.playerD,all.playerA)
+        }
+        val temp=decks.first.removeAt(card)
+        decks.second.add(temp)
+        all.currentlyPlaying++
+        all.currentlyPlaying%=4
+        Log.d("Deck",all.toString())
+        return all
     }
     fun getCardDetailsFromId(id:String):CardInfo{
         val char=id[0]
@@ -76,5 +101,11 @@ class GameRoomViewModel @Inject constructor(
             list.add(temp)
         }
         return list
+    }
+    fun uploadDeck(deck: Deck,listener:(Boolean)->Unit){
+        Log.d("Deck",deck.toString())
+        gameDeckRepository.uploadDeck(deck){success->
+            listener(success)
+        }
     }
 }

@@ -1,26 +1,20 @@
 package com.tcs.games.score4.ui.waitingroom
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.navigateUp
 import com.tcs.games.score4.R
 import com.tcs.games.score4.databinding.FragmentWaitingRoomBinding
 import dagger.hilt.android.AndroidEntryPoint
-import data.repository.GameDetailsRepository
-import data.repository.WaitingRoomRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -29,7 +23,6 @@ import model.gameroom.PlayersStatus
 import utils.ImageUtils
 import utils.constants.ImageNames
 import utils.views.WaitingRoomItem
-import javax.inject.Inject
 import kotlin.math.min
 
 @AndroidEntryPoint
@@ -55,10 +48,11 @@ class WaitingRoomFragment:Fragment() {
         lifecycleScope.launch {
             fetchGameRoom().observe(viewLifecycleOwner,{gameRoom->
                 if(gameRoom!=null) {
-                    viewModel.gameRoom=gameRoom
-                    if (viewModel.allPlayersReady(gameRoom.players)) {
+                    if (viewModel.allPlayersReady()) {
+                        Log.d("Waiting room","Navigating")
                         navigate()
                     } else {
+                        Log.d("Waiting room","setting up waiting room")
                         setUpWaitingRoom(gameRoom)
                     }
                     if(gameRoom.numberOfPlayers+gameRoom.numberOfBots==4)
@@ -122,11 +116,12 @@ class WaitingRoomFragment:Fragment() {
     }
     private suspend fun downloadResourcesToCacheDir():Boolean{
         return withContext(Dispatchers.IO){
+            val gameRoom=fetchGameRoom().value!!
             downloadResourcesSharedViewModel.downloadCardResources(
                 requireContext(),
-                viewModel.gameRoom.hostId,
-                viewModel.gameRoom.roomId,
-                viewModel.gameRoom.cards
+                gameRoom.hostId,
+                gameRoom.roomId,
+                gameRoom.cards
             )
         }
     }
@@ -136,27 +131,25 @@ class WaitingRoomFragment:Fragment() {
     private fun setUpWaitingRoom(data:GameRoom){
         binding.host.setText(data.players[0].playerName)
 
-        if(data.players[0].isReady){
+        if(data.players[0].ready){
             binding.host.setState(WaitingRoomItem.PlayerState.IS_READY)
         }else{
             binding.host.setState(WaitingRoomItem.PlayerState.PLAYER_JOINED)
         }
-        if(data.players[0].playerProfile!=null){
-            if(viewModel.isUserHost()){
-                lifecycleScope.launch {
-                    ImageUtils.loadCardImageFromInternalStorage(
-                        requireActivity().applicationContext,
-                        ImageNames.PROFILE.txt,
-                        binding.host.getImageView(),
-                        true
-                    )
-                }
-            }else{
-                viewModel.setImageToPlayerIcon(requireContext(),data.players[0].playerProfile,binding.host.getImageView())
+        if(viewModel.isUserHost()){
+            lifecycleScope.launch {
+                ImageUtils.loadCardImageFromInternalStorage(
+                    requireActivity().applicationContext,
+                    ImageNames.PROFILE.txt,
+                    binding.host.getImageView(),
+                    true
+                )
             }
+        }else{
+            viewModel.setImageToPlayerIcon(requireContext(),data.players[0].playerProfile,binding.host.getImageView())
         }
-        for(i in 1..min(data.numberOfPlayers,4)){
-            addPlayer(i,data.players[i-1])
+        for(i in 1..min(data.numberOfPlayers-1,3)){
+            addPlayer(i,data.players[i])
         }
         Log.d("Waiting Room",data.toString())
 
@@ -164,7 +157,7 @@ class WaitingRoomFragment:Fragment() {
     private fun addPlayer(index:Int,data:PlayersStatus){
         val view=getPlayerItem(index)
         view.setText(data.playerName)
-        if(data.isReady){
+        if(data.ready){
             view.setState(WaitingRoomItem.PlayerState.IS_READY)
         }else {
             view.setState(WaitingRoomItem.PlayerState.PLAYER_JOINED)

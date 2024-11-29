@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import data.PreferenceManager
+import kotlinx.coroutines.tasks.await
 import model.gameroom.Deck
 import model.gameroom.GameRoom
 import javax.inject.Inject
@@ -30,6 +31,7 @@ class GameDeckRepository @Inject constructor(
                 Log.e("GameDeckRepository", "Error listening to snapshot: ${error.message}")
             }
             if(snapshot!=null&&snapshot.exists()){
+                Log.d("DeckObserver","Snapshot triggered")
                 val deck=snapshot.toObject(Deck::class.java)
                 _gameDeck.postValue(deck)
             }else{
@@ -37,5 +39,14 @@ class GameDeckRepository @Inject constructor(
             }
         }
 
+    }
+    fun uploadDeck(deck:Deck,doneListener:(Boolean)->Unit){
+        docRef.set(deck)
+            .addOnSuccessListener {
+                doneListener(true)
+            }
+            .addOnFailureListener{
+                doneListener(false)
+            }
     }
 }

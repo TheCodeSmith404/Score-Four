@@ -2,7 +2,6 @@ package com.tcs.games.score4.ui.home
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.firestore.FirebaseFirestore
@@ -10,7 +9,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import data.PreferenceManager
 import data.repository.JoinGameRepository
 import data.repository.UserRepository
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import model.gameroom.GameRoom
 import model.gameroom.PlayersStatus
@@ -66,8 +64,8 @@ class EnterIdPassViewModel @Inject constructor(
                 currentUser.numberGamesPlayed,
                 currentUser.numberGamesWon,
                 currentUser.timeCreated,
-                isReady = false,
-                isActive = true
+                ready = false,
+                active = true
             )
             // Start a Firestore transaction
             firestore.runTransaction { transaction ->
@@ -88,7 +86,7 @@ class EnterIdPassViewModel @Inject constructor(
                             // Update the Firestore document with the modified data
                             transaction.set(gameRoomRef, gameRoom)
                         }else if(gameRoom.numberOfBots>0){
-                            gameRoom.players.removeIf { player -> player.isBot }
+                            gameRoom.players.removeIf { player -> player.bot }
                             gameRoom.players.add(playerStatus)
                             gameRoom.numberOfPlayers++
                             gameRoom.numberOfBots--

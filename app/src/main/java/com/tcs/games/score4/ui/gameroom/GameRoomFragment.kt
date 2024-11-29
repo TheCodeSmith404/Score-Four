@@ -10,8 +10,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import model.gameroom.CardInfo
 import utils.views.CustomCard
 import utils.views.PlayerIcon
@@ -88,7 +91,13 @@ class GameRoomFragment:Fragment() {
 
     private fun setUpMiniCardsObserver(){
         viewModel.getDeck().observe(viewLifecycleOwner){deck->
+            Log.d("DeckObserver","Data Changed")
             if(deck!=null){
+                if(viewModel.isUserCurrentlyPlaying()){
+                    binding.swipeAllowed.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.baseline_keyboard_double_arrow_up_24))
+                }else{
+                    binding.swipeAllowed.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.baseline_lock_outline_24))
+                }
                 Log.d("Deck","${viewModel.userIndex}")
                 val myDeck=when(viewModel.userIndex){
                     0->deck.playerA
@@ -96,21 +105,31 @@ class GameRoomFragment:Fragment() {
                     2->deck.playerC
                     else->deck.playerD
                 }
-                binding.cardsContainer.removeAllViews()
+                Log.d("Deck Observer","${viewModel.previousDeck.toString()} and current deck: ${myDeck.toString()}")
                 if(viewModel.previousDeck!=myDeck){
-                    viewModel.previousDeck=myDeck
+                    viewModel.previousDeck.clear()
+                    viewModel.previousDeck.addAll(myDeck)
+                    Log.d("Deck Observer","Updating previous Deck")
+                    binding.cardsContainer.removeAllViews()
                     val temp=prepareCardsFromIds(myDeck)
-                    if(true){
-                        setUpLargeCards(temp)
-                    }else{
-                        //TODO update
-                    }
+                    setUpLargeCards(temp)
                     temp.forEach{id->
                         val card=prepareCardFromId(id)
                         binding.cardsContainer.addView(card)
                     }
                 }
+                if(!viewModel.currentlySelectedItem.hasObservers()){
+                    setUpMiniCardsState()
+                }
             }
+        }
+    }
+    private fun setUpMiniCardsState(){
+        viewModel.currentlySelectedItem.observe(viewLifecycleOwner){position->
+            binding.cardsContainer.getChildAt(position)?.isSelected=true
+            if(viewModel.previouslySelectedItem >=0)
+                binding.cardsContainer.getChildAt(viewModel.previouslySelectedItem)?.isSelected=false
+            viewModel.previouslySelectedItem=position
         }
     }
     private fun prepareCardsFromIds(ids:MutableList<String>):MutableList<CardInfo>{
@@ -146,8 +165,12 @@ class GameRoomFragment:Fragment() {
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder
             ): Int {
+                return if(viewModel.isUserCurrentlyPlaying()){
+                    makeMovementFlags(0, ItemTouchHelper.UP)
+                }else{
+                    0
+                }
                 // Allow only upward swipe, disable downward swipe
-                return makeMovementFlags(0, ItemTouchHelper.UP)
             }
 
             override fun onMove(
@@ -197,10 +220,8 @@ class GameRoomFragment:Fragment() {
                     .alpha(0.0f)
                     .setDuration(300) // Duration of fade-out animation
                     .withEndAction {
+                        removeCardAndEndTurn(position-1)
                         // Remove the item from the adapter after the animation
-                        (recyclerView.adapter as? LargeCardAdapter)?.apply {
-                            removeItem(position)
-                        }
                         //Trigger item removal from small cards container
                         //Update firebase and disable item touch listener
                     }.start()
@@ -217,14 +238,28 @@ class GameRoomFragment:Fragment() {
                     0 -> { // If the user reaches the first phantom item
                         Log.d("Adapter","switching to ${adapter.itemCount-2}")
                         binding.cards.setCurrentItem(adapter.itemCount-2, false) // Jump to the last real item
+                        viewModel.currentlySelectedItem.value=adapter.itemCount-3
                     }
                     adapter.itemCount-1 -> { // If the user reaches the last phantom item
                         Log.d("Adapter","switching to 1")
                         binding.cards.setCurrentItem(1, false) // Jump to the first real item
+                        viewModel.currentlySelectedItem.value=0
+                    }
+                    else->{
+                        viewModel.currentlySelectedItem.value=position-1
                     }
                 }
             }
         })
+        binding.cards.setCurrentItem(1, false)
+    }
+    private fun removeCardAndEndTurn(position:Int) {
+        val deck = viewModel.modifyDeckForPlayer(position)
+        adapter.removeItem(position)
+        viewModel.uploadDeck(deck) { done ->
+            binding.swipeAllowed.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.baseline_lock_outline_24))
+            Log.d("Deck done", done.toString())
+        }
     }
 
 

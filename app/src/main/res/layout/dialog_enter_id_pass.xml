@@ -53,7 +53,8 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/room_id_hint"
                 android:inputType="textCapSentences"
-                android:maxLength="6" />
+                android:maxLength="6"
+                android:text="AAAAAA" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
@@ -76,7 +77,8 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/password_hint"
                 android:inputType="number"
-                android:maxLength="4" />
+                android:maxLength="4"
+                android:text="0000" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton

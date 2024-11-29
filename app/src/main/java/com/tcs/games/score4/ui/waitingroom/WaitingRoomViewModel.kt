@@ -1,20 +1,16 @@
 package com.tcs.games.score4.ui.waitingroom
 
 import android.content.Context
+import android.util.Log
 import android.widget.ImageView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.toObject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import data.PreferenceManager
 import data.repository.GameDetailsRepository
 import data.repository.UserRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 import model.gameroom.GameRoom
-import model.gameroom.PlayersStatus
 import utils.ImageUtils
 import javax.inject.Inject
 
@@ -25,7 +21,6 @@ class WaitingRoomViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val gameDetailsRepository: GameDetailsRepository,
 ):ViewModel() {
-    var gameRoom:GameRoom=GameRoom()
     fun isUserHost():Boolean{
          return userRepository.user!!.authId==gameDetailsRepository.gameRoom.value!!.hostId
     }
@@ -44,16 +39,18 @@ class WaitingRoomViewModel @Inject constructor(
         data.find{
             it.firebaseId == userId
         }!!.let {player->
-            player.isReady=true
+            player.ready=true
         }
         gameDetailsRepository.updateUserStatus(data)
     }
-    fun allPlayersReady(players:List<PlayersStatus>):Boolean{
+    fun allPlayersReady():Boolean{
+        Log.d("Waiting room","${gameDetailsRepository.gameRoom.value!!.players}")
         var ready=0
-        players.forEach{
-            if(it.isReady)
+        gameDetailsRepository.gameRoom.value!!.players.forEach{player->
+            if(player.ready)
                 ready++
         }
+        Log.d("Waiting room",ready.toString())
         return ready==4
     }
 }

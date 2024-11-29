@@ -60,8 +60,12 @@ class LargeCardAdapter(private var list:MutableList<CardInfo>,private val contex
             holder.bind(data,position)
         }
     }
+    fun getItem(position: Int):CardInfo{
+        return list[position-2]
+    }
+
     fun removeItem(position: Int){
-        list.removeAt(position-2)
+        list.removeAt(position)
         notifyItemRemoved(position)
     }
 }
