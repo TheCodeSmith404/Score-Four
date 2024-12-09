@@ -78,7 +78,7 @@ class UserInfoDialog:DialogFragment() {
         binding.email.text=data.gmail
         binding.gamesPlayed.text=data.numberGamesPlayed.toString()
         binding.gamesWon.text=data.numberGamesWon.toString()
-        binding.imagesUploaded.text="${data.numberImagesUploaded}/5"
+        binding.imagesUploaded.text="${data.numberImagesUploaded}/${data.numberImagesAllowed}"
         loadImage()
     }
     private fun loadImage(){

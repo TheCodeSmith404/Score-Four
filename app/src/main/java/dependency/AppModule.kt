@@ -22,11 +22,11 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-    @Provides
-    @Singleton
-    fun provideFireStoreInstance(): FirebaseFirestore {
-        return FirebaseFirestore.getInstance()
-    }
+//    @Provides
+//    @Singleton
+//    fun provideFireStoreInstance(): FirebaseFirestore {
+//        return FirebaseFirestore.getInstance()
+//    }
     @Provides
     @Singleton
     fun providesUserRepository(firestore: FirebaseFirestore,preferenceManager: PreferenceManager,firebaseStorage: FirebaseStorage):UserRepository{

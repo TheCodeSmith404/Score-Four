@@ -28,9 +28,11 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import model.gameroom.GameRoom
 import model.gameroom.PlayersStatus
+import utils.AlertDialogManager
 import utils.gamelogic.DeckCreator
 import utils.gamelogic.GenerateGameIdPass
 import javax.inject.Inject
+import kotlin.math.truncate
 
 @AndroidEntryPoint
 class GameSettingFragment:Fragment(),OptionsBottomSheet.OptionsBottomSheetListener {
@@ -94,9 +96,12 @@ class GameSettingFragment:Fragment(),OptionsBottomSheet.OptionsBottomSheetListen
     }
     private fun setOnClickListeners(){
         binding.fragmentGameSettingsCreate.setOnClickListener{
+            showProgressDialog()
             createGameRoom()
         }
-
+        binding.fragmentGameSettingsUp.setOnClickListener{
+            findNavController().navigateUp()
+        }
     }
     private fun setUpAdapter(){
         adapter= GameSettingRecycleViewAdapter(
@@ -195,12 +200,28 @@ class GameSettingFragment:Fragment(),OptionsBottomSheet.OptionsBottomSheetListen
         val hostData=userRepository.user!!
         lifecycleScope.launch {
             val result=viewModel.createGameRoom(hostData,binding.numberPicker.text.toString().toInt())
+            hideProgressDialog()
             if(result){
                 findNavController().navigate(R.id.action_game_settings_to_waiting_room)
             }else{
                 Log.d("GameSettings","Error Creating game room")
             }
         }
+    }
+    private fun showProgressDialog(){
+        AlertDialogManager.showDialog(
+            requireContext(),
+            true,
+            "Uploading Game Information"
+        )
+    }
+    private fun hideProgressDialog(){
+        AlertDialogManager.hideDialog()
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        onDestroy()
     }
 
     override fun onDestroy() {

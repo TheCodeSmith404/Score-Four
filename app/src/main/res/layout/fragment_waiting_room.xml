@@ -9,7 +9,7 @@
 
 
     <ImageButton
-        android:id="@+id/imageButton5"
+        android:id="@+id/imageButtonBack"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:background="@android:color/transparent"
@@ -31,7 +31,7 @@
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imageButtonBack"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.card.MaterialCardView
@@ -54,9 +54,11 @@
                 android:id="@+id/scrollView2"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:layout_editor_absoluteX="16dp">
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/share_credential_container"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -67,10 +69,10 @@
                         android:id="@+id/tv_waiting_room_host"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Host" />
+                        android:text="Player A" />
 
                     <utils.views.WaitingRoomItem
-                        android:id="@+id/host"
+                        android:id="@+id/player0"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:playerName="Waiting for Player" />
@@ -78,7 +80,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Player 1" />
+                        android:text="Player B" />
 
                     <utils.views.WaitingRoomItem
                         android:id="@+id/player1"
@@ -89,7 +91,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Player 2" />
+                        android:text="Player C" />
 
                     <utils.views.WaitingRoomItem
                         android:id="@+id/player2"
@@ -100,7 +102,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Player 3" />
+                        android:text="Player D" />
 
                     <utils.views.WaitingRoomItem
                         android:id="@+id/player3"
@@ -111,7 +113,7 @@
             </ScrollView>
 
             <LinearLayout
-                android:id="@+id/linearLayout3"
+                android:id="@+id/share_credential_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"

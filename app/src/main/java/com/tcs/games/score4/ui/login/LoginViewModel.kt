@@ -30,6 +30,7 @@ class LoginViewModel @Inject constructor(private val userRepository: UserReposit
     private val _user = MutableLiveData<FirebaseUser?>()
     val user: LiveData<FirebaseUser?> = _user
 
+
     init {
         var isReady: Task<UserData?>
         if(auth.currentUser!=null) {

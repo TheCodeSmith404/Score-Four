@@ -41,7 +41,11 @@ class WaitingRoomViewModel @Inject constructor(
         }!!.let {player->
             player.ready=true
         }
-        gameDetailsRepository.updateUserStatus(data)
+        if(allPlayersReady()){
+            gameDetailsRepository.updateUserStatusAndStart(data)
+        }else {
+            gameDetailsRepository.updateUserStatus(data)
+        }
     }
     fun allPlayersReady():Boolean{
         Log.d("Waiting room","${gameDetailsRepository.gameRoom.value!!.players}")

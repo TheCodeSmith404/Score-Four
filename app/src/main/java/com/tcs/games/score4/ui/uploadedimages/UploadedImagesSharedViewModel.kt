@@ -20,7 +20,7 @@ class UploadedImagesSharedViewModel @Inject constructor(): ViewModel(){
 
     fun updateCurrentCardId(images:Int){
         val temp=_cardId.value
-        temp[-1]=Pair(images,0)
+        temp[-1]=Pair(images,-1)
         _cardId.value=temp
     }
 }

@@ -87,5 +87,11 @@
             android:layout_height="64dp"
             android:layout_marginTop="16dp"
             android:text="@string/join_room" />
+        <ProgressBar
+            android:id="@+id/enter_id_pass_dialog_progress"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginTop="16dp"/>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

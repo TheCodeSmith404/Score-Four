@@ -53,6 +53,7 @@ class EnterIdPassViewModel @Inject constructor(
     }
     suspend fun joinGameRoom(gameId: String): Task<Boolean> {
         return try {
+            var result=true
             val currentUser=userRepository.user!!
             val playerStatus=PlayersStatus(
                 false,
@@ -80,31 +81,34 @@ class EnterIdPassViewModel @Inject constructor(
                     val gameRoom = gameRoomSnapshot.toObject(GameRoom::class.java)
                     if (gameRoom != null) {
                         // Modify the data: Append player and update player count
-                        if(gameRoom.numberOfPlayers+gameRoom.numberOfBots<=4) {
+                        if(gameRoom.numberOfPlayers+gameRoom.numberOfBots<=3&&!gameRoom.isRunning) {
+                            Log.d("Players","${gameRoom.numberOfPlayers+gameRoom.numberOfBots}")
                             gameRoom.players.add(playerStatus)
                             gameRoom.numberOfPlayers++
                             // Update the Firestore document with the modified data
                             transaction.set(gameRoomRef, gameRoom)
-                        }else if(gameRoom.numberOfBots>0){
+                        }else if(gameRoom.numberOfBots>0&&!gameRoom.isRunning){
+                            Log.d("Players","${gameRoom.numberOfPlayers}")
                             gameRoom.players.removeIf { player -> player.bot }
                             gameRoom.players.add(playerStatus)
                             gameRoom.numberOfPlayers++
                             gameRoom.numberOfBots--
                             transaction.set(gameRoomRef,gameRoom)
                         }else{
-                            Tasks.forResult(false)
+                            result=false
+                            Log.d("Players","Condition false")
                         }
                     } else {
                         // If the document exists but data can't be parsed, return failure
-                        Tasks.forResult(false)
+                        result=false
                     }
                 } else {
                     // If the game room doesn't exist
-                    Tasks.forResult(false)
+                    result=false
                 }
             }.await()
             preferenceManager.currentGameId=gameId
-            Tasks.forResult(true)
+            Tasks.forResult(result)
         } catch (e: Exception) {
             Log.d("Firebase",e.printStackTrace().toString())
             Log.d("Firebase",e.message.toString())

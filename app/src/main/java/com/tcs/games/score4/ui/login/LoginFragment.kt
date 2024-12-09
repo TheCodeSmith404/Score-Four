@@ -57,10 +57,6 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.user.observe(viewLifecycleOwner,{user->
-            if(user!=null)
-                findNavController().navigate(R.id.action_fragment_login_to_fragment_home)
-        })
         setOnClickListeners()
     }
 

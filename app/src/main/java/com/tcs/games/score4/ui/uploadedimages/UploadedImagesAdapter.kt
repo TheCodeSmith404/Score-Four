@@ -30,8 +30,13 @@ class UploadedImagesAdapter(
 
     init {
         imageData.forEach{data->
-            if(cardsData[data]==null)
-                cardsData[data]=Pair("",0)
+            if(cardsData[data]==null) {
+                Log.d("UploadImg", cardsData[data].toString())
+                cardsData[data] = Pair("", 0)
+            }
+            else{
+            Log.d("UploadImg", cardsData[data].toString())
+            }
         }
     }
 
@@ -151,7 +156,7 @@ class UploadedImagesAdapter(
         Log.d("Null pointer",cardsData.entries.toString())
         cardsData[newId]=Pair("",0)
         Log.d("Null pointer",cardsData.entries.toString())
-        notifyItemInserted(images.size)
+        notifyDataSetChanged()
     }
     fun updateImageItemRemoved(position: Int){
         imageData.remove(position)

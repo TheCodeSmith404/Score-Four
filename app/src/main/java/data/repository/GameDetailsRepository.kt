@@ -58,6 +58,17 @@ class GameDetailsRepository @Inject constructor(
                 Log.d("GameDetailsRepository","failure")
             }
     }
+    fun updateUserStatusAndStart(status: List<PlayersStatus>){
+        docRef.update(
+            "players",status,
+            "running",true)
+            .addOnSuccessListener {
+                Log.d("GameDetailsRepository","data_updated")
+            }
+            .addOnFailureListener{
+                Log.d("GameDetailsRepository","failure")
+            }
+    }
     fun getGameInformation():Triple<List<CardInfo>,String,String>{
         val game=gameRoom.value!!
         return Triple(game.cards.toList(),game.roomId,game.timePerTurns.toString())

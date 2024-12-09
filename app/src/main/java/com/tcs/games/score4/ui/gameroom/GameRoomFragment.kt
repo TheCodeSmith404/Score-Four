@@ -147,7 +147,13 @@ class GameRoomFragment:Fragment() {
         return customCard
     }
     private fun setUpOnClickListeners(){
+        binding.imageButtonGameRoomUp.setOnClickListener{
+            warnPlayer()
+        }
 
+    }
+    private fun warnPlayer(){
+        findNavController().navigateUp()
     }
     private fun setUpLargeCards(cards:MutableList<CardInfo>){
         adapter=LargeCardAdapter(cards,requireContext(),viewModel.getRoomId(),requireActivity().application, coroutineScope)

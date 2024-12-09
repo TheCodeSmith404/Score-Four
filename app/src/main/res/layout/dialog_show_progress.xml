@@ -13,25 +13,28 @@
         android:textStyle="bold"
         android:textColor="@color/black"
         android:layout_marginBottom="8dp"/>
+
     <LinearLayout
-        android:visibility="gone"
         android:id="@+id/indeterminate_progress_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="8dp">
+        android:padding="8dp"
+        android:visibility="visible">
+
         <ProgressBar
-            android:padding="4dp"
             android:layout_width="64dp"
-            android:layout_height="64dp"/>
+            android:layout_height="64dp"
+            android:padding="4dp" />
+
         <TextView
             android:id="@+id/indeterminate_message"
-            android:textSize="18dp"
-            android:textColor="@color/black"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:text="This is my message"/>
+            android:text="This is my message"
+            android:textColor="@color/black"
+            android:textSize="18dp" />
     </LinearLayout>
     <LinearLayout
         android:id="@+id/determinate_progress_container"

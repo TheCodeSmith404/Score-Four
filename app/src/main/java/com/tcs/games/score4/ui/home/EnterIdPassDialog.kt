@@ -1,6 +1,7 @@
 package com.tcs.games.score4.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -58,18 +59,20 @@ class EnterIdPassDialog:DialogFragment() {
         val pass=binding.verifyCredsPassword.text.toString()
         if(id.isNotEmpty()&&pass.isNotEmpty()){
            if(viewModel.verifyLocally(id,pass)){
+
                //TODO show a loading bar
                isInputAllowed(false)
                lifecycleScope.launch {
                    val result=viewModel.verifyGlobally(id,pass)
                    if(result!=null){
                        val userAdded=viewModel.joinGameRoom(result)
+                       Log.d("Players",userAdded.result.toString())
                        if(userAdded.result){
                            dismiss()
                            findNavController().navigate(R.id.action_dialog_enter_credentials_to_waiting_room)
                        }else{
                            isInputAllowed(true)
-                           Toast.makeText(requireContext(),"Server Error try again later",Toast.LENGTH_LONG).show()
+                           Toast.makeText(requireContext(),"Game finished or room full",Toast.LENGTH_LONG).show()
                        }
                    }else{
                        Toast.makeText(requireContext(),"Unable to find game room",Toast.LENGTH_SHORT).show()
@@ -83,6 +86,13 @@ class EnterIdPassDialog:DialogFragment() {
         }
     }
     private fun isInputAllowed(isAllowed:Boolean){
+        if(isAllowed){
+            binding.dialogIdPassJoin.visibility=View.VISIBLE
+            binding.enterIdPassDialogProgress.visibility=View.GONE
+        }else{
+            binding.dialogIdPassJoin.visibility=View.GONE
+            binding.enterIdPassDialogProgress.visibility=View.VISIBLE
+        }
         binding.dialogIdPassCancel.isEnabled=isAllowed
         binding.verifyCredsId.isEnabled=isAllowed
         binding.verifyCredsPassword.isEnabled=isAllowed

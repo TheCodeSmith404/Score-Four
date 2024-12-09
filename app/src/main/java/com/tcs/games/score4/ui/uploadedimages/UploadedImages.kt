@@ -118,6 +118,8 @@ class UploadedImages : Fragment(),OnUploadImageAdapterClickListener {
         binding.actionCancel.setOnClickListener{
             if(viewModel.showWarning){
                 showUpdateDialog()
+            }else{
+                findNavController().navigateUp()
             }
         }
         binding.actionDone.setOnClickListener{
@@ -142,18 +144,18 @@ class UploadedImages : Fragment(),OnUploadImageAdapterClickListener {
         }
         findNavController().navigate(R.id.action_images_upload_to_select_image,bundle)
     }
-    private fun setUpResultListener(){
-        setFragmentResultListener("selectImage") { requestKey, bundle ->
-            val done = bundle.getBoolean("done", false)
-            if (done) {
-                viewModel.updateImagesList(viewModel.currentImageId)
-                // Handle successful result
-                Toast.makeText(requireContext(), "Image selection completed!", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(requireContext(), "Image selection not completed.", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
+//    private fun setUpResultListener(){
+//        setFragmentResultListener("selectImage") { requestKey, bundle ->
+//            val done = bundle.getBoolean("done", false)
+//            if (done) {
+//                viewModel.updateImagesList(viewModel.currentImageId)
+//                // Handle successful result
+//                Toast.makeText(requireContext(), "Image selection completed!", Toast.LENGTH_SHORT).show()
+//            } else {
+//                Toast.makeText(requireContext(), "Image selection not completed.", Toast.LENGTH_SHORT).show()
+//            }
+//        }
+//    }
     private fun imagesUpdated(){
         if(!uploadedImagesSharedViewModel.imagesChanged.value){
             uploadedImagesSharedViewModel.imagesChanged.value=true
@@ -165,21 +167,49 @@ class UploadedImages : Fragment(),OnUploadImageAdapterClickListener {
         binding.imagesRecycleView.layoutManager=GridLayoutManager(requireContext(),2)
         binding.imagesRecycleView.adapter=adapter
     }
+//    private fun transformMap(): MutableMap<Int, Pair<String, Int>> {
+//        // Assuming cardId.value is a map of type Map<Int, Pair<Int, Int>>
+//        val cardMap = uploadedImagesSharedViewModel.cardId.value ?: emptyMap()
+//
+//        // Transform the map using getCardInitialFromId for the first Pair value
+//        return cardMap
+//            .filter { (_, value) -> value.first > 0 } // Filter entries where `first` > 0
+//            .map { (key, value) ->
+//                val (first, second) = value
+//                val transformedFirst = viewModel.getCardInitialFromId(key).toString()
+//                first to (transformedFirst to second) // Transform the value
+//            }
+//            .toMap()
+//            .toMutableMap()
+//    }
+
     private fun transformMap(): MutableMap<Int, Pair<String, Int>> {
+        val tag = "UploadImg"
+
         // Assuming cardId.value is a map of type Map<Int, Pair<Int, Int>>
         val cardMap = uploadedImagesSharedViewModel.cardId.value ?: emptyMap()
+        Log.d(tag, "Initial cardMap: $cardMap")
 
-        // Transform the map using getCardInitialFromId for the first Pair value
-        return cardMap
-            .filter { (_, value) -> value.first > 0 } // Filter entries where `first` > 0
-            .map { (key, value) ->
-                val (first, second) = value
-                val transformedFirst = viewModel.getCardInitialFromId(key).toString()
-                first to (transformedFirst to second) // Transform the value
-            }
-            .toMap()
-            .toMutableMap()
+        val filteredMap = cardMap.filter { (key,value) ->
+            val condition = key >= 0
+            condition
+        }
+        Log.d(tag, "Filtered map: $filteredMap")
+
+        val transformedMap = filteredMap.map { (key, value) ->
+            val (first, second) = value
+            val transformedFirst = viewModel.getCardInitialFromId(key).toString()
+            Log.d(tag, "Transforming key: $key, original value: $value, transformed first: $transformedFirst")
+            first to (transformedFirst to second) // Transform the value
+        }
+        Log.d(tag, "Transformed map: $transformedMap")
+
+        val resultMap = transformedMap.toMap().toMutableMap()
+        Log.d(tag, "Final resultMap: $resultMap")
+        return resultMap
     }
+
+
     private fun downloadImages(){
         if(!viewModel.isImagesUploaded()&&viewModel.getImageList().size!=0){
             viewModel.downloadMultipleImages(requireContext(),
@@ -213,6 +243,11 @@ class UploadedImages : Fragment(),OnUploadImageAdapterClickListener {
 
            }
        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        onDestroy()
     }
 
 

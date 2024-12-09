@@ -113,6 +113,12 @@ class WaitingRoomFragment:Fragment() {
                 }
             }
         }
+        binding.shareCredentialContainer.setOnClickListener{
+
+        }
+        binding.imageButtonBack.setOnClickListener{
+            findNavController().navigateUp()
+        }
     }
     private suspend fun downloadResourcesToCacheDir():Boolean{
         return withContext(Dispatchers.IO){
@@ -129,26 +135,11 @@ class WaitingRoomFragment:Fragment() {
         return viewModel.fetchGameRoom()
     }
     private fun setUpWaitingRoom(data:GameRoom){
-        binding.host.setText(data.players[0].playerName)
 
-        if(data.players[0].ready){
-            binding.host.setState(WaitingRoomItem.PlayerState.IS_READY)
-        }else{
-            binding.host.setState(WaitingRoomItem.PlayerState.PLAYER_JOINED)
-        }
         if(viewModel.isUserHost()){
-            lifecycleScope.launch {
-                ImageUtils.loadCardImageFromInternalStorage(
-                    requireActivity().applicationContext,
-                    ImageNames.PROFILE.txt,
-                    binding.host.getImageView(),
-                    true
-                )
-            }
         }else{
-            viewModel.setImageToPlayerIcon(requireContext(),data.players[0].playerProfile,binding.host.getImageView())
         }
-        for(i in 1..min(data.numberOfPlayers-1,3)){
+        for(i in 0..min(data.numberOfPlayers-1,3)){
             addPlayer(i,data.players[i])
         }
         Log.d("Waiting Room",data.toString())
@@ -166,6 +157,7 @@ class WaitingRoomFragment:Fragment() {
     }
     private fun getPlayerItem(index:Int):WaitingRoomItem{
         val map=mapOf(
+            0 to binding.player0,
             1 to binding.player1,
             2 to binding.player2,
             3 to binding.player3,
