@@ -19,7 +19,7 @@ import model.gameroom.GameRoom
 import model.gameroom.PlayersStatus
 import model.gamesettings.CardInfoAdapter
 import model.gamesettings.GameKeys
-import utils.convertors.TimeUtils
+import com.tcs.games.score4.utils.convertors.TimeUtils
 import utils.gamelogic.DeckCreator
 import utils.gamelogic.GenerateGameIdPass
 import javax.inject.Inject
@@ -60,7 +60,8 @@ class GameSettingViewModel @Inject constructor(
                 -1,
                 mutableListOf(userStatus),
                 getCardsInfo(),
-                time
+                time,
+                -1
             )
             val gameKeys=GameKeys(idPass.first,idPass.second,roomId,TimeUtils.getCurrentTimeInMillis())
             val result = createGameRepository.createGameRoom(roomId, deck, gameRoom,gameKeys)

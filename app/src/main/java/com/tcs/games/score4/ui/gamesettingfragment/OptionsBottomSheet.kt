@@ -161,17 +161,18 @@ class OptionsBottomSheet : BottomSheetDialogFragment() {
                     }
                 }
             }
-            binding.selectTurnsTime.setOnCheckedChangeListener { _, checkedId ->
-                if(viewModel.byUser){
-                    var num=10
-                    when(checkedId){
-                        R.id.seconds_10->num=10
-                        R.id.seconds_20->num=20
-                        R.id.seconds_30->num=30
-                        R.id.seconds_40->num=40
-                    }
-                    listener?.onTimeOptionSelected(num)
+
+        }
+        binding.selectTurnsTime.setOnCheckedChangeListener { _, checkedId ->
+            if(viewModel.byUser){
+                var num=20
+                when(checkedId){
+                    R.id.seconds_10->num=20
+                    R.id.seconds_20->num=30
+                    R.id.seconds_30->num=40
+                    R.id.seconds_50->num=50
                 }
+                listener?.onTimeOptionSelected(num)
             }
         }
     }

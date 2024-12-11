@@ -22,9 +22,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import data.PreferenceManager
 import data.repository.UserRepository
 import kotlinx.coroutines.launch
-import utils.ImageUtils
-import utils.constants.ImageNames
-import utils.convertors.TimeUtils
+import com.tcs.games.score4.utils.ImageUtils
+import com.tcs.games.score4.utils.constants.ImageNames
+import com.tcs.games.score4.utils.convertors.TimeUtils
 import javax.inject.Inject
 
 @AndroidEntryPoint

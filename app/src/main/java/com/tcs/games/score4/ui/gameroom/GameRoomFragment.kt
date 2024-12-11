@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.tcs.games.score4.R
+import com.tcs.games.score4.bot.ProbabilityBot
 import com.tcs.games.score4.databinding.FragmentGameRoomBinding
 import com.tcs.games.score4.ui.gameroom.adapter.LargeCardAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,6 +37,7 @@ class GameRoomFragment:Fragment() {
     private var _binding:FragmentGameRoomBinding?=null
     private val binding get()=_binding!!
     private val viewModel:GameRoomViewModel by viewModels()
+    private val timerViewModel:PlayerTimerViewModel by viewModels()
     private lateinit var adapter: LargeCardAdapter
     private lateinit var handler:Handler
     private lateinit var runnable: Runnable
@@ -55,20 +57,16 @@ class GameRoomFragment:Fragment() {
         setUpPlayerIcons()
         setUpOnClickListeners()
         setUpMiniCardsObserver()
+        setUpPlayerStateObserver()
     }
 
     override fun onStart() {
         super.onStart()
-        handler=Handler(Looper.getMainLooper())
-        runnable=Runnable{
-            findNavController().navigate(R.id.action_game_room_to_game_finished)
-        }
 //        handler.postDelayed(runnable,3000)
     }
 
     override fun onStop() {
         super.onStop()
-        handler.removeCallbacks(runnable)
     }
 
     override fun onDestroy() {
@@ -87,39 +85,131 @@ class GameRoomFragment:Fragment() {
                 }
             }
         }
+        viewModel.getGameRoom().observe(viewLifecycleOwner){game->
+            Log.d("GameFinishedDialog","Observer triggered")
+            if(game!=null) {
+                if (game.winner >= 0) {
+                    Log.d("GameFinishedDialog","Winner is ${game.winner}")
+                    findNavController().navigate(R.id.action_game_room_to_game_finished)
+                }
+            }
+        }
     }
 
     private fun setUpMiniCardsObserver(){
+        viewModel.startListeningToDeck()
         viewModel.getDeck().observe(viewLifecycleOwner){deck->
             Log.d("DeckObserver","Data Changed")
             if(deck!=null){
+                timerViewModel.cancelCountdown()
+                when(deck.currentlyPlaying){
+                    0->{
+                        timerViewModel.updateState(GameRoomCurrentlyPlayingState.Player1.Progress(100))
+                    }
+                    1-> {
+                        timerViewModel.updateState(GameRoomCurrentlyPlayingState.Player2.Progress(100))
+                    }
+                    2-> {
+                        timerViewModel.updateState(GameRoomCurrentlyPlayingState.Player3.Progress(100))
+                    }
+                    else-> {
+                        timerViewModel.updateState(GameRoomCurrentlyPlayingState.Player4.Progress(100))
+                    }
+                }
+                val myDeck=when(viewModel.userIndex){
+                    0->{
+                        deck.playerA
+                    }
+                    1-> {
+                        deck.playerB
+                    }
+                    2-> {
+                        deck.playerC
+                    }
+                    else-> {
+                        deck.playerD
+                    }
+                }
                 if(viewModel.isUserCurrentlyPlaying()){
+                    timerViewModel.startCountdown(viewModel.getTurnTime(false))
                     binding.swipeAllowed.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.baseline_keyboard_double_arrow_up_24))
                 }else{
+                    timerViewModel.startCountdown(viewModel.getTurnTime(true))
                     binding.swipeAllowed.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.baseline_lock_outline_24))
                 }
                 Log.d("Deck","${viewModel.userIndex}")
-                val myDeck=when(viewModel.userIndex){
-                    0->deck.playerA
-                    1->deck.playerB
-                    2->deck.playerC
-                    else->deck.playerD
-                }
+
+                //Setting up turn systems
                 Log.d("Deck Observer","${viewModel.previousDeck.toString()} and current deck: ${myDeck.toString()}")
                 if(viewModel.previousDeck!=myDeck){
+                    if(viewModel.checkIfWon(myDeck)){
+                        setWinner(viewModel.userIndex)
+                    }
                     viewModel.previousDeck.clear()
                     viewModel.previousDeck.addAll(myDeck)
                     Log.d("Deck Observer","Updating previous Deck")
                     binding.cardsContainer.removeAllViews()
                     val temp=prepareCardsFromIds(myDeck)
                     setUpLargeCards(temp)
-                    temp.forEach{id->
+                    temp.forEachIndexed{index,id->
                         val card=prepareCardFromId(id)
+                        card.setOnClickListener{
+                            binding.cards.setCurrentItem(index+1,true)
+                        }
                         binding.cardsContainer.addView(card)
                     }
                 }
                 if(!viewModel.currentlySelectedItem.hasObservers()){
                     setUpMiniCardsState()
+                }
+                if(viewModel.isUserHost()){
+                    if(viewModel.getGameRoom().value!!.players[deck.currentlyPlaying].bot){
+                        lifecycleScope.launch {
+                            if(viewModel.checkIfWon(myDeck)){
+                                setWinner(deck.currentlyPlaying)
+                            }
+                            val index=ProbabilityBot().start(myDeck).await()
+                            Handler(Looper.getMainLooper()).postDelayed(
+                                {removeCardAndEndTurn(index,true)},
+                                3000
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+    private fun setWinner(current:Int){
+        viewModel.setWinner(current)
+    }
+    private fun setUpPlayerStateObserver(){
+        lifecycleScope.launch {
+            timerViewModel.state.collect { state ->
+                when(state){
+                    is GameRoomCurrentlyPlayingState.Player1.Progress->{
+                        binding.playerA.setProgress(state.progress)
+                    }
+                    is GameRoomCurrentlyPlayingState.Player1.TimeOut->{
+                        removeCardAndEndTurn(0)
+                    }
+                    is GameRoomCurrentlyPlayingState.Player2.Progress->{
+                        binding.playerB.setProgress(state.progress)
+                    }
+                    is GameRoomCurrentlyPlayingState.Player2.TimeOut->{
+                        removeCardAndEndTurn(0)
+                    }
+                    is GameRoomCurrentlyPlayingState.Player3.Progress->{
+                        binding.playerC.setProgress(state.progress)
+                    }
+                    is GameRoomCurrentlyPlayingState.Player3.TimeOut->{
+                        removeCardAndEndTurn(0)
+                    }
+                    is GameRoomCurrentlyPlayingState.Player4.Progress->{
+                        binding.playerD.setProgress(state.progress)
+                    }
+                    is GameRoomCurrentlyPlayingState.Player4.TimeOut->{
+                        removeCardAndEndTurn(0)
+                    }
                 }
             }
         }
@@ -259,9 +349,12 @@ class GameRoomFragment:Fragment() {
         })
         binding.cards.setCurrentItem(1, false)
     }
-    private fun removeCardAndEndTurn(position:Int) {
-        val deck = viewModel.modifyDeckForPlayer(position)
-        adapter.removeItem(position)
+    private fun removeCardAndEndTurn(position:Int,forBot:Boolean=false) {
+
+        val deck = if(forBot) viewModel.modifyDeckForBot(position) else viewModel.modifyDeckForPlayer(position)
+        if(!forBot) {
+            adapter.removeItem(position)
+        }
         viewModel.uploadDeck(deck) { done ->
             binding.swipeAllowed.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.baseline_lock_outline_24))
             Log.d("Deck done", done.toString())

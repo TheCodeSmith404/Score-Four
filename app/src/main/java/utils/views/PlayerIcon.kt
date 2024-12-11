@@ -47,4 +47,7 @@ class PlayerIcon @JvmOverloads constructor(
                 .into(binding.imageView4)
         }
     }
+    fun setProgress(progress:Int){
+        binding.progress.progress=progress
+    }
 }

@@ -29,8 +29,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import utils.ImageUtils
-import utils.constants.ImageNames
+import com.tcs.games.score4.utils.ImageUtils
+import com.tcs.games.score4.utils.constants.ImageNames
 
 @AndroidEntryPoint
 class UploadedImages : Fragment(),OnUploadImageAdapterClickListener {

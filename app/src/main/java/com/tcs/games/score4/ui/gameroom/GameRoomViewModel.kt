@@ -24,7 +24,6 @@ class GameRoomViewModel @Inject constructor(
     private val preferenceManager: PreferenceManager,
 ): ViewModel() {
     private var _userIndex: Int? = null
-    private val gameRoomData:MutableLiveData<GameRoom> = MutableLiveData()
     val previousDeck= mutableListOf<String>()
     var currentlySelectedItem:MutableLiveData<Int> =MutableLiveData(0)
     var previouslySelectedItem=-1
@@ -39,8 +38,21 @@ class GameRoomViewModel @Inject constructor(
             }
             return _userIndex!!
         }
+    fun startListeningToDeck(){
+        gameDeckRepository.startObservingDeck(preferenceManager.currentGameId)
+    }
+    fun checkIfWon(deck: List<String>):Boolean{
+        val firstCharCount = deck.groupingBy { it[0] }.eachCount()
+        return firstCharCount.any { it.value == 4 }
+    }
+    fun isUserHost():Boolean{
+        return userRepository.user!!.authId==gameDetailsRepository.gameRoom.value!!.hostId
+    }
     fun getRoomId():String{
         return preferenceManager.currentGameId
+    }
+    fun setWinner(index: Int){
+        gameDetailsRepository.setWinner(index)
     }
     fun getDeck():LiveData<Deck?>{
         return gameDeckRepository.gameDeck
@@ -51,8 +63,13 @@ class GameRoomViewModel @Inject constructor(
     }
     fun getGameRoom(): LiveData<GameRoom?> {
         val temp=gameDetailsRepository.gameRoom
-        gameRoomData.value=temp.value
         return temp
+    }
+    fun getTurnTime(plusDelay:Boolean):Int{
+        return if(plusDelay)
+            gameDetailsRepository.gameRoom.value!!.timePerTurns+4
+        else
+            gameDetailsRepository.gameRoom.value!!.timePerTurns
     }
     fun getPlayerIcon(index:Int,binding:FragmentGameRoomBinding): PlayerIcon {
         return when(index){
@@ -61,6 +78,21 @@ class GameRoomViewModel @Inject constructor(
             2->binding.playerC
             else->binding.playerD
         }
+    }
+    fun modifyDeckForBot(card:Int):Deck{
+        val all=gameDeckRepository.gameDeck.value!!
+        val decks=when(gameDeckRepository.gameDeck.value?.currentlyPlaying!!){
+            0-> Pair(all.playerA,all.playerB)
+            1-> Pair(all.playerB,all.playerC)
+            2-> Pair(all.playerC,all.playerD)
+            else -> Pair(all.playerD,all.playerA)
+        }
+        val temp=decks.first.removeAt(card)
+        decks.second.add(temp)
+        all.currentlyPlaying++
+        all.currentlyPlaying%=4
+        Log.d("Deck",all.toString())
+        return all
     }
     fun modifyDeckForPlayer(card:Int):Deck{
         val all=gameDeckRepository.gameDeck.value!!

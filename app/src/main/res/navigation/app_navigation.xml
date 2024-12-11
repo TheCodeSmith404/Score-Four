@@ -117,7 +117,9 @@
         tools:layout="@layout/fragment_game_room">
         <action
             android:id="@+id/action_game_room_to_game_finished"
-            app:destination="@id/game_finished"/>
+            app:destination="@id/game_finished"
+            app:popUpTo="@id/game_room"
+            app:popUpToInclusive="true"/>
     </fragment>
     <dialog
         android:id="@+id/game_finished"

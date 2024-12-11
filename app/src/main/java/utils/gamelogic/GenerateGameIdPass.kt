@@ -21,6 +21,6 @@ object GenerateGameIdPass {
             .joinToString("")
     }
     fun getIdPass():Pair<String,String>{
-        return Pair("AAAAAA", "0000")
+        return Pair(generateLobbyId(), generateLobbyPassword())
     }
 }

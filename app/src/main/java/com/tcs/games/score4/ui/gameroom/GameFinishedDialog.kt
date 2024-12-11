@@ -58,9 +58,6 @@ class GameFinishedDialog: DialogFragment() {
         _binding=null
     }
     private fun setOnClickListener(){
-        binding.dialogGameFinished.setOnClickListener{
-            dismiss()
-            findNavController().navigate(R.id.action_game_finished_to_fragment_home)
-        }
+
     }
 }

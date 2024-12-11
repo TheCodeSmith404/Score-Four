@@ -258,25 +258,25 @@
             android:id="@+id/seconds_10"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="10 seconds" />
+            android:text="20 seconds" />
 
         <RadioButton
             android:id="@+id/seconds_20"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="20 seconds" />
+            android:text="30 seconds" />
 
         <RadioButton
             android:id="@+id/seconds_30"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="30 seconds" />
+            android:text="40 seconds" />
 
         <RadioButton
-            android:id="@+id/seconds_40"
+            android:id="@+id/seconds_50"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="40 seconds" />
+            android:text="50 seconds" />
 
     </RadioGroup>
 

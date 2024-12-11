@@ -21,7 +21,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import model.UserData
-import utils.convertors.TimeUtils
+import com.tcs.games.score4.utils.convertors.TimeUtils
 import javax.inject.Inject
 
 @HiltViewModel

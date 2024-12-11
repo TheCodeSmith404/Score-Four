@@ -5,7 +5,6 @@ import android.graphics.Color
 import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 import com.tcs.games.score4.R
-import model.gameroom.CardInfo
 import model.gamesettings.CardInfoAdapter
 
 object DefaultCardOptions {
@@ -99,7 +98,7 @@ object DefaultCardOptions {
             1 to R.id.seconds_10,
             2 to R.id.seconds_20,
             3 to R.id.seconds_30,
-            4 to R.id.seconds_40,
+            4 to R.id.seconds_50,
         )
         return radioGroupMap[id]?:R.id.seconds_10
     }

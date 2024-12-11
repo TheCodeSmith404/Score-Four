@@ -16,8 +16,8 @@ import model.UserData
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.async
-import utils.ImageUtils
-import utils.constants.ImageNames
+import com.tcs.games.score4.utils.ImageUtils
+import com.tcs.games.score4.utils.constants.ImageNames
 
 @Singleton
 class UserRepository @Inject constructor(

@@ -22,9 +22,6 @@ class EnterIdPassViewModel @Inject constructor(
     val preferenceManager: PreferenceManager
 ):ViewModel() {
     fun verifyLocally(id:String,password:String):Boolean{
-        if(id=="AAAAAA"&&password=="0000"){
-            return true
-        }
         password.toIntOrNull() ?: return false
         val hashSet= mutableSetOf<Char>()
         for(char in id){
@@ -81,13 +78,13 @@ class EnterIdPassViewModel @Inject constructor(
                     val gameRoom = gameRoomSnapshot.toObject(GameRoom::class.java)
                     if (gameRoom != null) {
                         // Modify the data: Append player and update player count
-                        if(gameRoom.numberOfPlayers+gameRoom.numberOfBots<=3&&!gameRoom.isRunning) {
+                        if(gameRoom.numberOfPlayers+gameRoom.numberOfBots<=3&&!gameRoom.running) {
                             Log.d("Players","${gameRoom.numberOfPlayers+gameRoom.numberOfBots}")
                             gameRoom.players.add(playerStatus)
                             gameRoom.numberOfPlayers++
                             // Update the Firestore document with the modified data
                             transaction.set(gameRoomRef, gameRoom)
-                        }else if(gameRoom.numberOfBots>0&&!gameRoom.isRunning){
+                        }else if(gameRoom.numberOfBots>0&&!gameRoom.running){
                             Log.d("Players","${gameRoom.numberOfPlayers}")
                             gameRoom.players.removeIf { player -> player.bot }
                             gameRoom.players.add(playerStatus)

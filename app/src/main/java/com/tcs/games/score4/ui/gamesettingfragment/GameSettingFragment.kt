@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -16,23 +15,15 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tcs.games.score4.R
 import com.tcs.games.score4.databinding.FragmentGameSettingsBinding
-import com.tcs.games.score4.ui.gamesettingfragment.GameSettingViewModel
 import com.tcs.games.score4.ui.uploadedimages.UploadedImagesSharedViewModel
-import com.tcs.games.score4.ui.uploadedimages.UploadedImagesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import data.repository.UserRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import model.gameroom.GameRoom
-import model.gameroom.PlayersStatus
-import utils.AlertDialogManager
-import utils.gamelogic.DeckCreator
-import utils.gamelogic.GenerateGameIdPass
+import com.tcs.games.score4.utils.AlertDialogManager
 import javax.inject.Inject
-import kotlin.math.truncate
 
 @AndroidEntryPoint
 class GameSettingFragment:Fragment(),OptionsBottomSheet.OptionsBottomSheetListener {
@@ -209,7 +200,7 @@ class GameSettingFragment:Fragment(),OptionsBottomSheet.OptionsBottomSheetListen
         }
     }
     private fun showProgressDialog(){
-        AlertDialogManager.showDialog(
+        AlertDialogManager.showLoadingDialog(
             requireContext(),
             true,
             "Uploading Game Information"

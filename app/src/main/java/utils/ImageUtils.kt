@@ -18,7 +18,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import utils.constants.ImageNames
+import com.tcs.games.score4.utils.constants.ImageNames
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream

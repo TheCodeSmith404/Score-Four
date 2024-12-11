@@ -13,7 +13,11 @@ import androidx.navigation.fragment.findNavController
 import com.tcs.games.score4.R
 import com.tcs.games.score4.databinding.DialogEnterIdPassBinding
 import dagger.hilt.android.AndroidEntryPoint
+import data.repository.GameDetailsRepository
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.util.Locale
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -21,6 +25,8 @@ class EnterIdPassDialog:DialogFragment() {
     private var _binding: DialogEnterIdPassBinding? = null
     private val binding get() = _binding!!
     private val viewModel: EnterIdPassViewModel by viewModels()
+    @Inject
+    lateinit var gameDetailsRepository:GameDetailsRepository
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,8 +60,9 @@ class EnterIdPassDialog:DialogFragment() {
         super.onDestroyView()
         _binding = null // Avoid memory leaks
     }
+
     private fun verifyCredentials(){
-        val id=binding.verifyCredsId.text.toString()
+        val id=binding.verifyCredsId.text.toString().uppercase()
         val pass=binding.verifyCredsPassword.text.toString()
         if(id.isNotEmpty()&&pass.isNotEmpty()){
            if(viewModel.verifyLocally(id,pass)){

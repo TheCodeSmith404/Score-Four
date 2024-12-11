@@ -21,8 +21,8 @@ import data.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import utils.ImageUtils
-import utils.constants.ImageNames
+import com.tcs.games.score4.utils.ImageUtils
+import com.tcs.games.score4.utils.constants.ImageNames
 import utils.views.CropOverlayView
 import javax.inject.Inject
 

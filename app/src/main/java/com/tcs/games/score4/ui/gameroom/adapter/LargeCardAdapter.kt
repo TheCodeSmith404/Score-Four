@@ -4,7 +4,11 @@ import android.app.Application
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.tcs.games.score4.R
 import com.tcs.games.score4.databinding.FragmentGameRoomCardLargeItemBinding
 import com.tcs.games.score4.databinding.FragmentGameSettingsBinding
 import data.defaults.DefaultCardOptions
@@ -12,8 +16,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import model.ImagesData
 import model.gameroom.CardInfo
-import utils.ImageUtils
-import utils.constants.ImageNames
+import com.tcs.games.score4.utils.ImageUtils
+import com.tcs.games.score4.utils.constants.ImageNames
 
 class LargeCardAdapter(private var list:MutableList<CardInfo>,private val context: Context,private val gameId:String,private val application: Application,private val coroutineScope: CoroutineScope):RecyclerView.Adapter<LargeCardAdapter.ViewHolder>() {
     inner class ViewHolder(binding:FragmentGameRoomCardLargeItemBinding):RecyclerView.ViewHolder(binding.root){
@@ -27,13 +31,33 @@ class LargeCardAdapter(private var list:MutableList<CardInfo>,private val contex
             icon.setColorFilter(DefaultCardOptions.getColor(data.color,false))
             name.setBackgroundColor(DefaultCardOptions.getColor(data.color,true))
             card.strokeColor=DefaultCardOptions.getColor(data.color,false)
-            coroutineScope.launch {
-                ImageUtils.loadCardImageFromCacheDir(
-                    application,
-                    "${ImageNames.CARD.txt}${data.imageRes}",
-                    gameId,
-                    image
-                )
+            if(data.imageRes>0) {
+                coroutineScope.launch {
+                    ImageUtils.loadCardImageFromCacheDir(
+                        application,
+                        "${ImageNames.CARD.txt}${data.imageRes}",
+                        gameId,
+                        image
+                    )
+                }
+            }else{
+                loadDefaultImage(getDefaultImageId(card.id))
+            }
+        }
+        private fun loadDefaultImage(id:Int){
+            Glide.with(context)
+                .load(id)  // Resource ID for WebP image
+                .diskCacheStrategy(DiskCacheStrategy.ALL) // Cache on disk for future use
+                .skipMemoryCache(false)  // Allow Glide to use memory cache for faster loading
+                .centerCrop()
+                .into(image)
+        }
+        private fun getDefaultImageId(index:Int):Int{
+            return when(index){
+                0-> R.drawable.i0
+                -1-> R.drawable.i1
+                -2-> R.drawable.i2
+                else-> R.drawable.i3
             }
         }
 

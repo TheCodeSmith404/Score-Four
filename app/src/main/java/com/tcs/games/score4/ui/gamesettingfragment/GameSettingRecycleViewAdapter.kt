@@ -22,8 +22,8 @@ import data.defaults.DefaultCardOptions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import model.gamesettings.CardInfoAdapter
-import utils.ImageUtils
-import utils.constants.ImageNames
+import com.tcs.games.score4.utils.ImageUtils
+import com.tcs.games.score4.utils.constants.ImageNames
 
 class GameSettingRecycleViewAdapter(
     private val application:Application,

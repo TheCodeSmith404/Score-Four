@@ -2,6 +2,7 @@ package data.repository
 
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.tasks.await
 import model.gameroom.Deck
@@ -24,22 +25,20 @@ class CreateGameRepository @Inject constructor(
         return try {
             // Run all tasks concurrently in a coroutine scope
             coroutineScope {
-                val gameRoomDeferred = async {
-                    val gameRoomRef = firestore.collection("game_room_details").document(roomId)
-                    gameRoomRef.set(gameRoom).await()
-                }
-                val deckDeferred = async {
-                    val deckRef = firestore.collection("game_room_deck").document(roomId)
-                    deckRef.set(deck).await()
-                }
-                val idPassDeferred = async {
-                    val idPassRef = firestore.collection("game_room_ids").document("${gameKeys.id}${gameKeys.pass}")
-                    idPassRef.set(gameKeys).await()
-                }
-                // Wait for all requests to complete
-                gameRoomDeferred.await()
-                deckDeferred.await()
-                idPassDeferred.await()
+                listOf(
+                    async {
+                        val gameRoomRef = firestore.collection("game_room_details").document(roomId)
+                        gameRoomRef.set(gameRoom).await()
+                    },
+                    async {
+                        val deckRef = firestore.collection("game_room_deck").document(roomId)
+                        deckRef.set(deck).await()
+                    },
+                    async {
+                        val idPassRef = firestore.collection("game_room_ids").document("${gameKeys.id}${gameKeys.pass}")
+                        idPassRef.set(gameKeys).await()
+                    }
+                ).awaitAll() // Wait for all tasks to complete
             }
             // If all succeed, return success
             Result.success(roomId)

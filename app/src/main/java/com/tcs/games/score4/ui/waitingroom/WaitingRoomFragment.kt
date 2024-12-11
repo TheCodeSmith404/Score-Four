@@ -14,14 +14,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.tcs.games.score4.R
 import com.tcs.games.score4.databinding.FragmentWaitingRoomBinding
+import com.tcs.games.score4.utils.AlertDialogManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import model.gameroom.GameRoom
 import model.gameroom.PlayersStatus
-import utils.ImageUtils
-import utils.constants.ImageNames
 import utils.views.WaitingRoomItem
 import kotlin.math.min
 
@@ -46,23 +45,26 @@ class WaitingRoomFragment:Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setOnClickListeners()
         lifecycleScope.launch {
-            fetchGameRoom().observe(viewLifecycleOwner,{gameRoom->
-                if(gameRoom!=null) {
-                    if (viewModel.allPlayersReady()) {
-                        Log.d("Waiting room","Navigating")
+            viewModel.startListeningToGameDetails()
+            fetchGameRoom().observe(viewLifecycleOwner) { gameRoom ->
+                if (gameRoom != null) {
+                    Log.d("Wait", gameRoom.running.toString())
+                    if (gameRoom.running&&viewModel.allPlayersReady()) {
+                        Log.d("Waiting room", "Navigating")
                         navigate()
                     } else {
-                        Log.d("Waiting room","setting up waiting room")
+                        Log.d("Waiting room", "setting up waiting room")
                         setUpWaitingRoom(gameRoom)
                     }
-                    if(gameRoom.numberOfPlayers+gameRoom.numberOfBots==4)
-                        binding.waitingRoomTvStatus.text=getString(R.string.fragment_waiting_room_waiting_for_players_to_be_ready)
+                    if (gameRoom.numberOfPlayers + gameRoom.numberOfBots == 4)
+                        binding.waitingRoomTvStatus.text =
+                            getString(R.string.fragment_waiting_room_waiting_for_players_to_be_ready)
                     else
-                        binding.waitingRoomTvStatus.text=getString(R.string.fragment_waiting_room_waiting_for_players)
-                }
-                else
+                        binding.waitingRoomTvStatus.text =
+                            getString(R.string.fragment_waiting_room_waiting_for_players)
+                } else
                     dataFetchError()
-            })
+            }
         }
 
     }
@@ -114,7 +116,11 @@ class WaitingRoomFragment:Fragment() {
             }
         }
         binding.shareCredentialContainer.setOnClickListener{
-
+            val key=viewModel.getKeys()
+            AlertDialogManager.showShareCredentialDialog(
+                requireContext(),
+                key.first,
+                key.second)
         }
         binding.imageButtonBack.setOnClickListener{
             findNavController().navigateUp()
@@ -135,25 +141,67 @@ class WaitingRoomFragment:Fragment() {
         return viewModel.fetchGameRoom()
     }
     private fun setUpWaitingRoom(data:GameRoom){
-
-        if(viewModel.isUserHost()){
-        }else{
-        }
-        for(i in 0..min(data.numberOfPlayers-1,3)){
+        for(i in 0..min(data.numberOfPlayers+data.numberOfBots-1,3)){
+            Log.d("AddBot","Adding player:$i")
             addPlayer(i,data.players[i])
         }
+        val players=data.numberOfPlayers+data.numberOfBots
+        Log.d("AddBot","$players")
+        if(viewModel.isUserHost()){
+            Log.d("AddBot","User is host")
+            for(i in players..<4){
+                refreshContainers(i,true,data.numberOfBots+1)
+            }
+        }else{
+            Log.d("AddBot","User is not host")
+            for(i in players..<4){
+                refreshContainers(i,false,0)
+            }
+        }
+
         Log.d("Waiting Room",data.toString())
 
+    }
+    private fun refreshContainers(index:Int,isHost:Boolean,numberOfBots:Int){
+        Log.d("AddBot","refreshing container for host:$isHost at index $index")
+        val view=getPlayerItem(index)
+        if(isHost){
+            view.setState(WaitingRoomItem.PlayerState.ADD_BOT)
+            view.getAddBotContainer().setOnClickListener{
+                if(viewModel.canAddBot()) {
+                    Log.d("AddBot","ItemClicked at $index")
+                    viewModel.addBot(index,numberOfBots)
+                }else{
+                    Toast.makeText(requireContext(),"Can not add more than two bots in an online game",Toast.LENGTH_LONG).show()
+                }
+            }
+        }else{
+            view.setState(WaitingRoomItem.PlayerState.WAITING_TO_JOIN)
+        }
     }
     private fun addPlayer(index:Int,data:PlayersStatus){
         val view=getPlayerItem(index)
         view.setText(data.playerName)
+        view.setOnClickListener{
+            AlertDialogManager.showPlayerDetailsDialog(requireContext(),data)
+        }
         if(data.ready){
             view.setState(WaitingRoomItem.PlayerState.IS_READY)
         }else {
             view.setState(WaitingRoomItem.PlayerState.PLAYER_JOINED)
         }
-        viewModel.setImageToPlayerIcon(requireContext(),data.playerProfile,view.getImageView())
+        if(data.bot){
+            viewModel.setImageToBot(
+                requireContext(),
+                view.getImageView()
+            )
+        }else {
+            viewModel.setImageToPlayerIcon(
+                requireContext(),
+                data.playerProfile,
+                view.getImageView()
+            )
+        }
     }
     private fun getPlayerItem(index:Int):WaitingRoomItem{
         val map=mapOf(
@@ -171,16 +219,12 @@ class WaitingRoomFragment:Fragment() {
         viewModel.updatePlayerStatus()
     }
     private fun navigate(){
-        downloadAssets()
         try {
             findNavController().navigate(R.id.action_waiting_room_to_game_room)
         }catch (e:IllegalStateException){
             findNavController().navigateUp()
             findNavController().navigate(R.id.action_waiting_room_to_game_room)
         }
-    }
-    private fun downloadAssets(){
-
     }
 
 }

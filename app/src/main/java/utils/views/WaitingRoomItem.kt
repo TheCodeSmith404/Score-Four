@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import com.google.android.material.card.MaterialCardView
 import com.tcs.games.score4.R
 import com.tcs.games.score4.databinding.FragmentWaitingRoomPlayerItemBinding
 import com.tcs.games.score4.databinding.GameRoomPlayerIconItemBinding
@@ -24,7 +26,8 @@ class WaitingRoomItem @JvmOverloads constructor(
     enum class PlayerState {
         WAITING_TO_JOIN,
         PLAYER_JOINED,
-        IS_READY
+        IS_READY,
+        ADD_BOT,
     }
 
     init {
@@ -50,23 +53,30 @@ class WaitingRoomItem @JvmOverloads constructor(
     fun setState(state:PlayerState){
         when(state){
             PlayerState.WAITING_TO_JOIN -> {
+                binding.addBot.visibility=View.GONE
+                binding.waitingRoomPlayerProfileContainer.visibility=View.VISIBLE
                 binding.waitingRoomPlayerProfile.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.baseline_person_24))
                 binding.waitingRoomWaitingToJoin.visibility= View.VISIBLE
                 binding.waitingRoomPlayerStatus.visibility=View.GONE
                 setText("Waiting to Join")
             }
             PlayerState.PLAYER_JOINED-> {
-//                binding.waitingRoomPlayerProfile TODO set up image loading
+                binding.addBot.visibility=View.GONE
+                binding.waitingRoomPlayerProfileContainer.visibility=View.VISIBLE
                 binding.waitingRoomWaitingToJoin.visibility=View.GONE
                 binding.waitingRoomPlayerStatus.visibility=View.VISIBLE
                 binding.waitingRoomPlayerStatus.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.round_warning_amber_24))
-
             }
             PlayerState.IS_READY-> {
-                //                binding.waitingRoomPlayerProfile TODO set up image loading
+                binding.waitingRoomPlayerProfileContainer.visibility=View.VISIBLE
+                binding.addBot.visibility=View.GONE
                 binding.waitingRoomPlayerStatus.visibility=View.VISIBLE
                 binding.waitingRoomWaitingToJoin.visibility=View.GONE
                 binding.waitingRoomPlayerStatus.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.outline_check_circle_outline_24))
+            }
+            PlayerState.ADD_BOT->{
+                binding.waitingRoomPlayerProfileContainer.visibility=View.GONE
+                binding.addBot.visibility=View.VISIBLE
             }
         }
     }
@@ -75,6 +85,9 @@ class WaitingRoomItem @JvmOverloads constructor(
     }
     fun getImageView():ImageView{
         return binding.waitingRoomPlayerProfile
+    }
+    fun getAddBotContainer(): CardView {
+        return binding.addBot
     }
 
 

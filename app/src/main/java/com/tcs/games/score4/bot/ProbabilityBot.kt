@@ -9,8 +9,9 @@ import kotlin.math.roundToInt
 import kotlin.random.Random
 
 class ProbabilityBot {
-    fun start(cards: List<Char>): Deferred<Char> =
+    fun start(cardsString: List<String>): Deferred<Int> =
         CoroutineScope(Dispatchers.Default).async {
+            val cards=cardsString.map{it[0]}
             // Step 1: Count occurrences of each card
             val cardCounts = cards.groupingBy { it }.eachCount()
             val uniqueCardCount = cardCounts.size
@@ -47,6 +48,7 @@ class ProbabilityBot {
                 }
             }
             // Return a random card ID continuously
-            getCards[Random.nextInt(getCards.size)]
+            val init=getCards[Random.nextInt(getCards.size)]
+            cards.indexOf(init)
         }
 }

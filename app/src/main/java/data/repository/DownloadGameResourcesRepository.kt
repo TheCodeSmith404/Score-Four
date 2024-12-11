@@ -10,7 +10,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import model.gameroom.CardInfo
-import utils.constants.ImageNames
+import com.tcs.games.score4.utils.constants.ImageNames
 import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton

@@ -12,15 +12,26 @@
         android:layout_height="64dp"
         android:orientation="vertical">
 
-        <Button
-            android:visibility="gone"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/addBot"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:drawableTop="@drawable/baseline_close_24"
-            android:text="BOT"
-            android:textSize="10sp" />
+            android:padding="2dp"
+            android:visibility="gone"
+            app:cardCornerRadius="32dp"
+            android:clickable="true">
+            <ImageView
+                android:scaleX="0.75"
+                android:scaleY="0.75"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/add_bot"/>
+        </androidx.cardview.widget.CardView>
+
+
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/waiting_room_player_profile_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="2dp"

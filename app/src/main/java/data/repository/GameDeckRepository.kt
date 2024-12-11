@@ -20,11 +20,8 @@ class GameDeckRepository @Inject constructor(
     private val _gameDeck = MutableLiveData<Deck?>()
     val gameDeck: LiveData<Deck?> get() = _gameDeck
     private lateinit var docRef: DocumentReference
-    init{
-        val id=preferenceManager.currentGameId
-        startObservingDeck(id)
-    }
-    private fun startObservingDeck(id:String){
+
+    fun startObservingDeck(id:String){
         docRef=firestore.collection("game_room_deck").document(id)
         docRef.addSnapshotListener{snapshot,error->
             if(error!=null){

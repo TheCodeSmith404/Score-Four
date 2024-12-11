@@ -3,14 +3,17 @@ package com.tcs.games.score4.ui.waitingroom
 import android.content.Context
 import android.util.Log
 import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
+import com.tcs.games.score4.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import data.PreferenceManager
 import data.repository.GameDetailsRepository
 import data.repository.UserRepository
 import model.gameroom.GameRoom
+import model.gameroom.PlayersStatus
 import utils.ImageUtils
 import javax.inject.Inject
 
@@ -21,6 +24,9 @@ class WaitingRoomViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val gameDetailsRepository: GameDetailsRepository,
 ):ViewModel() {
+    fun startListeningToGameDetails(){
+        gameDetailsRepository.startListeningToGameRoom(preferenceManager.currentGameId)
+    }
     fun isUserHost():Boolean{
          return userRepository.user!!.authId==gameDetailsRepository.gameRoom.value!!.hostId
     }
@@ -33,6 +39,9 @@ class WaitingRoomViewModel @Inject constructor(
     fun setImageToPlayerIcon(context: Context, url:String, imageView: ImageView){
         ImageUtils.downloadImageFromUrlToImageView(context,url,imageView)
     }
+    fun setImageToBot(context: Context,imageView: ImageView){
+        imageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.bot))
+    }
     fun updatePlayerStatus(){
         val userId=getUserAuthid()
         val data=gameDetailsRepository.gameRoom.value!!.players
@@ -41,11 +50,50 @@ class WaitingRoomViewModel @Inject constructor(
         }!!.let {player->
             player.ready=true
         }
-        if(allPlayersReady()){
+        if(allPlayersReady(data)){
             gameDetailsRepository.updateUserStatusAndStart(data)
         }else {
             gameDetailsRepository.updateUserStatus(data)
         }
+    }
+    fun getKeys():Pair<String,String>{
+        val data=gameDetailsRepository.gameRoom.value!!
+        return Pair(data.gameId,data.gamePassword)
+    }
+    fun addBot(index:Int, numberOfBots:Int){
+        val data=gameDetailsRepository.gameRoom.value!!.players
+        val gamesPlayed=getRandomNumber(99)
+        val won=getRandomNumber(gamesPlayed)
+        val bot=PlayersStatus(true,
+            "is_bot",
+            "i_am_a_bot",
+            "Bot_${generateRandomBotName()}",
+            "",
+            true,
+            gamesPlayed,
+            won,
+            0,
+            ready = true,
+            active = true
+        )
+        data.add(index,bot)
+        if(allPlayersReady(data)){
+            gameDetailsRepository.addBotAndStart(data,numberOfBots)
+        }else {
+            gameDetailsRepository.addBot(data,numberOfBots)
+        }
+    }
+    fun canAddBot():Boolean{
+        return gameDetailsRepository.gameRoom.value!!.numberOfBots<2
+    }
+    private fun allPlayersReady(data:List<PlayersStatus>):Boolean{
+        var ready=0
+        data.forEach{player->
+            if(player.ready)
+                ready++
+        }
+        Log.d("AddBot",ready.toString())
+        return ready==4
     }
     fun allPlayersReady():Boolean{
         Log.d("Waiting room","${gameDetailsRepository.gameRoom.value!!.players}")
@@ -56,5 +104,15 @@ class WaitingRoomViewModel @Inject constructor(
         }
         Log.d("Waiting room",ready.toString())
         return ready==4
+    }
+    private fun generateRandomBotName(): String {
+        val chars = ('a'..'z') // Range of lowercase letters
+        return (1..3) // Generate three characters
+            .map { chars.random() }
+            .joinToString("")
+    }
+    private fun getRandomNumber(max:Int):Int{
+        return (0..max).random()
+
     }
 }
