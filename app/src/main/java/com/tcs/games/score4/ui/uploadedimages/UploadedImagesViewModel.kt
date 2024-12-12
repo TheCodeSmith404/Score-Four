@@ -5,9 +5,9 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.storage.FirebaseStorage
+import com.tcs.games.score4.data.PreferenceManager
+import com.tcs.games.score4.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import data.PreferenceManager
-import data.repository.UserRepository
 import kotlinx.coroutines.launch
 import utils.ImageUtils
 import javax.inject.Inject

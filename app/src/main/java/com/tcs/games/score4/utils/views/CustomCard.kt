@@ -10,8 +10,8 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.widget.FrameLayout
 import com.tcs.games.score4.R
-import com.tcs.games.score4.databinding.FragmentGameRoomCardSmallItemBinding
 import com.tcs.games.score4.data.defaults.DefaultCardOptions
+import com.tcs.games.score4.databinding.FragmentGameRoomCardSmallItemBinding
 import com.tcs.games.score4.model.gameroom.CardInfo
 
 class CustomCard @JvmOverloads constructor(

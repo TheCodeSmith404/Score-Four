@@ -8,15 +8,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
+import com.tcs.games.score4.data.defaults.DefaultCardOptions
 import com.tcs.games.score4.databinding.FragmentUploadImageFooterItemBinding
 import com.tcs.games.score4.databinding.FragmentUploadImageItemBinding
-import data.defaults.DefaultCardOptions
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import com.tcs.games.score4.utils.ImageUtils
 import com.tcs.games.score4.utils.constants.ImageNames
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 class UploadedImagesAdapter(
     private val applicationContext:Application,

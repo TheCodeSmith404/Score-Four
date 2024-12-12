@@ -5,10 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
-import data.PreferenceManager
-import kotlinx.coroutines.tasks.await
-import model.gameroom.Deck
-import model.gameroom.GameRoom
+import com.tcs.games.score4.data.PreferenceManager
+import com.tcs.games.score4.model.gameroom.Deck
 import javax.inject.Inject
 import javax.inject.Singleton
 

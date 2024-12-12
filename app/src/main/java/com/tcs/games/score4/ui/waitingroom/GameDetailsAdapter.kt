@@ -8,13 +8,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.tcs.games.score4.R
+import com.tcs.games.score4.data.defaults.DefaultCardOptions
 import com.tcs.games.score4.databinding.DialogViewGameDetailsCardItemBinding
-import data.defaults.DefaultCardOptions
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
-import model.gameroom.CardInfo
+import com.tcs.games.score4.model.gameroom.CardInfo
 import com.tcs.games.score4.utils.ImageUtils
 import com.tcs.games.score4.utils.constants.ImageNames
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 class GameDetailsAdapter(
     private val application: Application,

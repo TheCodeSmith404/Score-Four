@@ -1,27 +1,23 @@
 package com.tcs.games.score4.ui.gamesettingfragment
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.tcs.games.score4.data.PreferenceManager
+import com.tcs.games.score4.data.defaults.DefaultCardOptions
+import com.tcs.games.score4.data.repository.CreateGameRepository
+import com.tcs.games.score4.model.gameroom.CardInfo
+import com.tcs.games.score4.model.gameroom.GameRoom
+import com.tcs.games.score4.model.gameroom.PlayersStatus
+import com.tcs.games.score4.model.gamesettings.CardInfoAdapter
+import com.tcs.games.score4.model.gamesettings.GameKeys
+import com.tcs.games.score4.utils.convertors.TimeUtils
+import com.tcs.games.score4.utils.gamelogic.DeckCreator
+import com.tcs.games.score4.utils.gamelogic.GenerateGameIdPass
 import dagger.hilt.android.lifecycle.HiltViewModel
-import data.PreferenceManager
-import data.defaults.DefaultCardOptions
-import data.repository.CreateGameRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import model.UserData
-import model.gameroom.CardInfo
-import model.gameroom.Deck
-import model.gameroom.GameRoom
-import model.gameroom.PlayersStatus
-import model.gamesettings.CardInfoAdapter
-import model.gamesettings.GameKeys
-import com.tcs.games.score4.utils.convertors.TimeUtils
-import utils.gamelogic.DeckCreator
-import utils.gamelogic.GenerateGameIdPass
 import javax.inject.Inject
 
 @HiltViewModel

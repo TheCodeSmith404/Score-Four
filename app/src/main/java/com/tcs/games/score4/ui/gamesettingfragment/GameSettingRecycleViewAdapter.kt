@@ -10,20 +10,18 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.card.MaterialCardView
-import com.google.android.material.textfield.TextInputEditText
 import com.tcs.games.score4.R
+import com.tcs.games.score4.data.defaults.DefaultCardOptions
 import com.tcs.games.score4.databinding.FragmentGameSettingsItemBinding
-import data.defaults.DefaultCardOptions
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
-import model.gamesettings.CardInfoAdapter
+import com.tcs.games.score4.model.gamesettings.CardInfoAdapter
 import com.tcs.games.score4.utils.ImageUtils
 import com.tcs.games.score4.utils.constants.ImageNames
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 class GameSettingRecycleViewAdapter(
     private val application:Application,

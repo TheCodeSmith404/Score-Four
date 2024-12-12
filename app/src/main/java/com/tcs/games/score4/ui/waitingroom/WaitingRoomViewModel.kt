@@ -8,12 +8,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.tcs.games.score4.R
+import com.tcs.games.score4.data.PreferenceManager
+import com.tcs.games.score4.model.gameroom.GameRoom
+import com.tcs.games.score4.model.gameroom.PlayersStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
-import data.PreferenceManager
 import data.repository.GameDetailsRepository
 import data.repository.UserRepository
-import model.gameroom.GameRoom
-import model.gameroom.PlayersStatus
 import utils.ImageUtils
 import javax.inject.Inject
 

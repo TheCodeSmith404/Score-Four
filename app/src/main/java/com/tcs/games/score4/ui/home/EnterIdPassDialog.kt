@@ -14,10 +14,7 @@ import com.tcs.games.score4.R
 import com.tcs.games.score4.databinding.DialogEnterIdPassBinding
 import dagger.hilt.android.AndroidEntryPoint
 import data.repository.GameDetailsRepository
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.util.Locale
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -73,8 +70,8 @@ class EnterIdPassDialog:DialogFragment() {
                    val result=viewModel.verifyGlobally(id,pass)
                    if(result!=null){
                        val userAdded=viewModel.joinGameRoom(result)
-                       Log.d("Players",userAdded.result.toString())
-                       if(userAdded.result){
+                   Log.d("Players",userAdded.isSuccess.toString())
+                       if(userAdded.isSuccess){
                            dismiss()
                            findNavController().navigate(R.id.action_dialog_enter_credentials_to_waiting_room)
                        }else{

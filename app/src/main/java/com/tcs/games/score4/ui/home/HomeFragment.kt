@@ -6,12 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.tcs.games.score4.R
+import com.tcs.games.score4.data.PreferenceManager
 import com.tcs.games.score4.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
-import data.PreferenceManager
 import data.repository.UserRepository
 import utils.ImageUtils
 import javax.inject.Inject

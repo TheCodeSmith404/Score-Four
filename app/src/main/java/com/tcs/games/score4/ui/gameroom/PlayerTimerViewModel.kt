@@ -9,7 +9,6 @@ import data.repository.GameDetailsRepository
 import data.repository.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import model.gameroom.GameRoom
 import javax.inject.Inject
 
 @HiltViewModel

@@ -3,18 +3,17 @@ package com.tcs.games.score4.dependency
 import android.content.Context
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
 import com.tcs.games.score4.data.PreferenceManager
 import com.tcs.games.score4.data.defaults.DefaultCardOptions
 import com.tcs.games.score4.data.repository.CreateGameRepository
 import com.tcs.games.score4.data.repository.DownloadGameResourcesRepository
 import com.tcs.games.score4.data.repository.GameDetailsRepository
 import com.tcs.games.score4.data.repository.UserRepository
-import com.tcs.games.score4.data.repository.WaitingRoomRepository
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
@@ -32,8 +31,8 @@ object AppModule {
     }
     @Provides
     @Singleton
-    fun providesGameSettingsRepository(firestore: FirebaseFirestore):CreateGameRepository{
-        return CreateGameRepository(firestore)
+    fun providesGameSettingsRepository(firestore: FirebaseFirestore,userRepository: UserRepository):CreateGameRepository{
+        return CreateGameRepository(firestore,userRepository)
     }
     @Provides
     @Singleton
@@ -51,17 +50,16 @@ object AppModule {
         return GameDetailsRepository(firestore,preferenceManager)
     }
 
-    @Provides
-    @Singleton
-    fun providesWaitingRoomRepository(firestore: FirebaseFirestore):WaitingRoomRepository{
-        return WaitingRoomRepository(firestore)
-    }
 //    @Provides
 //    @Singleton
-//    fun providesFirebaseStorageInstance():FirebaseStorage{
-//        return FirebaseStorage.getInstance()
+//    fun providesWaitingRoomRepository(firestore: FirebaseFirestore):WaitingRoomRepository{
+//        return WaitingRoomRepository(firestore)
 //    }
-
+    @Provides
+    @Singleton
+    fun providesFirebaseStorageInstance():FirebaseStorage{
+        return FirebaseStorage.getInstance()
+    }
     @Provides
     @Singleton
     fun providesDownloadResourcesRepository(firebaseStorage: FirebaseStorage):DownloadGameResourcesRepository{

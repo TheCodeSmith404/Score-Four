@@ -15,14 +15,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.storage.FirebaseStorage
+import com.tcs.games.score4.data.PreferenceManager
+import com.tcs.games.score4.utils.ImageUtils
+import com.tcs.games.score4.utils.constants.ImageNames
 import dagger.hilt.android.lifecycle.HiltViewModel
-import data.PreferenceManager
 import data.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import com.tcs.games.score4.utils.ImageUtils
-import com.tcs.games.score4.utils.constants.ImageNames
 import utils.views.CropOverlayView
 import javax.inject.Inject
 

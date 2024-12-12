@@ -13,9 +13,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.tcs.games.score4.R
+import com.tcs.games.score4.data.defaults.DefaultCardOptions
 import com.tcs.games.score4.databinding.FragmentOptionsBottomSheetBinding
 import dagger.hilt.android.AndroidEntryPoint
-import data.defaults.DefaultCardOptions
 import kotlinx.coroutines.launch
 import model.gamesettings.OptionsSheetUiState
 import javax.inject.Inject

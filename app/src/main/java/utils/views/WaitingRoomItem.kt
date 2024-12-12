@@ -8,10 +8,8 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
-import com.google.android.material.card.MaterialCardView
 import com.tcs.games.score4.R
 import com.tcs.games.score4.databinding.FragmentWaitingRoomPlayerItemBinding
-import com.tcs.games.score4.databinding.GameRoomPlayerIconItemBinding
 
 class WaitingRoomItem @JvmOverloads constructor(
     context: Context,

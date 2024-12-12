@@ -4,15 +4,15 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.tcs.games.score4.data.PreferenceManager
 import com.tcs.games.score4.databinding.FragmentGameRoomBinding
+import com.tcs.games.score4.model.gameroom.CardInfo
+import com.tcs.games.score4.model.gameroom.Deck
+import com.tcs.games.score4.model.gameroom.GameRoom
 import dagger.hilt.android.lifecycle.HiltViewModel
-import data.PreferenceManager
 import data.repository.GameDeckRepository
 import data.repository.GameDetailsRepository
 import data.repository.UserRepository
-import model.gameroom.CardInfo
-import model.gameroom.Deck
-import model.gameroom.GameRoom
 import utils.views.PlayerIcon
 import javax.inject.Inject
 
@@ -40,6 +40,9 @@ class GameRoomViewModel @Inject constructor(
         }
     fun startListeningToDeck(){
         gameDeckRepository.startObservingDeck(preferenceManager.currentGameId)
+    }
+    fun updateGameFinishedStats(userWon:Boolean){
+        userRepository.updateGameFinishedStats(userRepository.user!!.authId,userWon)
     }
     fun checkIfWon(deck: List<String>):Boolean{
         val firstCharCount = deck.groupingBy { it[0] }.eachCount()

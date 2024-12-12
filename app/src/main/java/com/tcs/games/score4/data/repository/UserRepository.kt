@@ -4,17 +4,18 @@ import android.content.Context
 import android.util.Log
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.tcs.games.score4.data.PreferenceManager
+import com.tcs.games.score4.utils.ImageUtils
+import com.tcs.games.score4.utils.constants.ImageNames
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import com.tcs.games.score4.model.UserData
+import model.UserData
 import javax.inject.Inject
 import javax.inject.Singleton
-import com.tcs.games.score4.utils.ImageUtils
-import com.tcs.games.score4.utils.constants.ImageNames
 
 @Singleton
 class UserRepository @Inject constructor(
@@ -26,7 +27,7 @@ class UserRepository @Inject constructor(
     private val usersCollection = firestore.collection("accounts")
     private val revenue=firestore.collection("revenue")
     private val config=firestore.collection("config")
-    var user:UserData?=null
+    var user: UserData?=null
 
     // Suspend function to add user
     suspend fun addUser(userData: UserData): Task<Boolean> = withContext(Dispatchers.IO) {
@@ -40,7 +41,7 @@ class UserRepository @Inject constructor(
             Tasks.forResult(false)
         }
     }
-    // Suspend function to get user com.tcs.games.score4.data
+    // Suspend function to get user data
     suspend fun getUser(authId: String,context: Context): Task<UserData?> = withContext(Dispatchers.IO) {
         try {
             val document = usersCollection.document(authId).get().await()
@@ -51,7 +52,8 @@ class UserRepository @Inject constructor(
             if(user!!.profileUrl!="none"&&preferenceManager.profileUrl==null||preferenceManager.profileImageChanged){
                 Log.d("Download","Starting Download")
                 preferenceManager.profileImageChanged=false
-                val uri=ImageUtils.downloadImageFromFirebase(firebaseStorage,"profile_images",user!!.authId, context,ImageNames.PROFILE.txt,true)
+                val uri= ImageUtils.downloadImageFromFirebase(firebaseStorage,"profile_images",user!!.authId, context,
+                    ImageNames.PROFILE.txt,true)
                 if(uri!=null){
                     preferenceManager.profileUrl=uri
                 }
@@ -60,12 +62,13 @@ class UserRepository @Inject constructor(
             Log.d("UserRepository", "Data Received")
             Tasks.forResult(user)
         } catch (e: Exception) {
-            Log.e("UserRepository", "Error getting user com.tcs.games.score4.data", e)
+            Log.e("UserRepository", "Error getting user data", e)
             Tasks.forResult(null)
         }
     }
 
-    suspend fun updateProfileImage(authId: String, profile: String): Boolean = withContext(Dispatchers.IO) {
+    suspend fun updateProfileImage(authId: String, profile: String): Boolean = withContext(
+        Dispatchers.IO) {
         try {
             // Update the profile URL in the FireStore document
             usersCollection.document(authId)
@@ -129,6 +132,17 @@ class UserRepository @Inject constructor(
             Log.e("UserRepository", "Error getting user count", e)
             return@withContext Tasks.forResult(0 to false) // Return default values on error
         }
+    }
+    fun updateGameFinishedStats(userId:String,userWon:Boolean){
+        val field=if(userWon) "numberGamesWon" else "NumberGamesWon"
+        usersCollection.document(userId).update(field, FieldValue.increment(1))
+            .addOnSuccessListener {
+                Log.d("updateStats","userWon: $userWon and update is successful")
+            }
+            .addOnFailureListener{
+                Log.d("updateStats","userWon: $userWon and update is unsuccessful")
+            }
+
     }
 
 }

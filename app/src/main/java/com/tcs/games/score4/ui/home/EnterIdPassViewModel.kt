@@ -2,11 +2,11 @@ package com.tcs.games.score4.ui.home
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.google.android.gms.tasks.Task
-import com.google.android.gms.tasks.Tasks
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.tcs.games.score4.data.PreferenceManager
+import com.tcs.games.score4.utils.convertors.TimeUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
-import data.PreferenceManager
 import data.repository.JoinGameRepository
 import data.repository.UserRepository
 import kotlinx.coroutines.tasks.await
@@ -48,11 +48,10 @@ class EnterIdPassViewModel @Inject constructor(
             null // Return false for unexpected exceptions
         }
     }
-    suspend fun joinGameRoom(gameId: String): Task<Boolean> {
+    suspend fun joinGameRoom(gameId: String): Result<Boolean> {
         return try {
-            var result=true
-            val currentUser=userRepository.user!!
-            val playerStatus=PlayersStatus(
+            val currentUser = userRepository.user!!
+            val playerStatus = PlayersStatus(
                 false,
                 currentUser.authId,
                 currentUser.generatedId,
@@ -65,53 +64,48 @@ class EnterIdPassViewModel @Inject constructor(
                 ready = false,
                 active = true
             )
-            // Start a Firestore transaction
-            firestore.runTransaction { transaction ->
 
-                // Fetch the game room document
+            // Perform the transaction to join the game room
+            firestore.runTransaction { transaction ->
                 val gameRoomRef = firestore.collection("game_room_details").document(gameId)
                 val gameRoomSnapshot = transaction.get(gameRoomRef)
+                val accountRef = firestore.collection("accounts").document(currentUser.authId)
 
                 if (gameRoomSnapshot.exists()) {
-                    Log.d("firebase",gameRoomSnapshot.toString())
-                    // Deserialize the document to a GameRoom object
                     val gameRoom = gameRoomSnapshot.toObject(GameRoom::class.java)
                     if (gameRoom != null) {
-                        // Modify the data: Append player and update player count
-                        if(gameRoom.numberOfPlayers+gameRoom.numberOfBots<=3&&!gameRoom.running) {
-                            Log.d("Players","${gameRoom.numberOfPlayers+gameRoom.numberOfBots}")
+                        if (gameRoom.numberOfPlayers + gameRoom.numberOfBots <= 3 && !gameRoom.running) {
                             gameRoom.players.add(playerStatus)
                             gameRoom.numberOfPlayers++
-                            // Update the Firestore document with the modified data
+                            transaction.update(accountRef, "numberGamesPlayed", FieldValue.increment(1))
                             transaction.set(gameRoomRef, gameRoom)
-                        }else if(gameRoom.numberOfBots>0&&!gameRoom.running){
-                            Log.d("Players","${gameRoom.numberOfPlayers}")
+                        } else if (gameRoom.numberOfBots > 0 && !gameRoom.running) {
                             gameRoom.players.removeIf { player -> player.bot }
                             gameRoom.players.add(playerStatus)
                             gameRoom.numberOfPlayers++
                             gameRoom.numberOfBots--
-                            transaction.set(gameRoomRef,gameRoom)
-                        }else{
-                            result=false
-                            Log.d("Players","Condition false")
+                            transaction.update(accountRef, "numberGamesPlayed", FieldValue.increment(1),
+                                "lastGamePlayed", TimeUtils.getCurrentTimeInMillis())
+                            transaction.set(gameRoomRef, gameRoom)
+                        } else {
+                            throw IllegalStateException("Room conditions not met")
                         }
                     } else {
-                        // If the document exists but data can't be parsed, return failure
-                        result=false
+                        throw IllegalArgumentException("Invalid game room data")
                     }
                 } else {
-                    // If the game room doesn't exist
-                    result=false
+                    throw IllegalStateException("Game room does not exist")
                 }
             }.await()
-            preferenceManager.currentGameId=gameId
-            Tasks.forResult(result)
+
+            // Update local preferences
+            preferenceManager.currentGameId = gameId
+            Result.success(true)
         } catch (e: Exception) {
-            Log.d("Firebase",e.printStackTrace().toString())
-            Log.d("Firebase",e.message.toString())
-            // Handle any error that occurs during the transaction
-            Tasks.forResult(false)
+            Log.e("Firebase", "Error joining game room", e)
+            Result.failure(e)
         }
     }
+
 
 }

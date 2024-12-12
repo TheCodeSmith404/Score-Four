@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModel
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.tcs.games.score4.data.PreferenceManager
 import dagger.hilt.android.lifecycle.HiltViewModel
-import data.PreferenceManager
 import data.repository.UserRepository
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

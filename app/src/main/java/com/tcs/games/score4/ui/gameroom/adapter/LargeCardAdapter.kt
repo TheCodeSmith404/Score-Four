@@ -4,20 +4,17 @@ import android.app.Application
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.tcs.games.score4.R
+import com.tcs.games.score4.data.defaults.DefaultCardOptions
 import com.tcs.games.score4.databinding.FragmentGameRoomCardLargeItemBinding
-import com.tcs.games.score4.databinding.FragmentGameSettingsBinding
-import data.defaults.DefaultCardOptions
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
-import model.ImagesData
-import model.gameroom.CardInfo
+import com.tcs.games.score4.model.gameroom.CardInfo
 import com.tcs.games.score4.utils.ImageUtils
 import com.tcs.games.score4.utils.constants.ImageNames
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 class LargeCardAdapter(private var list:MutableList<CardInfo>,private val context: Context,private val gameId:String,private val application: Application,private val coroutineScope: CoroutineScope):RecyclerView.Adapter<LargeCardAdapter.ViewHolder>() {
     inner class ViewHolder(binding:FragmentGameRoomCardLargeItemBinding):RecyclerView.ViewHolder(binding.root){

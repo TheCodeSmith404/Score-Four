@@ -5,16 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
-import data.PreferenceManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.newSingleThreadContext
-import kotlinx.coroutines.withContext
-import model.gameroom.CardInfo
-import model.gameroom.GameRoom
-import model.gameroom.PlayersStatus
-import utils.views.WaitingRoomItem
+import com.tcs.games.score4.data.PreferenceManager
+import com.tcs.games.score4.model.gameroom.CardInfo
+import com.tcs.games.score4.model.gameroom.GameRoom
+import com.tcs.games.score4.model.gameroom.PlayersStatus
 import javax.inject.Inject
 import javax.inject.Singleton
 

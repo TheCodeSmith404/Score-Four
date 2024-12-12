@@ -16,15 +16,15 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.tcs.games.score4.R
+import com.tcs.games.score4.data.PreferenceManager
 import com.tcs.games.score4.databinding.DialogUserInfoBinding
 import com.tcs.games.score4.ui.selectimage.SelectImageSharedViewModel
-import dagger.hilt.android.AndroidEntryPoint
-import data.PreferenceManager
-import data.repository.UserRepository
-import kotlinx.coroutines.launch
 import com.tcs.games.score4.utils.ImageUtils
 import com.tcs.games.score4.utils.constants.ImageNames
 import com.tcs.games.score4.utils.convertors.TimeUtils
+import dagger.hilt.android.AndroidEntryPoint
+import data.repository.UserRepository
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint

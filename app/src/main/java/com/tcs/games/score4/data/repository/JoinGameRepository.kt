@@ -2,8 +2,8 @@ package com.tcs.games.score4.data.repository
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.tcs.games.score4.data.PreferenceManager
-import kotlinx.coroutines.tasks.await
 import com.tcs.games.score4.model.gamesettings.GameKeys
+import kotlinx.coroutines.tasks.await
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -40,8 +40,5 @@ class JoinGameRepository @Inject constructor(
         } catch (e: Exception) {
             Result.failure(e)
         }
-    }
-    suspend fun registerUser(){
-
     }
 }

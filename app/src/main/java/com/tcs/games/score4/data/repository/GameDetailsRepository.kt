@@ -21,16 +21,13 @@ class GameDetailsRepository @Inject constructor(
     val gameRoom: LiveData<GameRoom?> get() = _gameDetails
     private lateinit var docRef:DocumentReference
 
-    init {
-        val id = preferenceManager.currentGameId
-        startListeningToGameRoom(id)
-    }
 
-    private fun startListeningToGameRoom(id: String) {
-        docRef=firebaseFireStore.collection("game_room_details")
-            .document(id)
-        // Add a snapshot listener to Firestore
-        docRef.addSnapshotListener { snapshot, error ->
+    fun startListeningToGameRoom(id: String) {
+        if(!::docRef.isInitialized) {
+            docRef = firebaseFireStore.collection("game_room_details")
+                .document(id)
+            // Add a snapshot listener to Firestore
+            docRef.addSnapshotListener { snapshot, error ->
                 if (error != null) {
                     Log.e("GameDetailsRepository", "Error listening to snapshot: ${error.message}")
                     return@addSnapshotListener
@@ -43,9 +40,52 @@ class GameDetailsRepository @Inject constructor(
                     Log.d("GameDetailsRepository", "No document found for ID: $id")
                 }
             }
+        }
+    }
+    fun addBot(status: List<PlayersStatus>, numberOfBot:Int){
+        docRef.update("players",status,
+            "numberOfBots",numberOfBot)
+            .addOnSuccessListener {
+                Log.d("GameDetailsRepository","data_updated")
+            }
+            .addOnFailureListener{
+                Log.d("GameDetailsRepository","failure")
+            }
+    }
+    fun addBotAndStart(status: List<PlayersStatus>, numberOfBot: Int){
+        docRef.update(
+            "players",status,
+            "numberOfBots",numberOfBot,
+            "running",true)
+            .addOnSuccessListener {
+                Log.d("GameDetailsRepository","data_updated")
+            }
+            .addOnFailureListener{
+                Log.d("GameDetailsRepository","failure")
+            }
     }
     fun updateUserStatus(status:List<PlayersStatus>){
         docRef.update("players",status)
+            .addOnSuccessListener {
+                Log.d("GameDetailsRepository","data_updated")
+            }
+            .addOnFailureListener{
+                Log.d("GameDetailsRepository","failure")
+            }
+    }
+    fun setWinner(index:Int){
+        docRef.update("winner",index)
+            .addOnSuccessListener {
+                Log.d("Winner","Winner is user $index")
+            }
+            .addOnFailureListener{
+                Log.d("Winner","Winner not set and was user $index")
+            }
+    }
+    fun updateUserStatusAndStart(status: List<PlayersStatus>){
+        docRef.update(
+            "players",status,
+            "running",true)
             .addOnSuccessListener {
                 Log.d("GameDetailsRepository","data_updated")
             }

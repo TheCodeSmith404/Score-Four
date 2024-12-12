@@ -2,24 +2,17 @@ package utils.views
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.res.ColorStateList
 import android.graphics.PorterDuff
 import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
-import android.view.View
 import android.widget.FrameLayout
-import android.widget.ImageView
-import androidx.cardview.widget.CardView
-import com.google.android.material.card.MaterialCardView
 import com.tcs.games.score4.R
-import com.tcs.games.score4.databinding.FragmentGameRoomCardLargeItemBinding
+import com.tcs.games.score4.data.defaults.DefaultCardOptions
 import com.tcs.games.score4.databinding.FragmentGameRoomCardSmallItemBinding
-import data.defaults.DefaultCardOptions
-import model.gameroom.CardInfo
+import com.tcs.games.score4.model.gameroom.CardInfo
 
 class CustomCard @JvmOverloads constructor(
     context: Context,

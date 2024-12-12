@@ -3,15 +3,13 @@ package com.tcs.games.score4.ui.uploadedimages
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -22,15 +20,12 @@ import com.google.android.material.snackbar.Snackbar
 import com.tcs.games.score4.R
 import com.tcs.games.score4.databinding.FragmentUploadImageBinding
 import com.tcs.games.score4.ui.selectimage.SelectImageSharedViewModel
+import com.tcs.games.score4.utils.constants.ImageNames
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import com.tcs.games.score4.utils.ImageUtils
-import com.tcs.games.score4.utils.constants.ImageNames
 
 @AndroidEntryPoint
 class UploadedImages : Fragment(),OnUploadImageAdapterClickListener {

@@ -1,8 +1,8 @@
 package com.tcs.games.score4.ui.base
 
 import android.os.Bundle
-import androidx.navigation.findNavController
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.tcs.games.score4.R
 import com.tcs.games.score4.databinding.ActivityMainBinding

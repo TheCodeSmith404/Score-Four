@@ -8,15 +8,14 @@ import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.tcs.games.score4.R
 import com.tcs.games.score4.databinding.DialogShareCredentialsBinding
 import com.tcs.games.score4.databinding.DialogShowPlayerDetailsBinding
 import com.tcs.games.score4.databinding.DialogShowProgressBinding
+import com.tcs.games.score4.model.gameroom.PlayersStatus
 import com.tcs.games.score4.utils.convertors.TimeUtils
-import model.gameroom.PlayersStatus
 
 @SuppressLint("StaticFieldLeak")
 object AlertDialogManager {

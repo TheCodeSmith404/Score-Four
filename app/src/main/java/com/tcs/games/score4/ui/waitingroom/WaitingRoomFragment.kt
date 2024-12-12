@@ -14,13 +14,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.tcs.games.score4.R
 import com.tcs.games.score4.databinding.FragmentWaitingRoomBinding
+import com.tcs.games.score4.model.gameroom.GameRoom
+import com.tcs.games.score4.model.gameroom.PlayersStatus
 import com.tcs.games.score4.utils.AlertDialogManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import model.gameroom.GameRoom
-import model.gameroom.PlayersStatus
 import utils.views.WaitingRoomItem
 import kotlin.math.min
 

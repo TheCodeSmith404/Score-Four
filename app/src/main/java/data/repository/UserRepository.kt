@@ -4,20 +4,18 @@ import android.content.Context
 import android.util.Log
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import data.PreferenceManager
+import com.tcs.games.score4.data.PreferenceManager
+import com.tcs.games.score4.utils.ImageUtils
+import com.tcs.games.score4.utils.constants.ImageNames
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import model.UserData
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlinx.coroutines.async
-import com.tcs.games.score4.utils.ImageUtils
-import com.tcs.games.score4.utils.constants.ImageNames
 
 @Singleton
 class UserRepository @Inject constructor(
@@ -132,6 +130,17 @@ class UserRepository @Inject constructor(
             Log.e("UserRepository", "Error getting user count", e)
             return@withContext Tasks.forResult(0 to false) // Return default values on error
         }
+    }
+    fun updateGameFinishedStats(userId:String,userWon:Boolean){
+        val field=if(userWon) "numberGamesWon" else "NumberGamesWon"
+        usersCollection.document(userId).update(field,FieldValue.increment(1))
+            .addOnSuccessListener {
+                Log.d("updateStats","userWon: $userWon and update is successful")
+            }
+            .addOnFailureListener{
+                Log.d("updateStats","userWon: $userWon and update is unsuccessful")
+            }
+
     }
 
 }

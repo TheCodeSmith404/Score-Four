@@ -8,29 +8,25 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.tcs.games.score4.R
 import com.tcs.games.score4.bot.ProbabilityBot
 import com.tcs.games.score4.databinding.FragmentGameRoomBinding
+import com.tcs.games.score4.model.gameroom.CardInfo
 import com.tcs.games.score4.ui.gameroom.adapter.LargeCardAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import model.gameroom.CardInfo
 import utils.views.CustomCard
-import utils.views.PlayerIcon
 
 @AndroidEntryPoint
 class GameRoomFragment:Fragment() {
@@ -89,10 +85,18 @@ class GameRoomFragment:Fragment() {
             Log.d("GameFinishedDialog","Observer triggered")
             if(game!=null) {
                 if (game.winner >= 0) {
+                    updateUserWon(game.winner)
                     Log.d("GameFinishedDialog","Winner is ${game.winner}")
                     findNavController().navigate(R.id.action_game_room_to_game_finished)
                 }
             }
+        }
+    }
+    private fun updateUserWon(userIndex:Int){
+        if(userIndex==viewModel.userIndex){
+            viewModel.updateGameFinishedStats(true)
+        }else{
+            viewModel.updateGameFinishedStats(false)
         }
     }
 

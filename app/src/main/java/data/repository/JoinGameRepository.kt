@@ -1,7 +1,7 @@
 package data.repository
 
 import com.google.firebase.firestore.FirebaseFirestore
-import data.PreferenceManager
+import com.tcs.games.score4.data.PreferenceManager
 import kotlinx.coroutines.tasks.await
 import model.gamesettings.GameKeys
 import java.util.Locale
@@ -40,8 +40,5 @@ class JoinGameRepository @Inject constructor(
         } catch (e: Exception) {
             Result.failure(e)
         }
-    }
-    suspend fun registerUser(){
-
     }
 }

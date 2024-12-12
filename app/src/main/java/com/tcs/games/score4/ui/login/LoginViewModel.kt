@@ -1,27 +1,23 @@
 package com.tcs.games.score4.ui.login
 
-import android.annotation.SuppressLint
 import android.app.Application
-import android.content.Context
 import android.util.Log
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
+import com.tcs.games.score4.data.PreferenceManager
+import com.tcs.games.score4.utils.convertors.TimeUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
-import data.PreferenceManager
 import data.repository.UserRepository
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import model.UserData
-import com.tcs.games.score4.utils.convertors.TimeUtils
 import javax.inject.Inject
 
 @HiltViewModel
