@@ -11,8 +11,8 @@ import com.tcs.games.score4.R
 import com.tcs.games.score4.data.PreferenceManager
 import com.tcs.games.score4.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
-import data.repository.UserRepository
-import utils.ImageUtils
+import com.tcs.games.score4.data.repository.UserRepository
+import com.tcs.games.score4.utils.ImageUtils
 import javax.inject.Inject
 
 @AndroidEntryPoint

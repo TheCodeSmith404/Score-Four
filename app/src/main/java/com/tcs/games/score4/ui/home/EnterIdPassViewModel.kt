@@ -7,11 +7,11 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.tcs.games.score4.data.PreferenceManager
 import com.tcs.games.score4.utils.convertors.TimeUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
-import data.repository.JoinGameRepository
-import data.repository.UserRepository
+import com.tcs.games.score4.data.repository.JoinGameRepository
+import com.tcs.games.score4.data.repository.UserRepository
 import kotlinx.coroutines.tasks.await
-import model.gameroom.GameRoom
-import model.gameroom.PlayersStatus
+import com.tcs.games.score4.model.gameroom.GameRoom
+import com.tcs.games.score4.model.gameroom.PlayersStatus
 import javax.inject.Inject
 
 @HiltViewModel

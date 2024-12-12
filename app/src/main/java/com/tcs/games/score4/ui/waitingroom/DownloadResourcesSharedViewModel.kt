@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tcs.games.score4.model.gameroom.CardInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
-import data.repository.DownloadGameResourcesRepository
+import com.tcs.games.score4.data.repository.DownloadGameResourcesRepository
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject

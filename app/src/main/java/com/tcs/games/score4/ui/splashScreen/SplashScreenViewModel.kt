@@ -9,11 +9,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.tcs.games.score4.data.PreferenceManager
 import dagger.hilt.android.lifecycle.HiltViewModel
-import data.repository.UserRepository
+import com.tcs.games.score4.data.repository.UserRepository
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import model.UserData
+import com.tcs.games.score4.model.UserData
 import javax.inject.Inject
 
 @HiltViewModel

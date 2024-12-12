@@ -18,7 +18,7 @@ import com.tcs.games.score4.databinding.FragmentGameSettingsBinding
 import com.tcs.games.score4.ui.uploadedimages.UploadedImagesSharedViewModel
 import com.tcs.games.score4.utils.AlertDialogManager
 import dagger.hilt.android.AndroidEntryPoint
-import data.repository.UserRepository
+import com.tcs.games.score4.data.repository.UserRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

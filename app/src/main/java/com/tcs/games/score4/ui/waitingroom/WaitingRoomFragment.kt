@@ -21,7 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import utils.views.WaitingRoomItem
+import com.tcs.games.score4.utils.views.WaitingRoomItem
 import kotlin.math.min
 
 @AndroidEntryPoint

@@ -23,7 +23,7 @@ import com.tcs.games.score4.utils.ImageUtils
 import com.tcs.games.score4.utils.constants.ImageNames
 import com.tcs.games.score4.utils.convertors.TimeUtils
 import dagger.hilt.android.AndroidEntryPoint
-import data.repository.UserRepository
+import com.tcs.games.score4.data.repository.UserRepository
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

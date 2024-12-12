@@ -10,10 +10,10 @@ import com.tcs.games.score4.model.gameroom.CardInfo
 import com.tcs.games.score4.model.gameroom.Deck
 import com.tcs.games.score4.model.gameroom.GameRoom
 import dagger.hilt.android.lifecycle.HiltViewModel
-import data.repository.GameDeckRepository
-import data.repository.GameDetailsRepository
-import data.repository.UserRepository
-import utils.views.PlayerIcon
+import com.tcs.games.score4.data.repository.GameDeckRepository
+import com.tcs.games.score4.data.repository.GameDetailsRepository
+import com.tcs.games.score4.data.repository.UserRepository
+import com.tcs.games.score4.utils.views.PlayerIcon
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,6 +38,7 @@ class GameRoomViewModel @Inject constructor(
             }
             return _userIndex!!
         }
+    val debounceUpdate=false
     fun startListeningToDeck(){
         gameDeckRepository.startObservingDeck(preferenceManager.currentGameId)
     }
@@ -68,6 +69,7 @@ class GameRoomViewModel @Inject constructor(
         val temp=gameDetailsRepository.gameRoom
         return temp
     }
+
     fun getTurnTime(plusDelay:Boolean):Int{
         return if(plusDelay)
             gameDetailsRepository.gameRoom.value!!.timePerTurns+4

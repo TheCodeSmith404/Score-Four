@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.tcs.games.score4.model.gameroom.Deck
-import data.PreferenceManager
+import com.tcs.games.score4.data.PreferenceManager
 import javax.inject.Inject
 import javax.inject.Singleton
 

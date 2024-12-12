@@ -12,9 +12,9 @@ import com.tcs.games.score4.data.PreferenceManager
 import com.tcs.games.score4.model.gameroom.GameRoom
 import com.tcs.games.score4.model.gameroom.PlayersStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
-import data.repository.GameDetailsRepository
-import data.repository.UserRepository
-import utils.ImageUtils
+import com.tcs.games.score4.data.repository.GameDetailsRepository
+import com.tcs.games.score4.data.repository.UserRepository
+import com.tcs.games.score4.utils.ImageUtils
 import javax.inject.Inject
 
 @HiltViewModel
@@ -44,8 +44,8 @@ class WaitingRoomViewModel @Inject constructor(
     }
     fun updatePlayerStatus(){
         val userId=getUserAuthid()
-        val data=gameDetailsRepository.gameRoom.value!!.players
-        data.find{
+        val data=gameDetailsRepository.gameRoom.value?.players
+        data?.find{
             it.firebaseId == userId
         }!!.let {player->
             player.ready=true

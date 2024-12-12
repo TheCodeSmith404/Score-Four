@@ -4,9 +4,9 @@ import android.os.CountDownTimer
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import data.repository.GameDeckRepository
-import data.repository.GameDetailsRepository
-import data.repository.UserRepository
+import com.tcs.games.score4.data.repository.GameDeckRepository
+import com.tcs.games.score4.data.repository.GameDetailsRepository
+import com.tcs.games.score4.data.repository.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject

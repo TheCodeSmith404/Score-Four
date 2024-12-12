@@ -3,7 +3,7 @@ package com.tcs.games.score4.ui.waitingroom
 import androidx.lifecycle.ViewModel
 import com.tcs.games.score4.model.gameroom.CardInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
-import data.repository.GameDetailsRepository
+import com.tcs.games.score4.data.repository.GameDetailsRepository
 import javax.inject.Inject
 
 @HiltViewModel

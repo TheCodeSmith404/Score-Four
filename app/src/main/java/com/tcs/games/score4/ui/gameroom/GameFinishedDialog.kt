@@ -16,8 +16,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class GameFinishedDialog: DialogFragment() {
     private var _binding:DialogGameFinishedBinding?=null
     private val binding get()=_binding!!
-    private lateinit var handler: Handler
-    private lateinit var navigateRunnable: Runnable
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -36,21 +34,12 @@ class GameFinishedDialog: DialogFragment() {
     override fun onStart() {
         super.onStart()
         dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        handler = Handler(Looper.getMainLooper())
 
         // Define the Runnable
-        navigateRunnable = Runnable {
-            dismiss()
-            findNavController().navigate(R.id.action_game_finished_to_waiting_room)
-        }
-
-        // Post the Runnable with a delay
-        handler.postDelayed(navigateRunnable, 2000)
     }
 
     override fun onStop() {
         super.onStop()
-        handler.removeCallbacks(navigateRunnable)
     }
 
     override fun onDestroy() {

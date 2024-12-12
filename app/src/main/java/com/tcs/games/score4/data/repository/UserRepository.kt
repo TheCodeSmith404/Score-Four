@@ -13,7 +13,7 @@ import com.tcs.games.score4.utils.constants.ImageNames
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import model.UserData
+import com.tcs.games.score4.model.UserData
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -134,7 +134,7 @@ class UserRepository @Inject constructor(
         }
     }
     fun updateGameFinishedStats(userId:String,userWon:Boolean){
-        val field=if(userWon) "numberGamesWon" else "NumberGamesWon"
+        val field=if(userWon) "numberGamesWon" else "NumberGamesLost"
         usersCollection.document(userId).update(field, FieldValue.increment(1))
             .addOnSuccessListener {
                 Log.d("updateStats","userWon: $userWon and update is successful")

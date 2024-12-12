@@ -15,8 +15,8 @@ import com.tcs.games.score4.R
 import com.tcs.games.score4.databinding.FragmentSelectImageBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import utils.ImageUtils
-import utils.views.CropOverlayView
+import com.tcs.games.score4.utils.ImageUtils
+import com.tcs.games.score4.utils.views.CropOverlayView
 
 @AndroidEntryPoint
 class SelectImageFragment: Fragment() {

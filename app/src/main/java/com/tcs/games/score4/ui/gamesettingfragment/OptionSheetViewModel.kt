@@ -1,9 +1,9 @@
 package com.tcs.games.score4.ui.gamesettingfragment
 
 import androidx.lifecycle.ViewModel
+import com.tcs.games.score4.model.gamesettings.OptionsSheetUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import model.gamesettings.OptionsSheetUiState
 
 class OptionSheetViewModel: ViewModel() {
     private val _state= MutableStateFlow<OptionsSheetUiState>(OptionsSheetUiState.Colors(0,1))

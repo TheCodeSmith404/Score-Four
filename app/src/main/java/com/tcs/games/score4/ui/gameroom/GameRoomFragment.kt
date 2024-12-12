@@ -26,7 +26,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import utils.views.CustomCard
+import com.tcs.games.score4.utils.views.CustomCard
 
 @AndroidEntryPoint
 class GameRoomFragment:Fragment() {
@@ -145,8 +145,9 @@ class GameRoomFragment:Fragment() {
 
                 //Setting up turn systems
                 Log.d("Deck Observer","${viewModel.previousDeck.toString()} and current deck: ${myDeck.toString()}")
-                if(viewModel.previousDeck!=myDeck){
+                if(viewModel.previousDeck != myDeck){
                     if(viewModel.checkIfWon(myDeck)){
+                        Log.d("winner","setting winner")
                         setWinner(viewModel.userIndex)
                     }
                     viewModel.previousDeck.clear()

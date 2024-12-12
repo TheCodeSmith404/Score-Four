@@ -25,7 +25,7 @@
             android:contentDescription="Image preview"
             android:scaleType="centerCrop" />
 
-        <utils.views.CropOverlayView
+        <com.tcs.games.score4.utils.views.CropOverlayView
             android:id="@+id/cropOverlay"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

@@ -9,7 +9,7 @@ import com.tcs.games.score4.data.PreferenceManager
 import com.tcs.games.score4.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import utils.ImageUtils
+import com.tcs.games.score4.utils.ImageUtils
 import javax.inject.Inject
 
 @HiltViewModel

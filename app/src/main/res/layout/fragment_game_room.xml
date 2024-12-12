@@ -40,25 +40,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageButtonGameRoomUp">
-        <utils.views.PlayerIcon
+        <com.tcs.games.score4.utils.views.PlayerIcon
             android:id="@+id/player_a"
             app:playerText="A"
             android:layout_margin="2dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
-        <utils.views.PlayerIcon
+        <com.tcs.games.score4.utils.views.PlayerIcon
             android:id="@+id/player_b"
             app:playerText="B"
             android:layout_margin="2dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
-        <utils.views.PlayerIcon
+        <com.tcs.games.score4.utils.views.PlayerIcon
             android:id="@+id/player_c"
             app:playerText="C"
             android:layout_margin="2dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
-        <utils.views.PlayerIcon
+        <com.tcs.games.score4.utils.views.PlayerIcon
             android:id="@+id/player_d"
             app:playerText="D"
             android:layout_margin="2dp"
@@ -100,19 +100,19 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" >
-        <utils.views.CustomCard
+        <com.tcs.games.score4.utils.views.CustomCard
             android:layout_height="wrap_content"
             android:layout_width="wrap_content" />
-        <utils.views.CustomCard
+        <com.tcs.games.score4.utils.views.CustomCard
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"/>
-        <utils.views.CustomCard
+        <com.tcs.games.score4.utils.views.CustomCard
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"/>
-        <utils.views.CustomCard
+        <com.tcs.games.score4.utils.views.CustomCard
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"/>
-        <utils.views.CustomCard
+        <com.tcs.games.score4.utils.views.CustomCard
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"/>
     </LinearLayout>

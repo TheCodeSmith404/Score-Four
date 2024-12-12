@@ -17,7 +17,7 @@ import com.tcs.games.score4.data.defaults.DefaultCardOptions
 import com.tcs.games.score4.databinding.FragmentOptionsBottomSheetBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import model.gamesettings.OptionsSheetUiState
+import com.tcs.games.score4.model.gamesettings.OptionsSheetUiState
 import javax.inject.Inject
 
 @AndroidEntryPoint

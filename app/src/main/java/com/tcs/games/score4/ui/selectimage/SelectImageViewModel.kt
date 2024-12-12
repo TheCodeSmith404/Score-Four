@@ -19,11 +19,11 @@ import com.tcs.games.score4.data.PreferenceManager
 import com.tcs.games.score4.utils.ImageUtils
 import com.tcs.games.score4.utils.constants.ImageNames
 import dagger.hilt.android.lifecycle.HiltViewModel
-import data.repository.UserRepository
+import com.tcs.games.score4.data.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import utils.views.CropOverlayView
+import com.tcs.games.score4.utils.views.CropOverlayView
 import javax.inject.Inject
 
 @HiltViewModel

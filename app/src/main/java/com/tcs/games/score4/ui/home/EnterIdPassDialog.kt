@@ -13,7 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.tcs.games.score4.R
 import com.tcs.games.score4.databinding.DialogEnterIdPassBinding
 import dagger.hilt.android.AndroidEntryPoint
-import data.repository.GameDetailsRepository
+import com.tcs.games.score4.data.repository.GameDetailsRepository
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

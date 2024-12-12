@@ -71,7 +71,7 @@
                         android:layout_height="wrap_content"
                         android:text="Player A" />
 
-                    <utils.views.WaitingRoomItem
+                    <com.tcs.games.score4.utils.views.WaitingRoomItem
                         android:id="@+id/player0"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -82,7 +82,7 @@
                         android:layout_height="wrap_content"
                         android:text="Player B" />
 
-                    <utils.views.WaitingRoomItem
+                    <com.tcs.games.score4.utils.views.WaitingRoomItem
                         android:id="@+id/player1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -93,7 +93,7 @@
                         android:layout_height="wrap_content"
                         android:text="Player C" />
 
-                    <utils.views.WaitingRoomItem
+                    <com.tcs.games.score4.utils.views.WaitingRoomItem
                         android:id="@+id/player2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -104,7 +104,7 @@
                         android:layout_height="wrap_content"
                         android:text="Player D" />
 
-                    <utils.views.WaitingRoomItem
+                    <com.tcs.games.score4.utils.views.WaitingRoomItem
                         android:id="@+id/player3"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

@@ -17,7 +17,7 @@ import com.tcs.games.score4.utils.gamelogic.GenerateGameIdPass
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import model.UserData
+import com.tcs.games.score4.model.UserData
 import javax.inject.Inject
 
 @HiltViewModel
