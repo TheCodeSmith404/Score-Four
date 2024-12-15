@@ -134,7 +134,7 @@ class UserRepository @Inject constructor(
         }
     }
     fun updateGameFinishedStats(userId:String,userWon:Boolean){
-        val field=if(userWon) "numberGamesWon" else "NumberGamesLost"
+        val field=if(userWon) "numberGamesWon" else "numberGamesLost"
         usersCollection.document(userId).update(field, FieldValue.increment(1))
             .addOnSuccessListener {
                 Log.d("updateStats","userWon: $userWon and update is successful")

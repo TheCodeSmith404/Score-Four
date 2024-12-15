@@ -22,11 +22,11 @@
             android:text="20 seconds"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/textView5"
+            app:layout_constraintStart_toEndOf="@+id/textViewWinnerName"
             app:layout_constraintTop_toBottomOf="@+id/recyclerView2" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/textViewWinnerName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"

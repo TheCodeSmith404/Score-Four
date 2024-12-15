@@ -1,6 +1,8 @@
 package com.tcs.games.score4.dependency
 
 import android.content.Context
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.tcs.games.score4.data.PreferenceManager
@@ -64,5 +66,15 @@ object AppModule {
     @Singleton
     fun providesDownloadResourcesRepository(firebaseStorage: FirebaseStorage):DownloadGameResourcesRepository{
         return DownloadGameResourcesRepository(firebaseStorage)
+    }
+    @Provides
+    @Singleton
+    fun providesFirebaseDatabaseInstance():FirebaseDatabase{
+        return FirebaseDatabase.getInstance("https://score-4-fb9aa-default-rtdb.asia-southeast1.firebasedatabase.app")
+    }
+    @Singleton
+    @Provides
+    fun providesFirebaseAuthInstance(): FirebaseAuth {
+        return FirebaseAuth.getInstance()
     }
 }

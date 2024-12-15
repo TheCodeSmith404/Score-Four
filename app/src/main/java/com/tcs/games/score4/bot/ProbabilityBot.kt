@@ -1,5 +1,6 @@
 package com.tcs.games.score4.bot
 
+import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
@@ -11,6 +12,7 @@ import kotlin.random.Random
 class ProbabilityBot {
     fun start(cardsString: List<String>): Deferred<Int> =
         CoroutineScope(Dispatchers.Default).async {
+            Log.d("Bot","Was given: $cardsString")
             val cards=cardsString.map{it[0]}
             // Step 1: Count occurrences of each card
             val cardCounts = cards.groupingBy { it }.eachCount()
@@ -49,6 +51,7 @@ class ProbabilityBot {
             }
             // Return a random card ID continuously
             val init=getCards[Random.nextInt(getCards.size)]
+            Log.d("Bot","It plays: $init")
             cards.indexOf(init)
         }
 }

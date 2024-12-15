@@ -11,12 +11,13 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/materialCardView"
-        android:layout_width="192dp"
-        android:layout_height="192dp"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
         app:cardCornerRadius="128dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/curvedTextViewVictory">
+        app:layout_constraintTo_toEndOf="@id/curvedTextView"
+        app:layout_constraintTop_toBottomOf="@+id/curvedTextView">
 
         <ImageView
             android:id="@+id/profile_winner_image"
@@ -30,13 +31,15 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:elevation="100dp"
+        android:visibility="gone"
         app:arcHeight="200dp"
         app:centerY="400"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@+id/materialCardView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/curvedTextViewVictory"
         app:text="Defeat"
         app:textColor="#000000"
-        app:textSize="48sp"
+        app:textSize="48dp"
         app:textStyle="bold" />
 
     <com.tcs.games.score4.utils.views.CurvedTextView
@@ -49,11 +52,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:text="Victory"
         app:textColor="#000000"
-        app:textSize="48sp"
-        app:textStyle="bold" />
+        app:textSize="48dp"
+        app:textStyle="bold"
+        tools:layout_editor_absoluteX="16dp" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/textViewCongrats"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
@@ -65,7 +69,7 @@
         tools:layout_editor_absoluteX="20dp" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/textViewWinnerName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
@@ -73,7 +77,7 @@
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="24sp"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCongrats"
         tools:layout_editor_absoluteX="4dp" />
 
 
@@ -84,7 +88,7 @@
         android:layout_marginTop="8dp"
         android:gravity="center"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/textView5"
+        app:layout_constraintTop_toBottomOf="@+id/textViewWinnerName"
         tools:layout_editor_absoluteX="16dp">
 
         <ProgressBar

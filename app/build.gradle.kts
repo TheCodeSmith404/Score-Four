@@ -73,6 +73,7 @@ dependencies {
     implementation(libs.androidx.credentials)
     implementation(libs.firebase.firestore)
     implementation(libs.github.glide)
+    implementation(libs.firebase.database)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
