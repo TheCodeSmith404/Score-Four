@@ -76,7 +76,7 @@ class WaitingRoomViewModel @Inject constructor(
             ready = true,
             active = true
         )
-        data.add(index,bot)
+        data.add(bot)
         if(allPlayersReady(data)){
             gameDetailsRepository.addBotAndStart(data,numberOfBots)
         }else {

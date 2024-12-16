@@ -18,7 +18,7 @@ import javax.inject.Inject
 class EnterIdPassViewModel @Inject constructor(
     val firestore: FirebaseFirestore,
     val userRepository: UserRepository,
-    val joinGameRepository: JoinGameRepository,
+    private val joinGameRepository: JoinGameRepository,
     val preferenceManager: PreferenceManager
 ):ViewModel() {
     fun verifyLocally(id:String,password:String):Boolean{

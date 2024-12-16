@@ -15,4 +15,6 @@ data class GameRoom(
     val cards:MutableList<CardInfo> = mutableListOf(),
     val timePerTurns:Int=10,
     val winner:Int=-1,
+    val restart:Boolean=false,
+    val newRoomId:String="",
 )

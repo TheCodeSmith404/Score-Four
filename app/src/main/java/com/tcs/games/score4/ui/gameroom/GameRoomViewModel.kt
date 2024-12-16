@@ -32,9 +32,9 @@ class GameRoomViewModel @Inject constructor(
             if (_userIndex==null) {
                 val currentUserId = userRepository.user!!.authId
                 val players = gameDetailsRepository.gameRoom.value!!.players
-                Log.d("Deck","$currentUserId is $players")
+                Log.d(this::class.simpleName,"$currentUserId is $players")
                 _userIndex = players.indexOfFirst { user -> user.firebaseId == currentUserId }
-                Log.d("Deck", _userIndex.toString())
+                Log.d(this::class.simpleName, _userIndex.toString())
             }
             return _userIndex!!
         }
@@ -96,7 +96,7 @@ class GameRoomViewModel @Inject constructor(
         decks.second.add(temp)
         all.currentlyPlaying++
         all.currentlyPlaying%=4
-        Log.d("Deck",all.toString())
+        Log.d(this::class.simpleName,all.toString())
         return all
     }
     fun modifyDeckForPlayer(card:Int):Deck{
@@ -111,7 +111,7 @@ class GameRoomViewModel @Inject constructor(
         decks.second.add(temp)
         all.currentlyPlaying++
         all.currentlyPlaying%=4
-        Log.d("Deck",all.toString())
+        Log.d(this::class.simpleName,all.toString())
         return all
     }
     fun getCardDetailsFromId(id:String):CardInfo{
@@ -140,7 +140,7 @@ class GameRoomViewModel @Inject constructor(
         return list
     }
     fun uploadDeck(deck: Deck,listener:(Boolean)->Unit){
-        Log.d("Deck",deck.toString())
+        Log.d(this::class.simpleName,deck.toString())
         gameDeckRepository.uploadDeck(deck){success->
             listener(success)
         }

@@ -70,10 +70,34 @@ class WaitingRoomFragment:Fragment() {
     }
     override fun onStart() {
         super.onStart()
+        lifecycleScope.launch {
+            viewModel.startListeningToGameDetails()
+            fetchGameRoom().observe(viewLifecycleOwner) { gameRoom ->
+                if (gameRoom != null) {
+                    Log.d("Wait", gameRoom.running.toString())
+                    if (gameRoom.running&&viewModel.allPlayersReady()) {
+                        Log.d("Waiting room", "Navigating")
+                        navigate()
+                    } else {
+                        Log.d("Waiting room", "setting up waiting room")
+                        setUpWaitingRoom(gameRoom)
+                    }
+                    if (gameRoom.numberOfPlayers + gameRoom.numberOfBots == 4)
+                        binding.waitingRoomTvStatus.text =
+                            getString(R.string.fragment_waiting_room_waiting_for_players_to_be_ready)
+                    else
+                        binding.waitingRoomTvStatus.text =
+                            getString(R.string.fragment_waiting_room_waiting_for_players)
+                } else
+                    dataFetchError()
+            }
+        }
+        Log.d(this::class.simpleName,"Waiting room has started")
 
     }
     override fun onStop() {
         super.onStop()
+        fetchGameRoom().removeObservers(viewLifecycleOwner)
     }
     private fun setOnClickListeners(){
         binding.fragmentWaitingRoomTvGameDetails.setOnClickListener{
@@ -219,6 +243,7 @@ class WaitingRoomFragment:Fragment() {
         viewModel.updatePlayerStatus()
     }
     private fun navigate(){
+        viewModel.fetchGameRoom().removeObservers(viewLifecycleOwner)
         try {
             findNavController().navigate(R.id.action_waiting_room_to_game_room)
         }catch (e:IllegalStateException){

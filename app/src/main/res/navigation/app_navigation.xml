@@ -127,15 +127,8 @@
         android:label="Game Finished"
         tools:layout="@layout/dialog_game_finished">
         <action
-            android:id="@+id/action_game_finished_to_fragment_home"
-            app:destination="@id/fragment_home"
-            app:popUpTo="@id/fragment_home"
-            app:popUpToInclusive="true"/>
-        <action
             android:id="@+id/action_game_finished_to_waiting_room"
-            app:destination="@id/waiting_room"
-            app:popUpTo="@id/waiting_room"
-            app:popUpToInclusive="true"/>
+            app:destination="@id/waiting_room" />
     </dialog>
     <fragment
         android:id="@+id/fragment_splash"

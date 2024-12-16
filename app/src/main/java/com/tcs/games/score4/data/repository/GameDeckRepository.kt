@@ -20,17 +20,18 @@ class GameDeckRepository @Inject constructor(
     private lateinit var docRef: DocumentReference
 
     fun startObservingDeck(id:String){
+        _gameDeck.postValue(null)
         docRef=firestore.collection("game_room_deck").document(id)
         docRef.addSnapshotListener{snapshot,error->
             if(error!=null){
-                Log.e("GameDeckRepository", "Error listening to snapshot: ${error.message}")
+                Log.e(this::class.simpleName, "Error listening to snapshot: ${error.message}")
             }
             if(snapshot!=null&&snapshot.exists()){
-                Log.d("DeckObserver","Snapshot triggered")
+                Log.d(this::class.simpleName,"Snapshot triggered")
                 val deck=snapshot.toObject(Deck::class.java)
                 _gameDeck.postValue(deck)
             }else{
-                Log.d("GameDeckRepository", "No document found for ID: $id")
+                Log.d(this::class.simpleName, "No document found for ID: $id")
             }
         }
 

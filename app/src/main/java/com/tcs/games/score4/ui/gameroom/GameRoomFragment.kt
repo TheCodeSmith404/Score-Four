@@ -58,6 +58,7 @@ class GameRoomFragment:Fragment() {
 
     override fun onStart() {
         super.onStart()
+        Log.d(this::class.simpleName,"Game Room Fragment Started")
 //        handler.postDelayed(runnable,3000)
     }
 
@@ -68,6 +69,8 @@ class GameRoomFragment:Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         job.cancel()
+        if(viewModel.getDeck().hasObservers())
+            viewModel.getDeck().removeObservers(viewLifecycleOwner)
         _binding=null
     }
     private fun setUpPlayerIcons(){
@@ -85,8 +88,9 @@ class GameRoomFragment:Fragment() {
             Log.d("GameFinishedDialog","Observer triggered")
             if(game!=null) {
                 if (game.winner >= 0) {
-                    updateUserWon(game.winner)
+                    viewModel.getGameRoom().removeObservers(viewLifecycleOwner)
                     Log.d("GameFinishedDialog","Winner is ${game.winner}")
+                    updateUserWon(game.winner)
                     findNavController().navigate(R.id.action_game_room_to_game_finished)
                 }
             }
@@ -141,7 +145,7 @@ class GameRoomFragment:Fragment() {
                     timerViewModel.startCountdown(viewModel.getTurnTime(true))
                     binding.swipeAllowed.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.baseline_lock_outline_24))
                 }
-                Log.d("Deck","${viewModel.userIndex}")
+                Log.d(this::class.simpleName,"${viewModel.userIndex}")
 
                 //Setting up turn systems
                 Log.d("Deck Observer","${viewModel.previousDeck.toString()} and current deck: ${myDeck.toString()}")
@@ -160,6 +164,12 @@ class GameRoomFragment:Fragment() {
                         val card=prepareCardFromId(id)
                         card.setOnClickListener{
                             binding.cards.setCurrentItem(index+1,true)
+                        }
+                        card.isLongClickable=true
+                        card.setOnLongClickListener{_->
+                            binding.cards.setCurrentItem(index+1,false)
+                            removeCardAndEndTurn(index)
+                            false
                         }
                         binding.cardsContainer.addView(card)
                     }
@@ -365,6 +375,7 @@ class GameRoomFragment:Fragment() {
             Log.d("Deck done", done.toString())
         }
     }
+
 
 
 

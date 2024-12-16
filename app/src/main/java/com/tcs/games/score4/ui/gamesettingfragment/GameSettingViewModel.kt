@@ -57,7 +57,9 @@ class GameSettingViewModel @Inject constructor(
                 mutableListOf(userStatus),
                 getCardsInfo(),
                 time,
-                -1
+                -1,
+                false,
+                ""
             )
             val gameKeys=GameKeys(idPass.first,idPass.second,roomId,TimeUtils.getCurrentTimeInMillis())
             val result = createGameRepository.createGameRoom(roomId, deck, gameRoom,gameKeys)

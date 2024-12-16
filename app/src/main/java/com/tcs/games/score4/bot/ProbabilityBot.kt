@@ -12,7 +12,7 @@ import kotlin.random.Random
 class ProbabilityBot {
     fun start(cardsString: List<String>): Deferred<Int> =
         CoroutineScope(Dispatchers.Default).async {
-            Log.d("Bot","Was given: $cardsString")
+            Log.d(this::class.simpleName,"Was given: $cardsString")
             val cards=cardsString.map{it[0]}
             // Step 1: Count occurrences of each card
             val cardCounts = cards.groupingBy { it }.eachCount()
@@ -51,7 +51,7 @@ class ProbabilityBot {
             }
             // Return a random card ID continuously
             val init=getCards[Random.nextInt(getCards.size)]
-            Log.d("Bot","It plays: $init")
+            Log.d(this::class.simpleName,"It plays: $init")
             cards.indexOf(init)
         }
 }

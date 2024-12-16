@@ -9,6 +9,7 @@ import com.tcs.games.score4.data.PreferenceManager
 import com.tcs.games.score4.model.gameroom.CardInfo
 import com.tcs.games.score4.model.gameroom.GameRoom
 import com.tcs.games.score4.model.gameroom.PlayersStatus
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -23,22 +24,22 @@ class GameDetailsRepository @Inject constructor(
 
 
     fun startListeningToGameRoom(id: String) {
-        if(!::docRef.isInitialized) {
-            docRef = firebaseFireStore.collection("game_room_details")
-                .document(id)
-            // Add a snapshot listener to Firestore
-            docRef.addSnapshotListener { snapshot, error ->
-                if (error != null) {
-                    Log.e("GameDetailsRepository", "Error listening to snapshot: ${error.message}")
-                    return@addSnapshotListener
-                }
-                if (snapshot != null && snapshot.exists()) {
-                    // Deserialize the document and update LiveData on the main thread
-                    val room = snapshot.toObject(GameRoom::class.java)
-                    _gameDetails.postValue(room)
-                } else {
-                    Log.d("GameDetailsRepository", "No document found for ID: $id")
-                }
+        _gameDetails.value=null
+        docRef = firebaseFireStore.collection("game_room_details")
+            .document(id)
+        _gameDetails.postValue(null)
+        // Add a snapshot listener to Firestore
+        docRef.addSnapshotListener { snapshot, error ->
+            if (error != null) {
+                Log.e("GameDetailsRepository", "Error listening to snapshot: ${error.message}")
+                return@addSnapshotListener
+            }
+            if (snapshot != null && snapshot.exists()) {
+                // Deserialize the document and update LiveData on the main thread
+                val room = snapshot.toObject(GameRoom::class.java)
+                _gameDetails.postValue(room)
+            } else {
+                Log.d("GameDetailsRepository", "No document found for ID: $id")
             }
         }
     }
@@ -81,6 +82,14 @@ class GameDetailsRepository @Inject constructor(
             .addOnFailureListener{
                 Log.d("Winner","Winner not set and was user $index")
             }
+    }
+    suspend fun setGameRoomRestarted(newId:String): Boolean {
+        return try {
+            docRef.update("restart", true,"newRoomId",newId).await()
+            true
+        } catch (e: Exception) {
+            false
+        }
     }
     fun updateUserStatusAndStart(status: List<PlayersStatus>){
         docRef.update(

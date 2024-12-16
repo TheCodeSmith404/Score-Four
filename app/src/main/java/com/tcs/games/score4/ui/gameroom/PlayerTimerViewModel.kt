@@ -31,9 +31,9 @@ class PlayerTimerViewModel @Inject constructor(
             if (_userIndex==null) {
                 val currentUserId = userRepository.user!!.authId
                 val players = gameDetailsRepository.gameRoom.value!!.players
-                Log.d("Deck","$currentUserId is $players")
+                Log.d(this::class.simpleName,"$currentUserId is $players")
                 _userIndex = players.indexOfFirst { user -> user.firebaseId == currentUserId }
-                Log.d("Deck", _userIndex.toString())
+                Log.d(this::class.simpleName, _userIndex.toString())
             }
             return _userIndex!!
         }
