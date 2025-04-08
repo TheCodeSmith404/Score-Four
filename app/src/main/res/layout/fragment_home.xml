@@ -4,16 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     android:padding="16dp"
     tools:context=".ui.home.HomeFragment">
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardView"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        app:cardCornerRadius="32dp"
+        android:elevation="16dp"
+        app:strokeColor="@color/colorPrimary"
+        app:strokeWidth="2dp"
+        app:cardCornerRadius="48dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -22,14 +26,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:src="@tools:sample/avatars" />
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/home_create_game"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/button_gradient"
         android:drawableEnd="@drawable/ic_menu_camera"
+        android:elevation="16dp"
         android:text="@string/create_a_game"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider4" />
@@ -39,8 +47,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+        android:background="@drawable/button_gradient"
         android:drawableEnd="@drawable/ic_menu_camera"
         android:text="@string/join_a_game"
+        android:textStyle="bold"
+        android:elevation="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/home_create_game" />
@@ -70,9 +81,13 @@
 
     <ImageButton
         android:id="@+id/imageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_margin="4dp"
         android:layout_marginEnd="8dp"
+        android:background="@drawable/button_gradient"
+        android:elevation="16dp"
+        android:padding="8dp"
         android:src="@drawable/baseline_settings_24"
         app:layout_constraintBottom_toBottomOf="@+id/cardView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -80,14 +95,27 @@
 
     <TextView
         android:id="@+id/showUserName"
+        android:textColor="@color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
+        android:elevation="8dp"
         android:ellipsize="marquee"
         android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardView" />
+
+    <ImageView
+        android:id="@+id/imageViewIcon"
+        android:layout_width="240dp"
+        android:layout_height="240dp"
+        android:src="@drawable/icon_grp"
+        app:layout_constraintBottom_toTopOf="@+id/home_create_game"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/showUserName"
+        app:layout_constraintVertical_bias="0.0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

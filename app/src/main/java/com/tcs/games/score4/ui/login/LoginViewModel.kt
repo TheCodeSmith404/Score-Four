@@ -26,6 +26,9 @@ class LoginViewModel @Inject constructor(private val userRepository: UserReposit
     private val _user = MutableLiveData<FirebaseUser?>()
     val user: LiveData<FirebaseUser?> = _user
 
+    private val _loadingMessage=MutableLiveData<String>()
+    val loadingMessage:LiveData<String> =_loadingMessage
+
 
     init {
         var isReady: Task<UserData?>
@@ -39,40 +42,73 @@ class LoginViewModel @Inject constructor(private val userRepository: UserReposit
         _user.value = auth.currentUser
     }
     suspend fun signInWithGoogle(token: String) {
-        val firebaseCredential = GoogleAuthProvider.getCredential(token, null)
+        try {
+            _loadingMessage.value="Retrieving Credentials"
 
-        // Sign in with Firebase and check if the task is successful
-        val task = auth.signInWithCredential(firebaseCredential).await() // await() to ensure completion before proceeding
-        if (task.user != null) {
-            viewModelScope.launch {
-                val user = auth.currentUser!!
-                val id = user.uid
 
-                // Check if the user exists in the repository
-                val exists = userRepository.checkUserExists(id)
-                if (exists) {
-                    Log.d("LoginViewModel", "User Exists")
-                    userRepository.getUser(id,application.applicationContext)
-                } else {
-                    Log.d("LoginViewModel", "User Does Not Exist")
+            val firebaseCredential = GoogleAuthProvider.getCredential(token, null)
 
-                    val currentTime = TimeUtils.getCurrentTimeInMillis()
-                    val pair = userRepository.getStats().await()
+            // Sign in with Firebase
+            val authResult = auth.signInWithCredential(firebaseCredential).await()
 
-                    // Create UserData object with details
-                    val data=UserData(id,generateShownId(id,currentTime),user.displayName.toString(),user.email.toString(),"",currentTime,currentTime,currentTime,pair.first,pair.second,false,0,6,0,0,0,0,0,0,0,0,true)
-                    val uploadData=userRepository.addUser(data)
-                    preferenceManager.isSignedIn=true
-                    preferenceManager.profileUrl=null
-                    preferenceManager.userName=user.displayName.toString()
-                    // Use await() to block further execution until user is added
-                    uploadData.await()
+            val user = authResult.user
+            if (user != null) {
+                viewModelScope.launch {
+                    try {
+                        val id = user.uid
+
+                        // Check if the user exists in the repository
+                        val exists = userRepository.checkUserExists(id)
+                        if (exists) {
+                            _loadingMessage.value="Getting Account Details"
+
+
+                            Log.d("LoginViewModel", "User Exists")
+                            userRepository.getUser(id, application.applicationContext)
+                        } else {
+                            _loadingMessage.value="Creating Account"
+
+
+                            Log.d("LoginViewModel", "User Does Not Exist")
+
+                            val currentTime = TimeUtils.getCurrentTimeInMillis()
+                            val pair = userRepository.getStats().await()
+
+                            // Create UserData object with details
+                            val data=UserData(id,generateShownId(id,currentTime),user.displayName.toString(),user.email.toString(),"",currentTime,currentTime,currentTime,pair.first,pair.second,false,0,6,0,0,0,0,0,0,0,0,true)
+                            val uploadData=userRepository.addUser(data)
+                            preferenceManager.isSignedIn=true
+                            preferenceManager.profileUrl=null
+                            preferenceManager.userName=user.displayName.toString()
+                            // Use await() to block further execution until user is added
+                            uploadData.await()
+
+                            Log.d("LoginViewModel", "New user successfully registered and signed in.")
+                        }
+                        // Successfully signed in, update UI
+                        _user.value = auth.currentUser
+                        Log.d("LoginViewModel", "Sign-in successful!")
+
+                    } catch (e: Exception) {
+                        _loadingMessage.value="Error"
+
+
+                        Log.e("LoginViewModel", "Error processing user data: ${e.message}")
+                        _user.value = null
+                    }
                 }
+            } else {
+                _loadingMessage.value="Error"
 
-                // Set the user value after repository actions are completed
-                _user.value = auth.currentUser
+
+                Log.e("LoginViewModel", "Sign-in failed: No user returned.")
+                _user.value = null
             }
-        } else {
+        } catch (e: Exception) {
+            _loadingMessage.value="Error"
+
+
+            Log.e("LoginViewModel", "Firebase sign-in failed: ${e.message}")
             _user.value = null
         }
     }
@@ -88,6 +124,9 @@ class LoginViewModel @Inject constructor(private val userRepository: UserReposit
                 val user = auth.currentUser!!
                 val id = user.uid
                 viewModelScope.launch {
+                    _loadingMessage.value="Creating Account"
+
+
                     val currentTime = TimeUtils.getCurrentTimeInMillis()
                     val pair = userRepository.getStats().await()
                     val data=UserData(id,generateShownId(id,currentTime),"User_${pair.first}","Please Sign Up","",currentTime,currentTime,currentTime,pair.first,pair.second,false,0,6,0,0,0,0,0,0,0,0,false)
@@ -99,6 +138,10 @@ class LoginViewModel @Inject constructor(private val userRepository: UserReposit
                     _user.value=auth.currentUser
                 }
             }else{
+
+                _loadingMessage.value="Error"
+
+
                 Log.e("SignIn","Anonymous Log in failed ${task.exception?.message}")
                 _user.value=null
             }

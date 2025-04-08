@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -43,9 +45,30 @@ class HomeFragment : Fragment() {
         setOnClickListeners()
     }
 
+    override fun onStart() {
+        super.onStart()
+        setUpAnimations()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+    private fun setUpAnimations(){
+        val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.icon_bubble)
+
+        // Set listener to restart animation when it ends
+        animation.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationStart(animation: Animation?) {}
+            override fun onAnimationRepeat(animation: Animation?) {}
+
+            override fun onAnimationEnd(animation: Animation?) {
+                binding.imageViewIcon.startAnimation(animation) // Restart animation
+            }
+        })
+
+        // Start animation
+        binding.imageViewIcon.startAnimation(animation)
     }
 
     private fun setUpViews(){

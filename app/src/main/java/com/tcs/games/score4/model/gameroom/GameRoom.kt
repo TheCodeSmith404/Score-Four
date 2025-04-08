@@ -1,5 +1,7 @@
 package com.tcs.games.score4.model.gameroom
 
+import com.google.firebase.Timestamp
+
 data class GameRoom(
     val roomId:String="",
     val gameId:String="",
@@ -11,6 +13,7 @@ data class GameRoom(
     var numberOfPlayersReady:Int=0,
     var createdAt:Long=0L,
     var startedAt:Long=0L,
+    var lastUpdated:Timestamp?=null,
     val players:MutableList<PlayersStatus> =mutableListOf(),
     val cards:MutableList<CardInfo> = mutableListOf(),
     val timePerTurns:Int=10,

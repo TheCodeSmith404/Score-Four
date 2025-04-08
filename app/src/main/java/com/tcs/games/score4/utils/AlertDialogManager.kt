@@ -154,6 +154,18 @@ object AlertDialogManager {
         dialogShowProgressBinding?.determinateMessage?.text=message
     }
 
+    fun updateProgressDialogText(message: String) {
+        // Check if the dialog is showing and the binding exists
+        if (alertDialog?.isShowing == true && dialogShowProgressBinding != null) {
+            // Update the text based on which progress container is visible
+            if (dialogShowProgressBinding?.indeterminateProgressContainer?.visibility == View.VISIBLE) {
+                dialogShowProgressBinding?.indeterminateMessage?.text = message
+            } else if (dialogShowProgressBinding?.determinateProgressContainer?.visibility == View.VISIBLE) {
+                dialogShowProgressBinding?.determinateMessage?.text = message
+            }
+        }
+    }
+
     fun hideDialog() {
         alertDialog?.dismiss()
         alertDialog = null

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="#FFECB3"> <!-- Light ripple color -->
+
+    <!-- Outer shadow and gradient background -->
+    <item>
+        <layer-list>
+
+            <!-- Outer shadow layer -->
+            <item>
+                <shape
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:shape="rectangle">
+                    <solid android:color="#FF9E00" />  <!-- Shadow color -->
+                    <corners android:radius="64dp" />
+                </shape>
+            </item>
+
+            <!-- Main button layer with gradient -->
+            <item android:top="2dp" android:left="2dp" android:right="2dp" android:bottom="2dp">
+                <shape
+                    android:layout_width="match_parent"
+                    android:shape="rectangle">
+                    <gradient
+                        android:angle="45"
+                        android:endColor="#FF8C00"
+                        android:startColor="@color/colorPrimary"
+                        android:type="linear" />
+                    <corners android:radius="64dp" />
+                </shape>
+            </item>
+
+        </layer-list>
+    </item>
+</ripple>

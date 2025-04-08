@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.tcs.games.score4.model.gameroom.Deck
 import com.tcs.games.score4.data.PreferenceManager
@@ -37,7 +38,16 @@ class GameDeckRepository @Inject constructor(
 
     }
     fun uploadDeck(deck:Deck,doneListener:(Boolean)->Unit){
-        docRef.set(deck)
+
+        val deckMap = mutableMapOf<String, Any?>().apply {
+            put("currentlyPlaying", deck.currentlyPlaying)
+            put("playerA", deck.playerA)
+            put("playerB", deck.playerB)
+            put("playerC", deck.playerC)
+            put("playerD", deck.playerD)
+            put("lastUpdated", FieldValue.serverTimestamp()) // Inject timestamp
+        }
+        docRef.set(deckMap)
             .addOnSuccessListener {
                 doneListener(true)
             }

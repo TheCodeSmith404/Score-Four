@@ -7,6 +7,27 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="colorPrimary">#FFC000</color>
+    <color name="colorPrimaryVariant">#512DA8</color>
+    <color name="colorOnPrimary">#000000</color>
+
+    <color name="colorPrimary100">#FFEBB2</color>
+    <color name="colorSecondary">#8E24AA</color>
+    <color name="colorSecondaryVariant">#FFA000</color>
+    <color name="colorOnSecondary">#000000</color>
+    <color name="colorBackground">#A0A5A7</color>
+    <color name="colorSurface">#FFF5D6</color>
+    <color name="colorOnBackground">#212121</color>
+    <color name="colorOnSurface">#212121</color>
+    <color name="colorAccent">#00BCD4</color>
+    <color name="colorOnAccent">#000000</color>
+    <color name="colorError">#D32F2F</color>
+    <color name="colorOnError">#FFFFFF</color>
+    <color name="textHeading">#000000</color>
+    <color name="textBody">#000000</color>
+    <color name="textDisabled">#BDBDBD</color>
+
     <color name="cardColorOption1">#FFFF6B6B</color> <!-- Soft Red -->
     <color name="cardColorOption2">#FFFFD93D</color> <!-- Warm Yellow -->
     <color name="cardColorOption3">#FF6BCB77</color> <!-- Fresh Green -->
