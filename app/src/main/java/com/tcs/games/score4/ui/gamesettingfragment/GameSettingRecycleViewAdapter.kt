@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -94,7 +95,8 @@ class GameSettingRecycleViewAdapter(
             }
         }
         fun setCardTint(color:Int){
-            setCardTint(root,previewCardCard,previewCardIcon,previewCardTextView,editCardColor,editCardIcon,color)
+            setCardTint(root,previewCardCard,previewCardIcon,previewCardTextView,editCardColor,editCardIcon,preview,edit,color)
+            setTextColor(cardId,color)
         }
         fun setCardName(name:String){
             setCardName(previewCardTextView,editCardName,name)
@@ -191,7 +193,11 @@ class GameSettingRecycleViewAdapter(
             else->R.drawable.i3
         }
     }
-    private fun setCardTint(cardParent:MaterialCardView,cardPreview:MaterialCardView,icon:ImageView,text:TextView,editColor:ImageView,editIconColor:ImageView,colorId:Int){
+    private fun setTextColor(textView: TextView,colorId: Int){
+        val selectedColor=DefaultCardOptions.getColor(colorId,false)
+        textView.setTextColor(selectedColor)
+    }
+    private fun setCardTint(cardParent:MaterialCardView,cardPreview:MaterialCardView,icon:ImageView,text:TextView,editColor:ImageView,editIconColor:ImageView,previewButton:ImageButton,editButton:ImageButton,colorId:Int){
         val selectedColor=DefaultCardOptions.getColor(colorId,false)
         cardParent.strokeColor=selectedColor
         cardPreview.strokeColor=selectedColor
@@ -199,6 +205,9 @@ class GameSettingRecycleViewAdapter(
         icon.setColorFilter(selectedColor, android.graphics.PorterDuff.Mode.SRC_IN)
         editColor.setColorFilter(selectedColor,android.graphics.PorterDuff.Mode.SRC_IN)
         editIconColor.setColorFilter(selectedColor,android.graphics.PorterDuff.Mode.SRC_IN)
+        editButton.setColorFilter(selectedColor,android.graphics.PorterDuff.Mode.SRC_IN)
+        previewButton.setColorFilter(selectedColor,android.graphics.PorterDuff.Mode.SRC_IN)
+
     }
     fun updateCardIcon(position:Int,iconId:Int){
         cards[position].icon=iconId

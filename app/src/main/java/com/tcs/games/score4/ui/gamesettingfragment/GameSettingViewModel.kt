@@ -54,6 +54,7 @@ class GameSettingViewModel @Inject constructor(
                 0,
                 TimeUtils.getCurrentTimeInMillis(),
                 -1,
+                null,
                 mutableListOf(userStatus),
                 getCardsInfo(),
                 time,

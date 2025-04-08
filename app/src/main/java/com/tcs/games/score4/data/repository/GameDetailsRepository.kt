@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.tcs.games.score4.data.PreferenceManager
 import com.tcs.games.score4.model.gameroom.CardInfo
@@ -45,7 +46,7 @@ class GameDetailsRepository @Inject constructor(
     }
     fun addBot(status: List<PlayersStatus>, numberOfBot:Int){
         docRef.update("players",status,
-            "numberOfBots",numberOfBot)
+            "numberOfBots",numberOfBot,"lastUpdated",FieldValue.serverTimestamp())
             .addOnSuccessListener {
                 Log.d("GameDetailsRepository","data_updated")
             }
@@ -57,7 +58,7 @@ class GameDetailsRepository @Inject constructor(
         docRef.update(
             "players",status,
             "numberOfBots",numberOfBot,
-            "running",true)
+            "running",true,"lastUpdated",FieldValue.serverTimestamp())
             .addOnSuccessListener {
                 Log.d("GameDetailsRepository","data_updated")
             }
@@ -66,7 +67,7 @@ class GameDetailsRepository @Inject constructor(
             }
     }
     fun updateUserStatus(status:List<PlayersStatus>){
-        docRef.update("players",status)
+        docRef.update("players",status,"lastUpdated",FieldValue.serverTimestamp())
             .addOnSuccessListener {
                 Log.d("GameDetailsRepository","data_updated")
             }
@@ -75,7 +76,7 @@ class GameDetailsRepository @Inject constructor(
             }
     }
     fun setWinner(index:Int){
-        docRef.update("winner",index)
+        docRef.update("winner",index,"lastUpdated",FieldValue.serverTimestamp())
             .addOnSuccessListener {
                 Log.d("Winner","Winner is user $index")
             }
@@ -85,7 +86,7 @@ class GameDetailsRepository @Inject constructor(
     }
     suspend fun setGameRoomRestarted(newId:String): Boolean {
         return try {
-            docRef.update("restart", true,"newRoomId",newId).await()
+            docRef.update("restart", true,"newRoomId",newId,"lastUpdated",FieldValue.serverTimestamp()).await()
             true
         } catch (e: Exception) {
             false
@@ -94,7 +95,7 @@ class GameDetailsRepository @Inject constructor(
     fun updateUserStatusAndStart(status: List<PlayersStatus>){
         docRef.update(
             "players",status,
-            "running",true)
+            "running",true,"lastUpdated",FieldValue.serverTimestamp())
             .addOnSuccessListener {
                 Log.d("GameDetailsRepository","data_updated")
             }

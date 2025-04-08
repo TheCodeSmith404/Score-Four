@@ -1,5 +1,7 @@
 package com.tcs.games.score4.model.gameroom
 
+import com.google.firebase.Timestamp
+
 data class PlayersStatus(
     var bot:Boolean=false,
     val firebaseId:String="",
@@ -9,7 +11,7 @@ data class PlayersStatus(
     val og:Boolean=false,
     val numberOfGamesPlayed:Int=0,
     val numberOfGamesWon:Int=0,
-    val dateJoined:Long=0,
+    val dateJoined: Long=0,
     var ready:Boolean=false,
     var active:Boolean=false,
 )

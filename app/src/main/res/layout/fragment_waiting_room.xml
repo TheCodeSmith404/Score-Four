@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
+    android:elevation="0dp"
+    android:background="@drawable/background"
     tools:context="ui.waitingroom.WaitingRoomFragment">
 
 
@@ -24,12 +26,12 @@
         android:id="@+id/textView9"
         android:layout_width="0dp"
         android:layout_height="48dp"
+        android:background="@drawable/reverse_trapezium"
         android:gravity="center"
         android:text="Waiting Room"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="24sp"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/imageButtonBack"
         app:layout_constraintTop_toTopOf="parent" />
@@ -38,16 +40,20 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="8dp"
-        app:cardCornerRadius="4dp"
+        app:cardCornerRadius="8dp"
+        app:strokeWidth="4dp"
+        app:strokeColor="@color/colorPrimary"
+        android:elevation="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/textView9"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
+            android:elevation="20dp"
             android:padding="16dp">
 
             <ScrollView
@@ -130,6 +136,7 @@
                     android:layout_gravity="center_vertical"
                     android:padding="4dp"
                     android:text="Share Credentials"
+                    android:textColor="@color/black"
                     android:textAlignment="center"
                     android:textSize="16sp"
                     android:textStyle="italic|bold"
@@ -155,6 +162,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:padding="8dp"
+                android:textColor="#555555"
                 android:text="View game Details"
                 android:textAlignment="center"
                 android:textSize="16sp"
@@ -185,6 +193,8 @@
                     android:id="@+id/checkBox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:buttonTint="@color/colorPrimary"
+                    android:checked="false"
                     android:textAlignment="textStart"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -202,19 +212,8 @@
                 <ProgressBar
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center" />
-
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:background="@android:color/transparent"
-                    android:clickable="false"
-                    android:padding="8dp"
-                    android:scaleX="2.0"
-                    android:scaleY="2.0"
-                    android:src="@drawable/baseline_close_24"
-                    android:visibility="gone" />
+                    android:indeterminateTint="@color/colorPrimary" />
             </FrameLayout>
 
             <TextView

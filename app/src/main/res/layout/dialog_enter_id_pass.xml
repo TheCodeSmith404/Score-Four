@@ -3,6 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    app:strokeColor="@color/colorPrimary"
+    app:strokeWidth="4dp"
     android:padding="16dp">
 
     <LinearLayout
@@ -10,40 +12,55 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp">
-
-        <ImageButton
-            android:id="@+id/dialog_id_pass_cancel"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginLeft="4dp"
-            android:background="@android:color/transparent"
-            android:padding="8dp"
-            android:scaleX="1.7"
-            android:scaleY="1.7"
-            android:src="@drawable/baseline_close_24" />
+            android:padding="4dp">
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:background="@drawable/reverse_trapezium"
+                android:gravity="center"
+                android:text="@string/dialog_enter_id_pass_title"
+                android:textAlignment="center"
+                android:textColor="@color/colorOnPrimary"
+                android:textSize="@dimen/dialog_edit_id_pass_title"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/dialog_id_pass_cancel"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/dialog_id_pass_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:background="@drawable/circular_exit"
+                android:contentDescription="Cancel Button"
+                android:padding="8dp"
+                android:src="@drawable/baseline_close_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/dialog_enter_id_pass_title"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="@dimen/dialog_edit_id_pass_title"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/enter_room_id" />
+            android:text="@string/enter_room_id"
+            android:textColor="@color/black"/>
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            app:hintTextColor="@color/black"
             app:boxStrokeColor="@color/purple_700"
             app:hintEnabled="false">
 
@@ -60,7 +77,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@string/enter_password" />
+            android:text="@string/enter_password"
+            android:textColor="@color/black"/>
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -78,18 +96,30 @@
                 android:inputType="number"
                 android:maxLength="4" />
         </com.google.android.material.textfield.TextInputLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:padding="8dp"
+            android:gravity="center"
+            android:orientation="horizontal">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/dialog_id_pass_join"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/dialog_id_pass_join"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_gradient"
+                android:text="@string/join_room"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+
+
+        <ProgressBar
+            android:id="@+id/enter_id_pass_dialog_progress"
             android:layout_width="match_parent"
             android:layout_height="64dp"
             android:layout_marginTop="16dp"
-            android:text="@string/join_room" />
-        <ProgressBar
-            android:id="@+id/enter_id_pass_dialog_progress"
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:layout_marginTop="16dp"/>
+            android:visibility="gone" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

@@ -165,12 +165,11 @@ class GameRoomFragment:Fragment() {
                         card.setOnClickListener{
                             binding.cards.setCurrentItem(index+1,true)
                         }
-                        card.isLongClickable=true
-                        card.setOnLongClickListener{_->
-                            binding.cards.setCurrentItem(index+1,false)
-                            removeCardAndEndTurn(index)
-                            false
-                        }
+                        card.isLongClickable=false
+//                        card.setOnLongClickListener{_->
+//                            removeCardAndEndTurn(index)
+//                            false
+//                        }
                         binding.cardsContainer.addView(card)
                     }
                 }

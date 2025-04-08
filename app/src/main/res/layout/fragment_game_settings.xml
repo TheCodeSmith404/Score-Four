@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="#DDDDDD"
     tools:context="ui.gamesettingfragment.GameSettingFragment"
     android:padding="16dp">
 
@@ -60,6 +61,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:gravity="center|start"
+            android:textColor="@color/black"
             android:text="Select time for turns"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/numberPicker"
@@ -72,6 +74,7 @@
             android:layout_height="0dp"
             android:gravity="center"
             android:padding="4dp"
+            android:textColor="@color/black"
             android:text="seconds"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -85,6 +88,7 @@
             android:gravity="center"
             android:padding="4dp"
             android:text="20"
+            android:textColor="@color/black"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/textView7"

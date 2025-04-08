@@ -12,6 +12,13 @@
 #   public *;
 #}
 -keepclassmembernames class com.tcs.games.score4.model.*
+-if class androidx.credentials.CredentialManager
+-keep class androidx.credentials.playservices.** {
+  *;
+}
+
+-keepattributes LineNumberTable,SourceFile
+-renamesourcefileattribute SourceFile
 
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
