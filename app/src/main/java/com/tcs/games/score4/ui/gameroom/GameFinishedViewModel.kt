@@ -19,6 +19,7 @@ import com.tcs.games.score4.utils.gamelogic.DeckCreator
 import com.tcs.games.score4.utils.gamelogic.GenerateGameIdPass
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -158,9 +159,9 @@ class GameFinishedViewModel @Inject constructor(
         }
     }
 
-    fun getGameRoomLiveData():LiveData<GameRoom?>{
-        return gameDetailsRepository.gameRoom
-    }
+//    fun getGameRoomLiveData(): StateFlow<GameRoom?>{
+//        return gameDetailsRepository.gameRoom
+//    }
 
     fun getGameRoomWinner(): PlayersStatus {
         val temp=getGameRoom()

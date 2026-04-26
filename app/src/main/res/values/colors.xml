@@ -8,16 +8,25 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="colorPrimary">#FFC000</color>
+    <!-- Neo-Brutalism Palette -->
+    <color name="neo_yellow">#FFFFE600</color>
+    <color name="neo_pink">#FFFF006E</color>
+    <color name="neo_blue">#FF3A86FF</color>
+    <color name="neo_green">#FF00F5D4</color>
+    <color name="neo_black">#FF000000</color>
+    <color name="neo_white">#FFFFFFFF</color>
+    <color name="neo_gray">#FFEEEEEE</color>
+
+    <color name="colorPrimary">@color/neo_yellow</color>
     <color name="colorPrimaryVariant">#512DA8</color>
-    <color name="colorOnPrimary">#000000</color>
+    <color name="colorOnPrimary">@color/neo_black</color>
 
     <color name="colorPrimary100">#FFEBB2</color>
-    <color name="colorSecondary">#8E24AA</color>
+    <color name="colorSecondary">@color/neo_pink</color>
     <color name="colorSecondaryVariant">#FFA000</color>
-    <color name="colorOnSecondary">#000000</color>
-    <color name="colorBackground">#A0A5A7</color>
-    <color name="colorSurface">#FFF5D6</color>
+    <color name="colorOnSecondary">@color/neo_white</color>
+    <color name="colorBackground">@color/white</color>
+    <color name="colorSurface">@color/neo_white</color>
     <color name="colorOnBackground">#212121</color>
     <color name="colorOnSurface">#212121</color>
     <color name="colorAccent">#00BCD4</color>
@@ -28,12 +37,13 @@
     <color name="textBody">#000000</color>
     <color name="textDisabled">#BDBDBD</color>
 
-    <color name="cardColorOption1">#FFFF6B6B</color> <!-- Soft Red -->
-    <color name="cardColorOption2">#FFFFD93D</color> <!-- Warm Yellow -->
-    <color name="cardColorOption3">#FF6BCB77</color> <!-- Fresh Green -->
-    <color name="cardColorOption4">#FF4D96FF</color> <!-- Sky Blue -->
-    <color name="cardColorOption5">#FFFF6F91</color> <!-- Coral Pink -->
-    <color name="cardColorOption6">#FF845EC2</color> <!-- Purple Haze -->
-    <color name="cardColorOption7">#FF00796B</color> <!-- medium-dark Teal -->
-    <color name="cardColorOption8">#FFFFC75F</color> <!-- Sunset Orange -->
+    <!-- Legacy Mappings (Redirected) -->
+    <color name="cardColorOption1">@color/neo_pink</color>
+    <color name="cardColorOption2">@color/neo_yellow</color>
+    <color name="cardColorOption3">@color/neo_green</color>
+    <color name="cardColorOption4">@color/neo_blue</color>
+    <color name="cardColorOption5">#FFFF6F91</color> 
+    <color name="cardColorOption6">#FF845EC2</color> 
+    <color name="cardColorOption7">#FF00796B</color> 
+    <color name="cardColorOption8">#FFFFC75F</color> 
 </resources>

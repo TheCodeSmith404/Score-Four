@@ -1,16 +1,15 @@
 package com.tcs.games.score4.ui.home
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.tcs.games.score4.data.repository.UserRepository
+import com.tcs.games.score4.model.UserData
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(): ViewModel() {
-
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
-    }
-    val text: LiveData<String> = _text
+class HomeViewModel @Inject constructor(
+    private val userRepository: UserRepository
+) : ViewModel() {
+    val userFlow: StateFlow<UserData?> = userRepository.userFlow
 }
